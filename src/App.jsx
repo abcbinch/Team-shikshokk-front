@@ -27,7 +27,6 @@ function App() {
       {/* <OwnerMain /> */}
       {/* <OwnerReiview /> */}
 
-
       <h1 className="bg-amber-400">홈입니다</h1>
     </div>
   );
