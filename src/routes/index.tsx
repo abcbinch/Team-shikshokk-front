@@ -13,7 +13,7 @@ import OwnerReview from "../pages/OwnerReview";
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: "/", element: <Home /> },
+    // { path: "/", element: <Home /> },
     { path: "/order1", element: <OwnerOrderHistory /> },
     { path: "/order2", element: <OwnerOrderAllHistory /> },
 
@@ -21,8 +21,13 @@ const AppRoutes = () => {
 
     { path: "/clock", element: <Clock /> },
     { path: "/counter", element: <Counter /> },
+
+
+    { path: "/", element: <OwnerOrderAllHistory /> },
+
     { path: "/owner", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
+
 
   ]);
 

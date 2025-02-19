@@ -3,9 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
+import { useDispatch } from "react-redux";
+import io from "socket.io-client";
+import { useEffect } from "react";
+
 interface OwnerOrderHistory {}
 
 const OwnerOrderHistory: React.FC = () => {
+  const dispatch = useDispatch();
+
   return (
     <>
       <Header nickname="고민봉" />

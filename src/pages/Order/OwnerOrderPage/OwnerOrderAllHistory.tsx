@@ -3,10 +3,47 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
+import React, { useEffect } from "react";
+import io from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  socketConnect,
+  socketDisconnect,
+  socketMessage,
+} from "../../../store/socket/actions";
+import { AppState } from "../../../store";
+import * as S from "../../../store/socket";
 
-interface OwnerOrderAllHistory {}
+interface OwnerOrderAllHistoryProps {}
 
-const OwnerOrderAllHistory: React.FC = () => {
+const socket = io("http://localhost:8082");
+const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
+  const dispatch = useDispatch();
+  const socket2 = useSelector<AppState, S.State>((state) => state.socket);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
+      dispatch(socketConnect());
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+      dispatch(socketDisconnect());
+    });
+
+    socket.on("message", (data: string) => {
+      console.log("Received message:", data);
+      dispatch(socketMessage(data));
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("message");
+    };
+  }, [dispatch]);
+
   return (
     <>
       <Header nickname="고민봉" />
