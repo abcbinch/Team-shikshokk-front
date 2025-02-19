@@ -1,0 +1,65 @@
+.m-reg-container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  // right: 0;
+  // bottom: 0;
+  // padding: 10px;
+  background-color: rgba(109, 151, 168, 0.5);
+}
+
+//모달 열고닫기.
+.hidden {
+  display: none;
+}
+
+.menu-modal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  width: 400px;
+  height: 500px;
+  margin: auto;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0px 5px 15px 0px lightgray;
+  .x-box {
+    width: 100%;
+    text-align: right;
+    padding: 5px;
+  }
+  .close-btn {
+    font-size: 24px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  input {
+    box-sizing: border-box;
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    background: white;
+  }
+  button {
+    width: 150px;
+    padding: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    font-weight: bold;
+    color: white;
+    background: #fe9a00;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
