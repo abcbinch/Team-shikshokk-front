@@ -2,6 +2,7 @@
   > .titleBorder {
     > .selctBox {
       > select {
+        border: none !important;
         background-image: url("../../public/assets/drop-down-arrow.png");
       }
     }
@@ -9,8 +10,9 @@
 
   > .folderBox {
     > .folder {
-      > div {
+      div {
         background-image: url("../../public/assets/folder.png");
+        cursor: pointer;
       }
     }
   }
@@ -26,8 +28,8 @@
   }
   @media (max-width: 480px) {
     > .folderBox {
-      border: none;
-      box-shadow: none;
+      border: none !important;
+      box-shadow: none !important;
 
       > .folder {
         > div {
