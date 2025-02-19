@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from "../Header/Header";
-import axios from "axios";
+
+// import axios from "axios";
 import {
   XAxis,
   YAxis,
@@ -60,21 +60,21 @@ export default function Income() {
     { name: "햄버거", value: 302, color: "#99ff99" },
   ];
 
-  const price = async () => {
-    const result = await axios.post("http://localhost:8082/api-server/income", {
-      startDate: dateRange[0],
-      endDate: dateRange[1],
-    });
-    console.log(result.data);
-    const menuTotal = result.data.reduce((acc, menu) => {
-      const price = parseInt(menu.totalPrice, 10) || 0;
-      acc[menu.menuName] = (acc[menu.menuName] || 0) + price;
-      return acc;
-    }, {});
+  // const price = async () => {
+  //   const result = await axios.post("http://localhost:8082/api-server/income", {
+  //     startDate: dateRange[0],
+  //     endDate: dateRange[1],
+  //   });
+  //   console.log(result.data);
+  //   const menuTotal = result.data.reduce((acc, menu) => {
+  //     const price = parseInt(menu.totalPrice, 10) || 0;
+  //     acc[menu.menuName] = (acc[menu.menuName] || 0) + price;
+  //     return acc;
+  //   }, {});
 
-    setMenuPrice(menuTotal);
-    console.log(menuTotal);
-  };
+  //   setMenuPrice(menuTotal);
+  //   console.log(menuTotal);
+  // };
 
   useEffect(() => {
     const today = new Date();
@@ -87,31 +87,30 @@ export default function Income() {
     );
   }, []);
 
-  useEffect(() => {
-    if (dateRange.length > 0) {
-      price();
-    }
-  }, [dateRange]);
+  // useEffect(() => {
+  //   if (dateRange.length > 0) {
+  //     // price();
+  //   }
+  // }, [dateRange]);
 
   return (
     <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
-      <Header />
       <h1 className="text-3xl font-bold text-center text-white">매출관리</h1>
       <hr className="my-4 border-white" />
 
-      <div className="text-center mb-4">
-        <span className="font-semibold text-lg">선택기간 :</span>
+      <div className="mb-4 text-center">
+        <span className="text-lg font-semibold">선택기간 :</span>
         <span className="ml-2">
           {selectedDateText || "날짜를 선택해주세요"}
         </span>
         <button
           onClick={() => setIsCalendarVisible(!isCalendarVisible)}
-          className="ml-4 px-4 py-2 bg-white text-amber-500 font-bold rounded-lg shadow"
+          className="px-4 py-2 ml-4 font-bold bg-white rounded-lg shadow text-amber-500"
         >
           달력 보기
         </button>
         {isCalendarVisible && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white p-2 rounded-lg shadow-lg z-10">
+          <div className="absolute z-10 p-2 mt-2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg left-1/2">
             <DatePicker
               selectsRange
               startDate={dateRange[0]}
@@ -126,7 +125,7 @@ export default function Income() {
       </div>
 
       <div className="grid grid-cols-3 gap-4 text-white">
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">매출액</h4>
           <hr className="my-2 border-white" />
           <p>
@@ -136,33 +135,33 @@ export default function Income() {
               </div>
             ))}
 
-            <p className="text-right font-bold">총 매출액 :</p>
+            <p className="font-bold text-right">총 매출액 :</p>
           </p>
         </div>
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">고객 수</h4>
           <hr className="my-2 border-white" />
           <p>방문 고객 수 : 8명</p>
           <p>포장 고객 수 : 2명</p>
-          <p className="text-right font-bold">총 고객 수 : 10명</p>
+          <p className="font-bold text-right">총 고객 수 : 10명</p>
         </div>
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">재방문율</h4>
           <hr className="my-2 border-white" />
           <p>총 고객 수 : 100명</p>
           <p>재방문 고객 : 10명</p>
           <p>신규 고객 : 90명</p>
-          <p className="text-right font-bold">재방문율 : 10%</p>
+          <p className="font-bold text-right">재방문율 : 10%</p>
         </div>
       </div>
 
       <div className="flex justify-center gap-10 mt-10">
-        <div className="bg-white p-4 rounded-lg shadow-lg">
+        <div className="p-4 bg-white rounded-lg shadow-lg">
           <select
             onChange={(e) => {
               setSelectedOption(e.target.value);
             }}
-            className="mb-4 p-2 border rounded-lg"
+            className="p-2 mb-4 border rounded-lg"
           >
             <option value="매출">매출</option>
             <option value="방문수">고객 수</option>
@@ -186,7 +185,7 @@ export default function Income() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="text-center bg-white p-4 rounded-lg shadow-lg">
+        <div className="p-4 text-center bg-white rounded-lg shadow-lg">
           <h4 className="font-bold">메뉴별 매출 비율</h4>
           <ResponsiveContainer width={300} height={400}>
             <PieChart>

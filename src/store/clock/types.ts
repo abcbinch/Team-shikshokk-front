@@ -8,4 +8,3 @@ export interface SetClockAction extends Action<"@clock/setClock"> {
 }
 
 export type Actions = SetClockAction;
-``;
