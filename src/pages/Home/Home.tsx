@@ -2,9 +2,9 @@ interface Home {}
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1>홈페이지</h1>
-    </div>
+    <>
+      <h1>홈입니다.</h1>
+    </>
   );
 };
 

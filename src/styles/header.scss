@@ -45,13 +45,21 @@
     div:nth-child(2) {
       margin-right: 10px;
     }
+    div:nth-child(3) {
+      margin-right: 10px;
+    }
 
     @media (max-width: 480px) {
       div:nth-child(1) {
         margin-right: 2vw;
+        display: none;
       }
 
       div:nth-child(2) {
+        margin-right: 2vw;
+      }
+
+      div:nth-child(3) {
         margin-right: 2vw;
       }
     }

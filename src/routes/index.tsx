@@ -7,11 +7,13 @@ import Counter from "../pages/CounterTest";
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: "/", element: <Home /> },
+    // { path: "/", element: <Home /> },
     { path: "/order1", element: <OwnerOrderHistory /> },
     { path: "/order2", element: <OwnerOrderAllHistory /> },
     { path: "/clock", element: <Clock /> },
     { path: "/counter", element: <Counter /> },
+
+    { path: "/", element: <OwnerOrderAllHistory /> },
   ]);
 
   return routes;
