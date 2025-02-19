@@ -4,6 +4,8 @@ import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHis
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
 import Clock from "../pages/ClockTest";
 import Counter from "../pages/CounterTest";
+import OwnerMain from "../pages/OwnerMain";
+import OwnerReview from "../pages/OwnerReview";
 
 const AppRoutes = () => {
   let routes = useRoutes([
@@ -12,6 +14,8 @@ const AppRoutes = () => {
     { path: "/order2", element: <OwnerOrderAllHistory /> },
     { path: "/clock", element: <Clock /> },
     { path: "/counter", element: <Counter /> },
+    { path: "/owner", element: <OwnerMain /> },
+    { path: "/owner-review", element: <OwnerReview /> },
   ]);
 
   return routes;
