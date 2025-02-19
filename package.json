@@ -17,7 +17,9 @@
     "daisyui": "^4.12.23",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
+
     "react-datepicker": "^8.1.0",
+
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.29.0",
