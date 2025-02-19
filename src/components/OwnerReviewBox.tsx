@@ -103,7 +103,13 @@ export default function OwnerReviewBox({ data, isOpen, onClick }: Props) {
                 alt="review-image"
               />
             </div>
-            <p className="m-3 text-center h-1/3 ">{data.body}</p>
+            <div className="innerTitle flex w-full border p-1">
+              <p className="mr-3 ml-2 font-bold">작성자</p>
+              <p className="mr-3">평점</p>
+            </div>
+            <p className="m-1 text-center h-1/3 bg-white rounded ">
+              {data.body}
+            </p>
 
             {/* 댓글 */}
             <div className="reBox w-full h-36 relative">

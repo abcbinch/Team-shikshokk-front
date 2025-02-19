@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import OwnerReviewBox from "../components/OwnerReviewBox";
 import "../styles/ownerReview.scss";
+import { useLocation } from "react-router-dom";
 
 //test interface
 interface test {
@@ -12,6 +13,12 @@ interface test {
 }
 
 export default function OwnerReview() {
+  const location = useLocation();
+  const { shopId } = location.state || { shopId: null }; // 기본 값을 null로 설정
+  // const { shopId } = location.state;
+
+  console.log(shopId);
+
   const [text, setText] = useState<test[]>([]);
   const [openId, setOpenId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
