@@ -24,7 +24,7 @@ export default function OwnerMain() {
       // }
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/owner`,
+        "http://localhost:8082/api-server/owner",
         {
           // headers: {
           //   Authorization: `Bearer ${token}`,
