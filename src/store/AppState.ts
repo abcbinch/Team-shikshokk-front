@@ -1,8 +1,6 @@
-import * as Clock from "./clock";
-import * as Counter from "./counter";
 import * as Socket from "./socket";
+import * as Counter from "./counter";
 export interface AppState {
-  clock: Clock.State;
+  socket: Socket.SocketState;
   counter: Counter.State;
-  socket: Socket.State;
 }
