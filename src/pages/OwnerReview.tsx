@@ -6,31 +6,61 @@ import { useLocation } from "react-router-dom";
 
 //test interface
 interface test {
-  userid: number;
+  // userid: number;
+  // id: number;
+  // title: string;
+  // body: string;
+  content: string;
+  cus_rev_id: number;
+  customer_nickname: string;
   id: number;
-  title: string;
-  body: string;
+  owner_review?: string;
+  reviewfile?: string;
+  score: number;
+  shop_id: number;
+  writeTime: string;
 }
 
 export default function OwnerReview() {
+  // shopid 받기
   const location = useLocation();
   const { shopId } = location.state || { shopId: null }; // 기본 값을 null로 설정
   // const { shopId } = location.state;
 
   console.log(shopId);
 
-  const [text, setText] = useState<test[]>([]);
+  //--- 추가
+  async function getData() {
+    try {
+      // 세션 로컬 스토리지에서 토큰 가져오기
+      // const token = localStorage.getItem("authToken");
+      // if (!token) {
+      //   console.error("No token found");
+      //   return;
+      // }
+      const response = await axios.get(
+        "http://localhost:8082/api-server/owner-review",
+        {
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
+          params: {
+            shopId: shopId, // 가게 아이디 test
+          },
+        }
+      );
+      console.log("res", response.data.reviews);
+      const reviews = response.data.reviews;
+      setText(reviews);
+    } catch (error) {
+      console.error("Error fetching shop data:", error);
+    }
+  }
+
+  const [text, setText] = useState<test[]>([]); // 리뷰들
   const [openId, setOpenId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  // test용 await axios
-  const getData = async () => {
-    const resData = await axios.get(
-      "https://jsonplaceholder.typicode.com/posts"
-    );
-    setText(resData.data.slice(0, 30));
-  };
 
   useEffect(() => {
     getData();
@@ -48,10 +78,10 @@ export default function OwnerReview() {
   return (
     <>
       <div className="con m-10 flex flex-col items-center">
-        <div className="reviewTitle mb-8">
+        <div className="reviewTitle mb-8 pb-2 w-3/5 border-b ">
           <h1 className="text-2xl font-bold">리뷰 관리</h1>
         </div>
-        <div className="title flex h-10 relative items-center border-amber-500 bg-amber-500 text-white w-3/5">
+        <div className="title flex h-14 shadow-sm relative items-center  bg-amber-500 text-white w-3/5">
           <div className="flex justify-between justify-items-center w-full">
             <p className="w-24 text-center">작성일</p>
             <p className="">제목</p>
@@ -59,12 +89,12 @@ export default function OwnerReview() {
           </div>
         </div>
 
-        {currentItems.map((data) => (
+        {currentItems.map((review) => (
           <OwnerReviewBox
-            data={data}
-            key={data.id}
-            isOpen={openId === data.id}
-            onClick={() => handleClick(data.id)}
+            review={review}
+            key={review.id}
+            isOpen={openId === review.id}
+            onClick={() => handleClick(review.id)}
           />
         ))}
 
