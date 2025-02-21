@@ -25,7 +25,7 @@ export const socketReducer = (
     case "@socket/addOrder":
       return {
         ...state,
-        orders: [...state.orders, action.payload],
+        orders: [...state.orders, action.payload.orders],
       };
 
     case "@socket/setDisconnect":
