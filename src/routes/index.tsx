@@ -9,7 +9,7 @@ import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
 
 import CounterTest from "../pages/CounterTest";
-
+import OrderTest from "../pages/Order/OwnerOrderPage/OrderTest";
 const AppRoutes = () => {
   let routes = useRoutes([
     // { path: "/", element: <Home /> },
@@ -23,6 +23,7 @@ const AppRoutes = () => {
     { path: "/owner", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
+    { path: "/testorder", element: <OrderTest /> },
   ]);
 
   return routes;

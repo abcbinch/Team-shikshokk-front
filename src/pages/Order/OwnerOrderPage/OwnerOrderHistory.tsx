@@ -18,44 +18,48 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   console.log("socket = ", typeof socket);
   console.log("socket = ", socket);
   const dispatch = useDispatch();
-
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
+
+  useEffect(() => {
+    const data = { loginId: "owner01", socketId: socket.id };
+    socket.emit("connectOwner", data);
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("socket connect~~~");
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
+  const orders = socketState.orders;
+
+  console.log("result = ", orders);
   console.log("socket = ", socketState);
 
   const connect = useCallback(() => {
-    const order = [
-      {
-        loginId: "minbong03",
-        orderTime: "2025-02-15 19:30:55",
-        orderNumber: "123123",
-        storeCapacity: "4",
-        contactNumber: "010-1234-1234",
-        shopName: "매장이름",
-        total: "85000",
-        items: [
-          "매우매우맛있는치킨x1",
-          "매우매우맛있는피자x1",
-          "매우매우맛있는햄버거x1",
-        ],
-      },
-    ];
+    const data = { loginId: "customer01", socketId: socket.id };
 
-    dispatch(
-      S.setConnect({ socketId: socket.id, loginId: "03", orders: order })
-    );
+    // dispatch(
+    //   S.setConnect({ socketId: socket.id, loginId: "03", orders: order })
+    // );
   }, [dispatch]);
 
   function addorder() {
     const order = [
       {
-        loginId: "minbong03",
+        loginId: "owner01",
         orderTime: "2025-02-15 19:30:55",
         orderNumber: "123123",
         storeCapacity: "4",
         contactNumber: "010-1234-1234",
         shopName: "매장이름",
+        shopLoginId: "owner01",
         total: "85000",
         items: [
           "매우매우맛있는치킨x1",
@@ -70,10 +74,10 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
       <button
         className="btn btn-primary"
         onClick={() => {
-          connect();
+          addorder();
         }}
       >
-        주문버튼
+        주문하기
       </button>
 
       <Header nickname="고민봉" />
