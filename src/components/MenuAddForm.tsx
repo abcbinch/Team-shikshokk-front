@@ -12,18 +12,27 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
   let [mname, setMname] = useState("");
   let [mcategory, setMcategory] = useState("");
   let [mprice, setMprice] = useState("");
-  let [mcontent, setMcontent] = useState("");
+  let [mdesc, setMcontent] = useState("");
 
-  const close = () => {
-    console.log("모달 close 함수 테스트");
-    setIsShow(false);
-  };
+  // const close = () => {
+  //   setIsShow(false);
+  // };
+  //만약 안 된다면 가위표 아이콘 부분에서 화살표 함수를 그냥 close로 써 준다.
 
-  // useEffect(() => {
-  //   axios.post("/menu-register", { mname, mcategory, mprice, mcontent });
-  // }); //미완성. async, await 필요. 받아온 데이터를 담을 state 필요.
-  // //등록 버튼을 눌렀을 때 axios가 실행되어야 한다.
-  // controller, routes 설정
+  axios.post("/menu-register", { mname, mcategory, mprice, mdesc });
+
+  useEffect(() => {
+    const menuList = async () => {
+      const response = await axios.get("/menu-list");
+      console.log(response.data);
+      //아마 menuName, price, menudesc, category가 들어있을테니
+      //이를 참고해서 구조분해할당을 해주면 될 것 같다.
+      const { menuName, price, menudesc, category } = response.data;
+    };
+
+    menuList();
+  });
+
   return (
     <div className="m-reg-container">
       <form className="menu-modal">
@@ -31,32 +40,48 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <FontAwesomeIcon
             icon={faXmark}
             className="close-btn"
-            onClick={close}
+            onClick={() => setIsShow(false)}
           />
         </div>
 
         <label>
           메뉴명
           <br />{" "}
-          <input type="text" onChange={(e) => setMname(e.target.value)} />
+          <input
+            type="text"
+            name="mname"
+            onChange={(e) => setMname(e.target.value)}
+          />
         </label>
         <br />
         <label>
           분류
           <br />{" "}
-          <input type="text" onChange={(e) => setMcategory(e.target.value)} />
+          <input
+            type="text"
+            name="mcategory"
+            onChange={(e) => setMcategory(e.target.value)}
+          />
         </label>
         <br />
         <label>
           가격
           <br />{" "}
-          <input type="text" onChange={(e) => setMprice(e.target.value)} />
+          <input
+            type="text"
+            name="mprice"
+            onChange={(e) => setMprice(e.target.value)}
+          />
         </label>
         <br />
         <label>
           설명
           <br />{" "}
-          <input type="text" onChange={(e) => setMcontent(e.target.value)} />
+          <input
+            type="text"
+            name="mdesc"
+            onChange={(e) => setMcontent(e.target.value)}
+          />
         </label>
         <br />
         <button>등록하기</button>
