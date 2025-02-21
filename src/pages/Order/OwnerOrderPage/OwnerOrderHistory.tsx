@@ -11,9 +11,8 @@ import * as S from "../../../store/socket";
 import { AppState } from "../../../store";
 
 interface OwnerOrderHistoryProps {}
-
+const socket = io("http://localhost:8082");
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
-  const socket = io("http://localhost:8082");
   console.log("socket = ", socket);
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(
@@ -27,13 +26,17 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
-
     socket.on("order", (data: S.SocketState) => {
       console.log("받은 값 = ", data);
       dispatch(S.addOrder(data));
     });
+    socket.on("disconnect", () => {
+      console.log("socket disconnect~~~");
+    });
     return () => {
       socket.off("connect");
+      socket.off("order");
+      socket.off("disconnect");
     };
   }, [socket]);
 

@@ -1,13 +1,15 @@
 // reducers.ts
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { SocketState } from "./types";
+
+import { SocketState, Order } from "./types";
 import * as T from "./types";
 
 const initialState: T.SocketState = {
-  customerId: "",
   orders: {},
 };
 
+// (property) SocketState.orders: {
+//     [loginId: string]: Order[];
+// }
 export const socketReducer = (
   state: SocketState = initialState,
   action: T.Actions | any
@@ -17,11 +19,18 @@ export const socketReducer = (
       return {
         ...state,
       };
-
     case "@socket/addOrder":
+      const newOrder = action.payload;
+      console.log("newOrder====", newOrder);
       return {
         ...state,
-        customerId: action.payload,
+        orders: {
+          ...state.orders,
+          [newOrder.loginId]: [
+            ...(state.orders[newOrder.loginId] ?? []),
+            newOrder,
+          ],
+        },
       };
 
     case "@socket/setDisconnect":
