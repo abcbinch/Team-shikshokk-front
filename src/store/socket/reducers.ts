@@ -4,9 +4,8 @@ import { SocketState } from "./types";
 import * as T from "./types";
 
 const initialState: T.SocketState = {
-  socketId: "",
-  loginId: "",
-  orders: [],
+  customerId: "",
+  orders: {},
 };
 
 export const socketReducer = (
@@ -17,15 +16,12 @@ export const socketReducer = (
     case "@socket/connect":
       return {
         ...state,
-        socketId: action.payload.socketId,
-        loginId: action.payload.loginId,
-        orders: [...state.orders, ...action.payload.orders],
       };
 
     case "@socket/addOrder":
       return {
         ...state,
-        orders: [...state.orders, action.payload.orders],
+        customerId: action.payload,
       };
 
     case "@socket/setDisconnect":

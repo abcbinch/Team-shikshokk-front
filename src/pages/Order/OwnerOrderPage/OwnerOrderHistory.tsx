@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import * as S from "../../../store/socket";
@@ -14,69 +14,32 @@ interface OwnerOrderHistoryProps {}
 
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const socket = io("http://localhost:8082");
-
-  console.log("socket = ", typeof socket);
   console.log("socket = ", socket);
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
+  console.log("socket상태 = ", socketState);
 
   useEffect(() => {
     const data = { loginId: "owner01", socketId: socket.id };
     socket.emit("connectOwner", data);
-  }, [socket]);
-
-  useEffect(() => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
 
+    socket.on("order", (data: S.SocketState) => {
+      console.log("받은 값 = ", data);
+      dispatch(S.addOrder(data));
+    });
     return () => {
       socket.off("connect");
     };
-  }, []);
+  }, [socket]);
 
-  const orders = socketState.orders;
-
-  console.log("result = ", orders);
-  console.log("socket = ", socketState);
-
-  const connect = useCallback(() => {
-    const data = { loginId: "customer01", socketId: socket.id };
-
-    // dispatch(
-    //   S.setConnect({ socketId: socket.id, loginId: "03", orders: order })
-    // );
-  }, [dispatch]);
-
-  function addorder() {
-    const order = [
-      {
-        loginId: "owner01",
-        orderTime: "2025-02-15 19:30:55",
-        orderNumber: "123123",
-        storeCapacity: "4",
-        contactNumber: "010-1234-1234",
-        shopName: "매장이름",
-        shopLoginId: "owner01",
-        total: "85000",
-        items: [
-          "매우매우맛있는치킨x1",
-          "매우매우맛있는피자x1",
-          "매우매우맛있는햄버거x1",
-        ],
-      },
-    ];
-  }
   return (
     <>
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          addorder();
-        }}
-      >
+      <button className="btn btn-primary" onClick={() => {}}>
         주문하기
       </button>
 
