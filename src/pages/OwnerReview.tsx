@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import OwnerReviewBox from "../components/OwnerReviewBox";
 import "../styles/ownerReview.scss";
 import { useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-// import { RootState, AppDispatch } from "../store/rootReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store";
+import { RootState } from "../store/rootReducer";
+import { fetchReviews } from "../store/modules/reviewSlice";
 
 //test interface
 interface test {
@@ -24,9 +26,15 @@ export default function OwnerReview() {
   const location = useLocation();
   const { shopId } = location.state || { shopId: null }; // 기본 값을 null로 설정
   // const { shopId } = location.state;
-  // const dispatch = useDispatch<AppDispatch>();
 
-  console.log(shopId);
+  const dispatch = useDispatch<AppDispatch>();
+  const { reviews, loading } = useSelector((state: RootState) => state.reviews);
+
+  console.log("받은id:", shopId);
+  const [text, setText] = useState<test[]>([]); // 리뷰들
+  const [openId, setOpenId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   //--- 추가
   async function getData() {
@@ -56,14 +64,20 @@ export default function OwnerReview() {
     }
   }
 
-  const [text, setText] = useState<test[]>([]); // 리뷰들
-  const [openId, setOpenId] = useState<number | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   useEffect(() => {
     getData();
   }, []);
+
+  //--- 리덕스
+  // useEffect(() => {
+  //   if (shopId) {
+  //     dispatch(fetchReviews(shopId));
+  //   }
+  //   setText(reviews);
+  //   console.log("redux안", reviews);
+  // }, [dispatch, shopId]);
+
+  // if (loading) return <p>Loading...</p>;
 
   const handleClick = (id: number) => {
     setOpenId(openId === id ? null : id);
@@ -72,6 +86,7 @@ export default function OwnerReview() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = text.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = reviews.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(text.length / itemsPerPage);
 
   return (

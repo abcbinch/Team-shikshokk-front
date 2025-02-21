@@ -20,4 +20,6 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
+export type AppDispatch = typeof store.dispatch; // AppDispatch 타입 정의
+
 export { store, persistor };
