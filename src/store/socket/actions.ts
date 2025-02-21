@@ -1,17 +1,15 @@
-// store/socket/actions.ts
-export const SOCKET_CONNECT = "SOCKET_CONNECT";
-export const SOCKET_DISCONNECT = "SOCKET_DISCONNECT";
-export const SOCKET_MESSAGE = "SOCKET_MESSAGE";
-
-export const socketConnect = () => ({
-  type: SOCKET_CONNECT,
+// actions.ts
+import type * as T from "./types";
+export const setConnect = (payload: T.SocketState): T.SocketConnectAction => ({
+  type: "@socket/connect",
+  payload,
 });
 
-export const socketDisconnect = () => ({
-  type: SOCKET_DISCONNECT,
+export const addOrder = (payload: { data: any[] }) => ({
+  type: "@socket/addOrder",
+  payload,
 });
 
-export const socketMessage = (message: string) => ({
-  type: SOCKET_MESSAGE,
-  payload: message,
+export const setDisconnect = () => ({
+  type: "@socket/setDisconnect",
 });

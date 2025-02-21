@@ -1,17 +1,35 @@
-// store/socket/reducers.ts
-import { SOCKET_CONNECT, SOCKET_DISCONNECT, SOCKET_MESSAGE } from "./actions";
+// reducers.ts
+import { SocketState } from "./types";
 import * as T from "./types";
-const initialState: T.State = "0";
 
-export const reducer = (state: T.State = initialState, action: T.Actions) => {
+const initialState: T.SocketState = {
+  connected: false,
+  loginId: "",
+  socketId: "",
+  data: [],
+};
+
+export const socketReducer = (
+  state: SocketState = initialState,
+  action: T.Actions | any
+): T.SocketState => {
   switch (action.type) {
-    case "@socket/message":
-      return action.message;
     case "@socket/connect":
-      return action.socketId;
+      return {
+        ...state,
+        connected: action.payload.connected,
+        loginId: action.payload.loginId,
+        socketId: action.payload.socketId,
+        data: action.payload.data,
+      };
+
+    case "@socket/addOrder":
+      return {
+        ...state,
+        data: [...state.data, ...action.payload.data],
+      };
+
     default:
       return state;
   }
 };
-
-export default reducer;

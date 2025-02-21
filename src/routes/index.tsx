@@ -5,11 +5,10 @@ import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
 
 import Menus from "../pages/Menus";
 
-import Clock from "../pages/ClockTest";
-import Counter from "../pages/CounterTest";
 import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
 
+import CounterTest from "../pages/CounterTest";
 
 const AppRoutes = () => {
   let routes = useRoutes([
@@ -19,16 +18,11 @@ const AppRoutes = () => {
 
     { path: "/menu", element: <Menus /> },
 
-    { path: "/clock", element: <Clock /> },
-    { path: "/counter", element: <Counter /> },
-
-
-    { path: "/", element: <OwnerOrderAllHistory /> },
+    { path: "/", element: <OwnerOrderHistory /> },
 
     { path: "/owner", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
-
-
+    { path: "/counter", element: <CounterTest /> },
   ]);
 
   return routes;
