@@ -7,17 +7,17 @@ import { useDispatch } from "react-redux";
 // import { RootState, AppDispatch } from "../store/rootReducer";
 
 //test interface
-// interface test {
-//   content: string;
-//   cus_rev_id: number;
-//   customer_nickname: string;
-//   id: number;
-//   owner_review?: string;
-//   reviewfile?: string;
-//   score: number;
-//   shop_id: number;
-//   writeTime: string;
-// }
+interface test {
+  content: string;
+  cus_rev_id: number;
+  customer_nickname: string;
+  id: number;
+  owner_review?: string;
+  reviewfile?: string;
+  score: number;
+  shop_id: number;
+  writeTime: string;
+}
 
 export default function OwnerReview() {
   // shopid 받기
