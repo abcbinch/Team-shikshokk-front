@@ -3,7 +3,7 @@ import Header from "../../../components/Header/Header";
 import { AppState } from "../../../store";
 import io from "socket.io-client";
 import * as S from "../../../store/socket";
-import { useEffect } from "react";
+import { use, useEffect, useRef, useState } from "react";
 interface OrderTestProps {}
 const OrderTest: React.FC<OrderTestProps> = () => {
   const socket = io("http://localhost:8082");
@@ -12,22 +12,19 @@ const OrderTest: React.FC<OrderTestProps> = () => {
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
+
   useEffect(() => {
     const data = { loginId: "customer01", socketId: socket.id };
     socket.emit("connectCustomer", data);
-  }, [socket]);
-
-  useEffect(() => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
-
     return () => {
       socket.off("connect");
+      socket.off("order");
     };
-  }, []);
+  }, [socket]);
 
-  console.log(socketState);
   const order2 = [
     {
       loginId: "customer01",

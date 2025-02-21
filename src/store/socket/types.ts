@@ -1,5 +1,6 @@
 // types.ts
 import { Action } from "redux";
+
 export interface Order {
   loginId: string;
   orderTime: string;
@@ -13,9 +14,10 @@ export interface Order {
 }
 
 export type SocketState = {
-  socketId: string;
-  loginId: string;
-  orders: Order[];
+  customerId: string;
+  orders: {
+    [order: string]: Order;
+  };
 };
 
 export type SocketConnectAction = Action<"@socket/connect"> & {
@@ -23,7 +25,7 @@ export type SocketConnectAction = Action<"@socket/connect"> & {
 };
 
 export type SocketAddOrderAction = Action<"@socket/addOrder"> & {
-  payload: Order;
+  payload: SocketState;
 };
 
 export type Actions = SocketConnectAction | SocketAddOrderAction;
