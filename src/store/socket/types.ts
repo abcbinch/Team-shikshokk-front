@@ -1,19 +1,7 @@
 // types.ts
 import { Action } from "redux";
-export interface SocketState {
-  connected: boolean;
+export interface Order {
   loginId: string;
-  socketId: string;
-  data: any[];
-}
-
-export interface RootState {
-  socket: SocketState;
-}
-
-export interface OrderState {
-  loginId: string;
-  socketId: string;
   orderTime: string;
   orderNumber: string;
   storeCapacity: string;
@@ -23,19 +11,21 @@ export interface OrderState {
   items: string[];
 }
 
+export type SocketState = {
+  socketId: string;
+  loginId: string;
+  orders: Order[];
+};
+export interface RootState {
+  socket: SocketState;
+}
+
 export type SocketConnectAction = Action<"@socket/connect"> & {
-  payload: {
-    connected: boolean;
-    loginId: string;
-    socketId: string;
-    data: any[];
-  };
+  payload: SocketState;
 };
 
 export type SocketAddOrderAction = Action<"@socket/addOrder"> & {
-  payload: {
-    data: any[];
-  };
+  payload: Order;
 };
 
 export type Actions = SocketConnectAction | SocketAddOrderAction;

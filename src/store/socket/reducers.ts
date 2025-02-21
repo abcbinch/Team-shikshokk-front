@@ -1,12 +1,12 @@
 // reducers.ts
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import { SocketState } from "./types";
 import * as T from "./types";
 
 const initialState: T.SocketState = {
-  connected: false,
-  loginId: "",
   socketId: "",
-  data: [],
+  loginId: "",
+  orders: [],
 };
 
 export const socketReducer = (
@@ -17,17 +17,18 @@ export const socketReducer = (
     case "@socket/connect":
       return {
         ...state,
-        connected: action.payload.connected,
-        loginId: action.payload.loginId,
         socketId: action.payload.socketId,
-        data: action.payload.data,
+        loginId: action.payload.loginId,
+        orders: [...state.orders, ...action.payload.orders],
       };
 
     case "@socket/addOrder":
       return {
         ...state,
-        data: [...state.data, ...action.payload.data],
+        orders: [...state.orders, action.payload],
       };
+
+    case "@socket/setDisconnect":
 
     default:
       return state;

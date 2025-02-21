@@ -5,7 +5,7 @@ export const setConnect = (payload: T.SocketState): T.SocketConnectAction => ({
   payload,
 });
 
-export const addOrder = (payload: { data: any[] }) => ({
+export const addOrder = (payload: T.Order): T.SocketAddOrderAction => ({
   type: "@socket/addOrder",
   payload,
 });

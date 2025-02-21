@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import * as S from "../../../store/socket";
@@ -14,6 +14,9 @@ interface OwnerOrderHistoryProps {}
 
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const socket = io("http://localhost:8082");
+
+  console.log("socket = ", typeof socket);
+  console.log("socket = ", socket);
   const dispatch = useDispatch();
 
   const socketState = useSelector<AppState, S.SocketState>(
@@ -21,19 +24,27 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   );
   console.log("socket = ", socketState);
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("socket connected");
-      console.log("socket.id = ", socket.id);
-      dispatch(
-        S.setConnect({
-          connected: socket.connected,
-          socketId: socket.id,
-          loginId: "minbong03",
-          data: [],
-        })
-      );
-    });
+  const connect = useCallback(() => {
+    const order = [
+      {
+        loginId: "minbong03",
+        orderTime: "2025-02-15 19:30:55",
+        orderNumber: "123123",
+        storeCapacity: "4",
+        contactNumber: "010-1234-1234",
+        shopName: "매장이름",
+        total: "85000",
+        items: [
+          "매우매우맛있는치킨x1",
+          "매우매우맛있는피자x1",
+          "매우매우맛있는햄버거x1",
+        ],
+      },
+    ];
+
+    dispatch(
+      S.setConnect({ socketId: socket.id, loginId: "03", orders: order })
+    );
   }, [dispatch]);
 
   function addorder() {
@@ -53,15 +64,13 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
         ],
       },
     ];
-
-    dispatch(S.addOrder({ data: order }));
   }
   return (
     <>
       <button
         className="btn btn-primary"
         onClick={() => {
-          addorder();
+          connect();
         }}
       >
         주문버튼

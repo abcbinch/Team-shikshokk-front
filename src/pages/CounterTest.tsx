@@ -9,8 +9,8 @@ export default function CounterTest() {
   // 중요: rootReducer와 AppState의 속성명을 동일하게 해야 한다. 틀리면 속성을 못찾는다.
   const counter = useSelector<AppState, C.State>(({ counter }) => counter);
   console.log("counter", counter);
-  const increase = useCallback(() => dispatch(C.increaseCounter()), [dispatch]);
-  const decrease = useCallback(() => dispatch(C.decreaseCounter()), [dispatch]);
+  const increase = useCallback(() => dispatch(C.setCount(1)), [dispatch]);
+  const decrease = useCallback(() => dispatch(C.setCount(-1)), [dispatch]);
 
   return (
     <section className="mt-4">

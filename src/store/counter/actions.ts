@@ -5,5 +5,5 @@ export const setCount = (payload: T.State): T.SetCounterAction => ({
   payload,
 });
 
-export const increaseCounter = () => setCount(1);
-export const decreaseCounter = () => setCount(-1);
+// export const increaseCounter = () => setCount(1);
+// export const decreaseCounter = () => setCount(-1);
