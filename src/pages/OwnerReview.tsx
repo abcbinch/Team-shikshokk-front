@@ -3,29 +3,28 @@ import { useEffect, useState } from "react";
 import OwnerReviewBox from "../components/OwnerReviewBox";
 import "../styles/ownerReview.scss";
 import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+// import { RootState, AppDispatch } from "../store/rootReducer";
 
 //test interface
-interface test {
-  // userid: number;
-  // id: number;
-  // title: string;
-  // body: string;
-  content: string;
-  cus_rev_id: number;
-  customer_nickname: string;
-  id: number;
-  owner_review?: string;
-  reviewfile?: string;
-  score: number;
-  shop_id: number;
-  writeTime: string;
-}
+// interface test {
+//   content: string;
+//   cus_rev_id: number;
+//   customer_nickname: string;
+//   id: number;
+//   owner_review?: string;
+//   reviewfile?: string;
+//   score: number;
+//   shop_id: number;
+//   writeTime: string;
+// }
 
 export default function OwnerReview() {
   // shopid 받기
   const location = useLocation();
   const { shopId } = location.state || { shopId: null }; // 기본 값을 null로 설정
   // const { shopId } = location.state;
+  // const dispatch = useDispatch<AppDispatch>();
 
   console.log(shopId);
 
