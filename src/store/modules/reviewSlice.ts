@@ -25,6 +25,7 @@ const initialState: ReviewState = {
   error: null,
 };
 
+//조회 x
 export const fetchReviews = createAsyncThunk(
   "reviews/fetchReviews",
   async (shopId: number) => {
@@ -37,8 +38,22 @@ export const fetchReviews = createAsyncThunk(
     return response.data.reviews;
   }
 );
+//수정
+export const updateReview = createAsyncThunk(
+  "reviews/updateReview",
+  async ({ id, owner_review }: { id: number; owner_review: string }) => {
+    console.log("리듀서", id);
+    const response = await axios.patch(
+      `http://localhost:8082/api-server/owner-review/${id}`,
+      {
+        owner_review,
+      }
+    );
+    return response.data.review;
+  }
+);
 
-// ----
+// ---- state
 const reviewSlice = createSlice({
   name: "reviews",
   initialState,
@@ -56,6 +71,14 @@ const reviewSlice = createSlice({
       .addCase(fetchReviews.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Failed to fetch reviews";
+      })
+      .addCase(updateReview.fulfilled, (state, action) => {
+        const index = state.reviews.findIndex(
+          (r) => r.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.reviews[index] = action.payload;
+        }
       });
   },
 });

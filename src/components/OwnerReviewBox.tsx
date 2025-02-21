@@ -1,4 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../store";
+import { updateReview } from "../store/modules/reviewSlice";
+import { RootState } from "../store/rootReducer";
 
 //test interface
 interface test {
@@ -19,15 +23,60 @@ interface Props {
   onClick: () => void; // 클릭시 실행할 함수
 }
 
+//--- 추가 (사용하지 않음 )
+interface ReviewProps {
+  review: {
+    // id: number;
+    // owner_review?: string;
+    // content: string;
+    // customer_nickname: string;
+    // writeTime: string;
+    // reviewfile?: string | null;  // 순서? 리뷰 이미지 파일 추가
+    // score: number;
+    content: string;
+    cus_rev_id: number;
+    customer_nickname: string;
+    id: number;
+    owner_review?: string;
+    reviewfile?: string;
+    score: number;
+    shop_id: number;
+    writeTime: string;
+  };
+}
+
 export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
+  //추가
+  const dispatch = useDispatch<AppDispatch>();
+  const [editMode, setEditMode] = useState(false);
+  const [newReview, setNewReview] = useState(review.owner_review || "");
+
+  //--수정 핸들러
+  const handleUpdate = () => {
+    dispatch(updateReview({ id: review.id, owner_review: newReview }));
+    setEditMode(false);
+  };
+
   // 리플
-  const [newRe, setNewRe] = useState<string>("");
+  // const [newRe, setNewRe] = useState<string>("");
+  const [newRe, setNewRe] = useState(review.owner_review || "");
   const reRef = useRef<HTMLTextAreaElement>(null);
-  const [reMode, setReMode] = useState(false);
+  const [reMode, setReMode] = useState(true); // 등록인지 아닌지
 
   // ref 지정
   const parentRef = React.useRef<HTMLDivElement>(null);
   const childRef = React.useRef<HTMLDivElement>(null);
+
+  // Redux 스토어에서 최신 리뷰 상태 가져오기
+  const updatedReview = useSelector((state: RootState) =>
+    state.reviews.reviews.find((r) => r.id === review.id)
+  );
+  // Redux 스토어에서 업데이트된 `owner_review` 값을 가져와 `newRe`에 반영
+  useEffect(() => {
+    if (updatedReview) {
+      setNewRe(updatedReview.owner_review || "");
+    }
+  }, [updatedReview]); // `updatedReview`가 변경될 때마다 실행
 
   const addRe = () => {
     // 등록 버튼
@@ -36,10 +85,11 @@ export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
       if (parentRef.current && childRef.current) {
         if (isOpen) {
           parentRef.current.style.height = `${
-            childRef.current.clientHeight + 50
+            childRef.current.scrollHeight + 50
           }px`;
         }
       }
+      dispatch(updateReview({ id: review.id, owner_review: newRe }));
     } else {
       alert("댓글을 입력해주세요");
     }
@@ -63,7 +113,7 @@ export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
     if (parentRef.current && childRef.current) {
       if (isOpen) {
         parentRef.current.style.height = `${
-          childRef.current.clientHeight + 30
+          childRef.current.scrollHeight + 30
         }px`;
         parentRef.current.style.background = "#fefcf5";
       } else {
@@ -131,37 +181,60 @@ export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
 
             {/* 댓글 */}
             <div className="reBox w-full h-36 relative">
-              {reMode ? (
-                // --------- 수정-----------------------------
-                <div className="newReBox border-t">
-                  <p className="text-sm mt-2 text-center"> 점주 </p>
-                  {review.owner_review && (
-                    <p className="text-center w-full h-1/2">
-                      {review.owner_review}
-                    </p>
-                  )}
+              {/*  -------새로운------- */}
 
-                  <button
-                    className="border rounded m-2 w-12 h-7 text-sm
-                 bg-white absolute right-1"
-                    onClick={updateRe}
-                  >
-                    수정
-                  </button>
-                  <button
-                    className="border rounded m-2 w-12 h-7 text-sm
-                 bg-white absolute"
-                  >
-                    삭제
-                  </button>
-                </div>
+              {updatedReview?.owner_review !== null ? (
+                reMode ? (
+                  <div className="newReBox border-t  p-3 my-3">
+                    <p className="mt-2 font-bold"> 점주 </p>
+                    {updatedReview?.owner_review && (
+                      <p className="text-center w-full h-1/2 bg-white p-2 shadow-sm">
+                        {updatedReview.owner_review}
+                      </p>
+                    )}
+
+                    <button
+                      className="border rounded m-2 w-12 h-7 text-sm
+               bg-white absolute right-1"
+                      onClick={updateRe}
+                    >
+                      수정
+                    </button>
+                    <button
+                      className="border rounded m-2 w-12 h-7 text-sm
+               bg-white absolute right-14"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <textarea
+                      placeholder="댓글 내용을 입력해주세요.(공백 포함 200자 이내 작성)"
+                      maxLength={200}
+                      className="resize-none border block w-full h-1/2 p-2 
+    rounded text-sm"
+                      value={newRe}
+                      onChange={(e) => setNewRe(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      ref={reRef}
+                    ></textarea>
+                    <button
+                      className="border rounded m-2 w-12 h-7 text-sm
+   bg-white absolute right-1"
+                      onClick={addRe}
+                    >
+                      등록
+                    </button>
+                  </>
+                )
               ) : (
                 <>
                   <textarea
                     placeholder="댓글 내용을 입력해주세요.(공백 포함 200자 이내 작성)"
                     maxLength={200}
                     className="resize-none border block w-full h-1/2 p-2 
-                  rounded text-sm"
+rounded text-sm"
                     value={newRe}
                     onChange={(e) => setNewRe(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -169,7 +242,7 @@ export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
                   ></textarea>
                   <button
                     className="border rounded m-2 w-12 h-7 text-sm
-                 bg-white absolute right-1"
+bg-white absolute right-1"
                     onClick={addRe}
                   >
                     등록
