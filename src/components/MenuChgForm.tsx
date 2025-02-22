@@ -21,7 +21,7 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
     e.preventDefault();
     try {
       if (formRef.current && formRef.current.checkValidity()) {
-        axios.post("http://localhost:8082/api-server/menu-register", {
+        axios.patch("http://localhost:8082/api-server/menu-change", {
           mname,
           mcategory,
           mprice,
@@ -33,6 +33,22 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
       console.log(err);
     }
   };
+
+  // onSubmit={menuAdd}
+
+  useEffect(() => {
+    const menuOne = async () => {
+      const response = await axios.get(
+        "http://localhost:8082/api-server/menu-one"
+      );
+      console.log("response data", response.data);
+      //아마 menuName, price, menudesc, category가 들어있을테니
+      //이를 참고해서 구조분해할당을 해주면 될 것 같다.
+      //확인을 해 봐야 한다.
+    };
+
+    menuOne();
+  }, []);
 
   return (
     <div className="m-reg-container">
@@ -89,7 +105,7 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           />
         </label>
         <br />
-        <button type="submit">등록하기</button>
+        <button type="submit">수정하기</button>
       </form>
     </div>
   );
