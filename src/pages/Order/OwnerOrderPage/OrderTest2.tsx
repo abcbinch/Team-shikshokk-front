@@ -7,9 +7,9 @@ import { use, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useInterval } from "../../../hooks";
 import * as C from "../../../store/clock";
-interface OrderTest2Props {}
+interface OrderTestProps {}
 const socket = io("http://localhost:8082");
-const OrderTest2: React.FC<OrderTest2Props> = () => {
+const OrderTest: React.FC<OrderTestProps> = () => {
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
   );
@@ -42,7 +42,30 @@ const OrderTest2: React.FC<OrderTest2Props> = () => {
     dispatch(C.setClock(new Date().toISOString()));
   }, [dispatch]);
 
-  function order() {
+  // function order() {
+  //   const order2 = [
+  //     {
+  //       loginId: "customer01",
+  //       orderTime: clock,
+  //       orderNumber: uuidv4(),
+  //       storeCapacity: "4",
+  //       orderType: "매장",
+  //       contactNumber: "010-1234-1234",
+  //       shopName: "치킨가게",
+  //       shopLoginId: "owner01",
+  //       total: "85000",
+  //       items: [
+  //         "매우매우맛있는후라x1",
+  //         "매우매우맛있는양념x1",
+  //         "매우매우맛있는순살x1",
+  //       ],
+  //     },
+  //   ];
+
+  //   socket.emit("order", order2);
+  // }
+
+  function order2() {
     const order2 = [
       {
         loginId: "customer02",
@@ -71,7 +94,7 @@ const OrderTest2: React.FC<OrderTest2Props> = () => {
       <div>
         <button
           onClick={() => {
-            order();
+            order2();
           }}
           className="btn btn-primary btn-lg"
         >
@@ -82,4 +105,4 @@ const OrderTest2: React.FC<OrderTest2Props> = () => {
   );
 };
 
-export default OrderTest2;
+export default OrderTest;

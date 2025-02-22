@@ -13,11 +13,13 @@ export interface Order {
   total: string;
   items: string[];
 }
+export interface Owner {
+  ownerId: string;
+  orders: Order[];
+}
 
 export interface SocketState {
-  orders: {
-    [loginId: string]: Order[];
-  };
+  owners: Owner[];
 }
 
 export type SocketConnectAction = Action<"@socket/connect"> & {
