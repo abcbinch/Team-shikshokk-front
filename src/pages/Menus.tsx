@@ -16,10 +16,6 @@ export default function Menus() {
   let [isShow, setIsShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
-  // let [mname, setMname] = useState("");
-  // let [mcategory, setMcategory] = useState("");
-  // let [mprice, setMprice] = useState(0);
-  // let [mdesc, setMcontent] = useState("");
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -28,9 +24,7 @@ export default function Menus() {
         "http://localhost:8082/api-server/menu-list"
       );
       console.log("response data", response.data);
-      //아마 menuName, price, menudesc, category가 들어있을테니
-      //이를 참고해서 구조분해할당을 해주면 될 것 같다.
-      //확인을 해 봐야 한다.
+
       let result = response.data.map((el: Menus) => {
         const { menuName, price, menudesc, category } = el;
         return { menuName, price, menudesc, category };
@@ -72,40 +66,36 @@ export default function Menus() {
         {categoryArr.map((el) => {
           return <li>{el}</li>;
         })}
-        <li>
-          <FontAwesomeIcon icon={faPlus} />
-        </li>
       </ul>
 
       {/* 메뉴 보드들 */}
-      {menuArr.map((comp) => {
+      {categoryArr.map((comp) => {
         return (
           <div>
             <hr className="mb-3" />
-            {categoryArr.map((cel) => {
-              return (
-                <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
-                  {cel}
-                </span>
-              );
-            })}
+
+            <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
+              {comp}
+            </span>
 
             <ul className="menu-board flex list-none overflow-x-scroll">
-              {menuArr.map((el) => {
-                return (
-                  <li>
-                    <div className="icon-box">
-                      <FontAwesomeIcon
-                        icon={faGear}
-                        className="setting-icon m-2"
-                      />
-                    </div>
-                    <div className="img-box"></div>
-                    <p>{el.menuName}</p>
-                    <p>{el.price}</p>
-                    <div className="content-box">{el.menudesc}</div>
-                  </li>
-                );
+              {menuArr.map((mel) => {
+                if (comp === mel.category) {
+                  return (
+                    <li>
+                      <div className="icon-box">
+                        <FontAwesomeIcon
+                          icon={faGear}
+                          className="setting-icon m-2"
+                        />
+                      </div>
+                      <div className="img-box"></div>
+                      <p>{mel.menuName}</p>
+                      <p>{mel.price}</p>
+                      <div className="content-box">{mel.menudesc}</div>
+                    </li>
+                  );
+                }
               })}
 
               <li onClick={() => setIsShow(true)}>
