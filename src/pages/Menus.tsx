@@ -24,7 +24,9 @@ export default function Menus() {
   //메뉴 전체 조회 axios
   useEffect(() => {
     const menuList = async () => {
-      const response = await axios.get("/menu-list");
+      const response = await axios.get(
+        "http://localhost:8082/api-server/menu-list"
+      );
       console.log(response.data);
       //아마 menuName, price, menudesc, category가 들어있을테니
       //이를 참고해서 구조분해할당을 해주면 될 것 같다.
@@ -43,7 +45,7 @@ export default function Menus() {
     };
 
     menuList();
-  });
+  }, []);
 
   return (
     <main className="max-w-7xl m-auto">

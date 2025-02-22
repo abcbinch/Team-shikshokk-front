@@ -19,7 +19,12 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
   // };
   //만약 안 된다면 가위표 아이콘 부분에서 화살표 함수를 그냥 close로 써 준다.
 
-  axios.post("/menu-register", { mname, mcategory, mprice, mdesc });
+  axios.post("http://localhost:8082/api-server/menu-register", {
+    mname,
+    mcategory,
+    mprice,
+    mdesc,
+  });
 
   return (
     <div className="m-reg-container">
