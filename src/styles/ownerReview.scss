@@ -1,5 +1,8 @@
 .con {
   @media (max-width: 768px) {
+    .reviewTitle {
+      width: 80%;
+    }
     .title {
       width: 80%;
       > div > p {
@@ -8,6 +11,9 @@
     }
   }
   @media (max-width: 480px) {
+    .reviewTitle {
+      width: 100%;
+    }
     .title {
       width: 100%;
       > div > p {
@@ -19,7 +25,7 @@
     > .contentWrapper {
       transition: height 0.35s ease;
       @media (max-width: 768px) {
-        > .innerContent > p {
+        > .innerContent p {
           font-size: 0.8rem;
         }
       }
@@ -29,11 +35,17 @@
       > header > div > p {
         font-size: 0.8rem;
       }
+      button {
+        font-size: 0.8rem;
+      }
     }
     @media (max-width: 480px) {
       width: 100%;
       > header > div > p {
         font-size: 0.7rem;
+      }
+      button {
+        font-size: 0.8rem;
       }
     }
   }

@@ -53,6 +53,31 @@ export const updateReview = createAsyncThunk(
   }
 );
 
+// 점주 리뷰 삭제
+export const deleteReview = createAsyncThunk(
+  "reviews/deleteReview",
+  async (id: number) => {
+    const response = await axios.delete(
+      `http://localhost:8082/api-server/owner-review/${id}`
+    );
+    return response.data.review;
+  }
+);
+
+// 손님 리뷰 삭제 요청
+export const cus_delete = createAsyncThunk(
+  "review/cus_delete",
+  async (id: number) => {
+    const response = await axios.patch(
+      `http://localhost:8082/api-server/owner-review`,
+      {
+        id,
+      }
+    );
+    return response.data.review;
+  }
+);
+
 // ---- state
 const reviewSlice = createSlice({
   name: "reviews",
@@ -78,6 +103,22 @@ const reviewSlice = createSlice({
         );
         if (index !== -1) {
           state.reviews[index] = action.payload;
+        }
+      })
+      .addCase(deleteReview.fulfilled, (state, action) => {
+        const index = state.reviews.findIndex(
+          (r) => r.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.reviews[index] = action.payload; // owner_review가 null로 변경
+        }
+      })
+      .addCase(cus_delete.fulfilled, (state, action) => {
+        const index = state.reviews.findIndex(
+          (r) => r.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.reviews[index] = action.payload; // owner_review가 null로 변경
         }
       });
   },
