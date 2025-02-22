@@ -3,20 +3,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import * as S from "../../../store/socket";
 import { AppState } from "../../../store";
-
-interface OwnerOrderHistory2Props {}
+interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
 
-const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
+const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
+  console.log("전체 socketState = ", socketState);
+
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
+  const [orderStatus, setOrderStatus] = useState<{ [key: string]: boolean }>(
+    () => {
+      const savedStatus = localStorage.getItem("orderStatus");
+      return savedStatus ? JSON.parse(savedStatus) : {};
+    }
+  );
+  const [cookingCompleted, setCookingCompleted] = useState<{
+    [key: string]: boolean;
+  }>(() => {
+    const savedCompletedStatus = localStorage.getItem("cookingCompleted");
+    return savedCompletedStatus ? JSON.parse(savedCompletedStatus) : {};
+  });
+  const [orderApproved, setOrderApproved] = useState<{
+    [key: string]: boolean;
+  }>(() => {
+    const savedApprovedStatus = localStorage.getItem("orderApproved");
+    return savedApprovedStatus ? JSON.parse(savedApprovedStatus) : {};
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 480);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const data = { loginId: "owner02", socketId: socket.id };
@@ -38,12 +68,40 @@ const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
     };
   }, [dispatch]);
 
-  // 모든 주문을 배열로 합친 후, 시간순으로 정렬
-  const allOrders = Object.values(socketState.orders)
-    .flat()
-    .sort((a, b) => {
-      return new Date(b.orderTime).getTime() - new Date(a.orderTime).getTime();
+  const handleOrderApproval = (orderNumber: string) => {
+    console.log("주문 확인 버튼 눌럿다");
+    setOrderApproved((prevState) => {
+      const updatedStatus = { ...prevState, [orderNumber]: true };
+      localStorage.setItem("orderApproved", JSON.stringify(updatedStatus));
+      return updatedStatus;
     });
+  };
+
+  const handleCookingStart = (orderNumber: string) => {
+    console.log("조리 시작 버튼 눌럿다");
+    setOrderStatus((prevState) => {
+      const updatedStatus = { ...prevState, [orderNumber]: true };
+      localStorage.setItem("orderStatus", JSON.stringify(updatedStatus));
+      return updatedStatus;
+    });
+  };
+
+  const handleCookingEnd = (orderNumber: string) => {
+    console.log("조리 완료 버튼 눌럿다");
+    setCookingCompleted((prevState) => {
+      const updatedCompletedStatus = { ...prevState, [orderNumber]: true };
+      localStorage.setItem(
+        "cookingCompleted",
+        JSON.stringify(updatedCompletedStatus)
+      );
+      return updatedCompletedStatus;
+    });
+  };
+
+  const order = socketState.owners.filter(
+    (owner) => owner.ownerId === "owner02"
+  );
+  const orders = order[0]?.orders ? order[0].orders.map((order) => order) : [];
 
   return (
     <>
@@ -60,10 +118,9 @@ const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
               </div>
             </div>
             <hr className="border-2 opacity-75 black" />
-
             <div className="receipt-card-container">
-              {allOrders.map((order) => (
-                <div className="receipt-card-all" key={order.orderNumber}>
+              {orders.map((order, index) => (
+                <div className="receipt-card" key={index}>
                   <ul className="receipt-card-list">
                     <li>
                       <FontAwesomeIcon icon={faTimes} className="custom-icon" />
@@ -95,22 +152,56 @@ const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
                     <br />
                     <li>합계: {order.total}원</li>
                   </ul>
+
                   <div className="mt-2">
-                    {window.innerWidth >= 480 ? (
-                      <div>
-                        <button className="btn btn-warning">조리 시작</button>
-                        <button className="btn btn-success">조리 완료</button>
-                      </div>
-                    ) : (
-                      <div>
-                        <button className="btn btn-warning btn-sm">
-                          조리 시작
+                    <div>
+                      {!orderApproved[order.orderNumber] && (
+                        <button
+                          className={`btn btn-secondary ${
+                            isSmallScreen ? "btn-sm" : ""
+                          }`}
+                          onClick={() => handleOrderApproval(order.orderNumber)}
+                        >
+                          주문 확인
                         </button>
-                        <button className="btn btn-success btn-sm">
-                          조리 완료
+                      )}
+                      {orderApproved[order.orderNumber] &&
+                        !cookingCompleted[order.orderNumber] && (
+                          <>
+                            <button
+                              className={`btn btn-warning ${
+                                isSmallScreen ? "btn-sm" : ""
+                              }`}
+                              onClick={() =>
+                                handleCookingStart(order.orderNumber)
+                              }
+                              disabled={orderStatus[order.orderNumber]}
+                            >
+                              조리 시작
+                            </button>
+                            <button
+                              className={`btn btn-success ${
+                                isSmallScreen ? "btn-sm" : ""
+                              }`}
+                              onClick={() =>
+                                handleCookingEnd(order.orderNumber)
+                              }
+                              disabled={!orderStatus[order.orderNumber]}
+                            >
+                              조리 완료
+                            </button>
+                          </>
+                        )}
+                      {cookingCompleted[order.orderNumber] && (
+                        <button
+                          className={`btn btn-info ${
+                            isSmallScreen ? "btn-sm" : ""
+                          }`}
+                        >
+                          조리완료되었습니다.
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -122,4 +213,4 @@ const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
   );
 };
 
-export default OwnerOrderHistory2;
+export default OwnerOrderHistory;

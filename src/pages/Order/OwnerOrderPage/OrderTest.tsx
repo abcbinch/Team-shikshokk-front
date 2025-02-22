@@ -42,14 +42,37 @@ const OrderTest: React.FC<OrderTestProps> = () => {
     dispatch(C.setClock(new Date().toISOString()));
   }, [dispatch]);
 
-  function order() {
+  // function order() {
+  //   const order2 = [
+  //     {
+  //       loginId: "customer01",
+  //       orderTime: clock,
+  //       orderNumber: uuidv4(),
+  //       storeCapacity: "4",
+  //       orderType: "매장",
+  //       contactNumber: "010-1234-1234",
+  //       shopName: "치킨가게",
+  //       shopLoginId: "owner01",
+  //       total: "85000",
+  //       items: [
+  //         "매우매우맛있는후라x1",
+  //         "매우매우맛있는양념x1",
+  //         "매우매우맛있는순살x1",
+  //       ],
+  //     },
+  //   ];
+
+  //   socket.emit("order", order2);
+  // }
+
+  function order2() {
     const order2 = [
       {
         loginId: "customer01",
         orderTime: clock,
         orderNumber: uuidv4(),
-        storeCapacity: "4",
-        orderType: "매장",
+        orderType: "포장",
+        storeCapacity: "1",
         contactNumber: "010-1234-1234",
         shopName: "치킨가게",
         shopLoginId: "owner01",
@@ -71,7 +94,7 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       <div>
         <button
           onClick={() => {
-            order();
+            order2();
           }}
           className="btn btn-primary btn-lg"
         >
