@@ -6,6 +6,7 @@ export interface Order {
   orderTime: string;
   orderNumber: string;
   storeCapacity: string;
+  orderType: string;
   contactNumber: string;
   shopName: string;
   shopLoginId: string;
@@ -13,12 +14,11 @@ export interface Order {
   items: string[];
 }
 
-export type SocketState = {
-  customerId: string;
+export interface SocketState {
   orders: {
-    [order: string]: Order;
+    [loginId: string]: Order[];
   };
-};
+}
 
 export type SocketConnectAction = Action<"@socket/connect"> & {
   payload: SocketState;

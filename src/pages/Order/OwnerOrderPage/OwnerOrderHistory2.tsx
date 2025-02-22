@@ -9,17 +9,17 @@ import io from "socket.io-client";
 import * as S from "../../../store/socket";
 import { AppState } from "../../../store";
 
-interface OwnerOrderHistoryProps {}
+interface OwnerOrderHistory2Props {}
 const socket = io("http://localhost:8082");
 
-const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
+const OwnerOrderHistory2: React.FC<OwnerOrderHistory2Props> = () => {
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
 
   useEffect(() => {
-    const data = { loginId: "owner01", socketId: socket.id };
+    const data = { loginId: "owner02", socketId: socket.id };
     socket.emit("connectOwner", data);
     socket.on("connect", () => {
       console.log("socket connect~~~");
@@ -122,4 +122,4 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   );
 };
 
-export default OwnerOrderHistory;
+export default OwnerOrderHistory2;

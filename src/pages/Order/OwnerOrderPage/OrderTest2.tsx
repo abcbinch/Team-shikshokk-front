@@ -7,9 +7,9 @@ import { use, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useInterval } from "../../../hooks";
 import * as C from "../../../store/clock";
-interface OrderTestProps {}
+interface OrderTest2Props {}
 const socket = io("http://localhost:8082");
-const OrderTest: React.FC<OrderTestProps> = () => {
+const OrderTest2: React.FC<OrderTest2Props> = () => {
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
   );
@@ -45,14 +45,14 @@ const OrderTest: React.FC<OrderTestProps> = () => {
   function order() {
     const order2 = [
       {
-        loginId: "customer01",
+        loginId: "customer02",
         orderTime: clock,
         orderNumber: uuidv4(),
-        storeCapacity: "4",
-        orderType: "매장",
+        orderType: "포장",
+        storeCapacity: "1",
         contactNumber: "010-1234-1234",
         shopName: "치킨가게",
-        shopLoginId: "owner01",
+        shopLoginId: "owner02",
         total: "85000",
         items: [
           "매우매우맛있는후라x1",
@@ -82,4 +82,4 @@ const OrderTest: React.FC<OrderTestProps> = () => {
   );
 };
 
-export default OrderTest;
+export default OrderTest2;

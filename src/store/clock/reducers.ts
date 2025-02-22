@@ -1,14 +1,13 @@
-import { RootState } from "../rootReducer";
 import * as T from "./types";
 
-const initialState: T.State = 0;
+const initialState: T.State = new Date().toISOString();
 export const reducer = (
   state: T.State = initialState,
   action: T.Actions | any
-): T.State => {
+) => {
   switch (action.type) {
-    case "@counter/setCounter":
-      return state + action.payload;
+    case "@clock/setClock":
+      return action.payload;
     default:
       return state;
   }

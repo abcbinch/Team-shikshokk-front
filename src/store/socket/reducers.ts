@@ -1,10 +1,9 @@
 // reducers.ts
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { SocketState } from "./types";
+
+import { SocketState, Order } from "./types";
 import * as T from "./types";
 
 const initialState: T.SocketState = {
-  customerId: "",
   orders: {},
 };
 
@@ -17,11 +16,18 @@ export const socketReducer = (
       return {
         ...state,
       };
-
     case "@socket/addOrder":
+      const newOrder = action.payload;
       return {
         ...state,
-        customerId: action.payload,
+        orders: {
+          ...state.orders,
+
+          [newOrder.loginId]: [
+            ...(state.orders[newOrder.loginId] ?? []),
+            newOrder,
+          ],
+        },
       };
 
     case "@socket/setDisconnect":
