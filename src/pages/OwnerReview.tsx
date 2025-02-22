@@ -9,12 +9,13 @@ import { RootState } from "../store/rootReducer";
 import { fetchReviews } from "../store/modules/reviewSlice";
 
 //test interface
-interface test {
+interface Review {
   content: string;
   cus_rev_id: number;
   customer_nickname: string;
   id: number;
   owner_review?: string;
+  isDelete?: string; // --------- 추가
   reviewfile?: string;
   score: number;
   shop_id: number;
@@ -29,9 +30,14 @@ export default function OwnerReview() {
 
   const dispatch = useDispatch<AppDispatch>();
   const { reviews, loading } = useSelector((state: RootState) => state.reviews);
+  useEffect(() => {
+    if (shopId) {
+      dispatch(fetchReviews(shopId));
+    }
+  }, [dispatch, shopId]);
 
   console.log("받은id:", shopId);
-  const [text, setText] = useState<test[]>([]); // 리뷰들
+  const [text, setText] = useState<Review[]>([]); // 리뷰들
   const [openId, setOpenId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -68,17 +74,6 @@ export default function OwnerReview() {
     getData();
   }, []);
 
-  //--- 리덕스
-  // useEffect(() => {
-  //   if (shopId) {
-  //     dispatch(fetchReviews(shopId));
-  //   }
-  //   setText(reviews);
-  //   console.log("redux안", reviews);
-  // }, [dispatch, shopId]);
-
-  // if (loading) return <p>Loading...</p>;
-
   const handleClick = (id: number) => {
     setOpenId(openId === id ? null : id);
   };
@@ -86,12 +81,14 @@ export default function OwnerReview() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = text.slice(indexOfFirstItem, indexOfLastItem);
-  // const currentItems = reviews.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(text.length / itemsPerPage);
+
+  /// 확인
+  console.log(reviews);
 
   return (
     <>
-      <div className="con m-10 flex flex-col items-center">
+      <div className="con max-w-[1200px] m-10 flex flex-col items-center">
         <div className="reviewTitle mb-8 pb-2 w-3/5 border-b ">
           <h1 className="text-2xl font-bold">리뷰 관리</h1>
         </div>
