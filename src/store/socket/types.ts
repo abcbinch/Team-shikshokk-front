@@ -6,6 +6,7 @@ export interface Order {
   orderTime: string;
   orderNumber: string;
   storeCapacity: string;
+  orderType: string;
   contactNumber: string;
   shopName: string;
   shopLoginId: string;

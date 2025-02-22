@@ -7,9 +7,6 @@ const initialState: T.SocketState = {
   orders: {},
 };
 
-// (property) SocketState.orders: {
-//     [loginId: string]: Order[];
-// }
 export const socketReducer = (
   state: SocketState = initialState,
   action: T.Actions | any
@@ -21,11 +18,11 @@ export const socketReducer = (
       };
     case "@socket/addOrder":
       const newOrder = action.payload;
-      console.log("newOrder====", newOrder);
       return {
         ...state,
         orders: {
           ...state.orders,
+
           [newOrder.loginId]: [
             ...(state.orders[newOrder.loginId] ?? []),
             newOrder,
