@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../styles/menu-form.scss";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 interface MenuAddFormProps {
@@ -14,21 +14,31 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
   let [mprice, setMprice] = useState(0);
   let [mdesc, setMcontent] = useState("");
 
-  // const close = () => {
-  //   setIsShow(false);
-  // };
-  //만약 안 된다면 가위표 아이콘 부분에서 화살표 함수를 그냥 close로 써 준다.
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const form = formRef.current;
 
-  axios.post("http://localhost:8082/api-server/menu-register", {
-    mname,
-    mcategory,
-    mprice,
-    mdesc,
-  });
+  const menuAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (formRef.current && formRef.current.checkValidity()) {
+        axios.post("http://localhost:8082/api-server/menu-register", {
+          mname,
+          mcategory,
+          mprice,
+          mdesc,
+        });
+      }
+      setIsShow(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // onSubmit={menuAdd}
 
   return (
     <div className="m-reg-container">
-      <form className="menu-modal">
+      <form className="menu-modal" ref={formRef} onSubmit={menuAdd}>
         <div className="x-box">
           <FontAwesomeIcon
             icon={faXmark}
@@ -43,6 +53,7 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mname"
+            value={mname}
             onChange={(e) => setMname(e.target.value)}
           />
         </label>
@@ -53,6 +64,7 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mcategory"
+            value={mcategory}
             onChange={(e) => setMcategory(e.target.value)}
           />
         </label>
@@ -63,6 +75,7 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mprice"
+            value={mprice}
             onChange={(e) => setMprice(Number(e.target.value))}
           />
         </label>
@@ -73,11 +86,12 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mdesc"
+            value={mdesc}
             onChange={(e) => setMcontent(e.target.value)}
           />
         </label>
         <br />
-        <button>등록하기</button>
+        <button type="submit">등록하기</button>
       </form>
     </div>
   );
