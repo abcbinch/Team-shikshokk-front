@@ -8,8 +8,10 @@
   width: 400px;
   height: 100%;
   top: 0;
-  right: 0;
+  // right: 0;
+  right: -400px;
   background-color: moccasin;
+  transition: right 0.5s ease-in-out;
   .fold-btn {
     position: absolute;
     top: 30px;
