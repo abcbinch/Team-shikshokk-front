@@ -81,7 +81,7 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       orderType: "매장",
       storeCapacity: "4",
       contactNumber: "010-1234-1234",
-      shopName: "치킨가게",
+      shopName: "피자가게",
       shopLoginId: "owner01",
       total: "85000",
       items: [
