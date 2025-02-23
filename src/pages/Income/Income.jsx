@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from "../Header/Header";
+import Header from "../../components/Header/Header";
 import axios from "axios";
 import {
   XAxis,
@@ -9,12 +9,11 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  AreaChart,
-  Area,
+  BarChart,
+  Bar,
   PieChart,
   Pie,
   Cell,
-  LabelList,
 } from "recharts";
 import { ko } from "date-fns/locale";
 
@@ -22,13 +21,17 @@ export default function Income() {
   const [dateRange, setDateRange] = useState([null, null]);
   const [selectedDateText, setSelectedDateText] = useState(null);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("매출");
+  const [selectedOption, setSelectedOption] = useState("income");
   const [data, setData] = useState({
-    매출: [],
-    방문수: [],
+    income: [],
+    visitors: [],
     재방문율: [],
   });
-  const [menuPrice, setMenuPrice] = useState([]);
+  const [menuData, setMenuData] = useState([]);
+  const [orderVisitor, setOrderVisitor] = useState({});
+  const [menuSum, setMenuSum] = useState(0);
+  const [reVisit, setReVisit] = useState({});
+  const [menuDate, setMenuDate] = useState([]);
   const handleDateChange = (dates) => {
     setDateRange(dates);
     if (dates[0] && dates[1]) {
@@ -61,21 +64,68 @@ export default function Income() {
   ];
 
   const price = async () => {
-    const result = await axios.post("http://localhost:8082/api-server/income", {
-      startDate: dateRange[0],
-      endDate: dateRange[1],
-    });
-    console.log(result.data);
-    const menuTotal = result.data.reduce((acc, menu) => {
-      const price = parseInt(menu.totalPrice, 10) || 0;
-      acc[menu.menuName] = (acc[menu.menuName] || 0) + price;
-      return acc;
-    }, {});
+    const result = await axios.post(
+      "http://localhost:8082/api-server/income/orderMenu",
+      {
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+      }
+    );
 
-    setMenuPrice(menuTotal);
-    console.log(menuTotal);
+    const menuSum = result.data.menuSum;
+    setMenuSum(menuSum);
+    const menuData = Object.values(result.data.menu);
+    setMenuData(menuData);
+    console.log(menuData);
+
+    setData((prevData) => ({
+      ...prevData,
+      income: menuData,
+    }));
   };
 
+  const visitor = async () => {
+    const result = await axios.post(
+      "http://localhost:8082/api-server/income/orderVisitor",
+      {
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+      }
+    );
+    setOrderVisitor(result.data.takeOutData);
+    const visitDate = Object.values(result.data.takeOutDate);
+    console.log(visitDate);
+    setData((prevData) => ({
+      visitors: visitDate,
+    }));
+    console.log(data);
+  };
+  const reVisitor = async () => {
+    const result = await axios.post(
+      "http://localhost:8082/api-server/income/reVisitor",
+      {
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+      }
+    );
+    const reVisitData = Object.values(result.data.reVisitData).reduce(
+      (acc, user) => {
+        if (user.isReVisit) {
+          acc.reVisit += user.number;
+        } else {
+          acc.firstVisit += user.number;
+        }
+        acc.visitPercent =
+          acc.reVisit === 0
+            ? 0
+            : Math.floor((acc.reVisit / (acc.reVisit + acc.firstVisit)) * 100);
+        return acc;
+      },
+      { reVisit: 0, firstVisit: 0, visitPercent: 0 }
+    );
+
+    setReVisit(reVisitData);
+  };
   useEffect(() => {
     const today = new Date();
     const thirtyDaysAgo = new Date(today);
@@ -88,10 +138,12 @@ export default function Income() {
   }, []);
 
   useEffect(() => {
-    if (dateRange.length > 0) {
+    if (dateRange[1]) {
       price();
+      visitor();
+      reVisitor();
     }
-  }, [dateRange]);
+  }, [dateRange[1]]);
 
   return (
     <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
@@ -130,65 +182,59 @@ export default function Income() {
           <h4 className="font-bold">매출액</h4>
           <hr className="my-2 border-white" />
           <p>
-            {Object.entries(menuPrice).map(([menuName, price]) => (
-              <div key={menuName}>
-                {menuName}: {price}
-              </div>
-            ))}
-
-            <p className="text-right font-bold">총 매출액 :</p>
+            <div>
+              {menuData.map((el) => {
+                return (
+                  <div>
+                    {el.menuName}: {el.totalPrice}원
+                  </div>
+                );
+              })}
+            </div>
           </p>
+          <p className="text-right font-bold">총 매출액 : {menuSum}원</p>
         </div>
         <div className="p-4 bg-amber-500 rounded-lg shadow">
           <h4 className="font-bold">고객 수</h4>
           <hr className="my-2 border-white" />
-          <p>방문 고객 수 : 8명</p>
-          <p>포장 고객 수 : 2명</p>
-          <p className="text-right font-bold">총 고객 수 : 10명</p>
+          <p>
+            방문 고객 수 : {orderVisitor.takeOut ? orderVisitor.takeOut : 0}명
+          </p>
+          <p>
+            포장 고객 수 : {orderVisitor.takeIn ? orderVisitor.takeIn : 0}명
+          </p>
+          <p className="text-right font-bold">
+            총 고객 수 : {orderVisitor.visitors ? orderVisitor.visitors : 0} 명
+          </p>
         </div>
         <div className="p-4 bg-amber-500 rounded-lg shadow">
           <h4 className="font-bold">재방문율</h4>
           <hr className="my-2 border-white" />
-          <p>총 고객 수 : 100명</p>
-          <p>재방문 고객 : 10명</p>
-          <p>신규 고객 : 90명</p>
-          <p className="text-right font-bold">재방문율 : 10%</p>
+
+          <p>재방문 고객 : {reVisit.reVisit}</p>
+          <p>신규 고객 : {reVisit.firstVisit}</p>
+          <p className="text-right font-bold">
+            재방문율 : {reVisit.visitPercent}%{" "}
+          </p>
         </div>
       </div>
 
-      <div className="flex justify-center gap-10 mt-10">
-        <div className="bg-white p-4 rounded-lg shadow-lg">
+      <div className="flex justify-center gap-10 mt-10 w-full h-full">
+        <div className="bg-white p-4 rounded-lg shadow-lg w-[70%]">
           <select
             onChange={(e) => {
               setSelectedOption(e.target.value);
             }}
             className="mb-4 p-2 border rounded-lg"
           >
-            <option value="매출">매출</option>
-            <option value="방문수">고객 수</option>
-            <option value="재방문율">재방문율</option>
+            <option value="income">매출</option>
+            <option value="visitors">고객 수</option>
+            <option value="reVisit">재방문율</option>
           </select>
-          <ResponsiveContainer width={900} height={500}>
-            <AreaChart
-              data={generateChartDataForWeek(dateRange[0], dateRange[1])}
-            >
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Area
-                type="linear"
-                dataKey="value"
-                stroke="#8884d8"
-                fill="#8884d8"
-                fillOpacity={0.3}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
         </div>
-        <div className="text-center bg-white p-4 rounded-lg shadow-lg">
+        <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%]">
           <h4 className="font-bold">메뉴별 매출 비율</h4>
-          <ResponsiveContainer width={300} height={400}>
+          <ResponsiveContainer width="100%" height={500}>
             <PieChart>
               <Pie
                 data={menu}
