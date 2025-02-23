@@ -13,6 +13,9 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
   let [mcategory, setMcategory] = useState("");
   let [mprice, setMprice] = useState(0);
   let [mdesc, setMcontent] = useState("");
+  let [mfile, setMfile] = useState("");
+  //파일 첨부 기능 만들 때 사용
+  let [fileInput, setFileInput] = useState("클릭해서 파일을 첨부해주세요.");
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const form = formRef.current;
@@ -44,7 +47,6 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
             onClick={() => setIsShow(false)}
           />
         </div>
-
         <label>
           메뉴명
           <br />{" "}
@@ -88,6 +90,20 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
             onChange={(e) => setMcontent(e.target.value)}
           />
         </label>
+        <br />
+
+        <div className="custom-container">
+          사진
+          <br />
+          <div className="custom-input">
+            <input
+              type="file"
+              name="mfile"
+              value={mfile}
+              onChange={(e) => setMfile(e.target.value)}
+            />
+          </div>
+        </div>
         <br />
         <button type="submit">등록하기</button>
       </form>
