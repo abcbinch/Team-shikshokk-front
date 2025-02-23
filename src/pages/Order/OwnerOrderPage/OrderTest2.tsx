@@ -61,16 +61,12 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       }
     });
 
-    socket.on("orderInfoSave", (data: S.Order) => {
-      console.log("주문 정보 저장 = ", data);
-    });
-
     socket.on("cookingStart", (data: S.Order) => {
       console.log("요리 시작 알림 받음 = ", data);
     });
 
     socket.on("cookingEnd", (data: S.Order) => {
-      console.log("조리 완료료c 알림 받음 = ", data);
+      console.log("조리 완료 알림 받음 = ", data);
     });
 
     socket.on("disconnect", () => {
@@ -166,6 +162,7 @@ const OrderTest: React.FC<OrderTestProps> = () => {
                         <li>{order.loginId}</li>
                         <li>주문번호</li>
                         <li>{order.orderNumber.slice(-8)}</li>
+                        <li>가게이름 {order.shopName}</li>
                         <li>
                           {order.orderType} {order.storeCapacity}명
                         </li>
