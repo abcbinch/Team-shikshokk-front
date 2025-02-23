@@ -1,9 +1,8 @@
-import "../styles/menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faGear } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import MenuAddForm from "../components/MenuAddForm";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import "..//styles/shopDetail.scss";
+import ShoppingCart from "../components/ShoppingCart";
 
 interface Menus {
   menuName: string;
@@ -11,8 +10,7 @@ interface Menus {
   price: number;
   menudesc: string;
 }
-
-export default function Menus() {
+export default function CustomerShopDetail() {
   let [isShow, setIsShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
@@ -59,7 +57,10 @@ export default function Menus() {
 
   return (
     <main className="max-w-7xl m-auto">
-      <h3 className="text-3xl font-bold m-5">메뉴 관리</h3>
+      <div className="shop-image-container">
+        <div className="img-sample"></div>
+      </div>
+      <hr />
       {/* 메뉴 탭 */}
       <ul className="menu-tab flex list-none">
         <li className="choose">전체 메뉴</li>
@@ -83,12 +84,7 @@ export default function Menus() {
                 if (comp === mel.category) {
                   return (
                     <li>
-                      <div className="icon-box">
-                        <FontAwesomeIcon
-                          icon={faGear}
-                          className="setting-icon m-2"
-                        />
-                      </div>
+                      <div className="icon-box"></div>
                       <div className="img-box"></div>
                       <p>{mel.menuName}</p>
                       <p>{mel.price}</p>
@@ -97,16 +93,11 @@ export default function Menus() {
                   );
                 }
               })}
-
-              <li onClick={() => setIsShow(true)}>
-                <FontAwesomeIcon icon={faPlus} className="add-icon" />
-              </li>
             </ul>
           </div>
         );
       })}
-
-      {isShow && <MenuAddForm setIsShow={setIsShow} />}
+      <ShoppingCart />
     </main>
   );
 }

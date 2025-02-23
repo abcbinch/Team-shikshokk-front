@@ -7,10 +7,6 @@
   height: 100%;
   top: 0;
   left: 0;
-  // right: 0;
-  // bottom: 0;
-  // padding: 10px;
-  background-color: rgba(109, 151, 168, 0.5);
 }
 
 //모달 열고닫기.
@@ -26,7 +22,7 @@
   align-items: center;
 
   width: 400px;
-  height: 500px;
+  height: 600px;
   margin: auto;
   border: 1px solid gray;
   border-radius: 5px;
@@ -50,6 +46,20 @@
     border: 1px solid lightgray;
     border-radius: 4px;
     background: white;
+  }
+  //input file 버튼 숨기기
+  .custom-container {
+    display: flex;
+    flex-direction: column;
+    .custom-input {
+      border: 1px solid lightgray;
+      border-radius: 4px;
+      background: white;
+      input {
+        cursor: pointer;
+        opacity: 0;
+      }
+    }
   }
   button {
     width: 150px;

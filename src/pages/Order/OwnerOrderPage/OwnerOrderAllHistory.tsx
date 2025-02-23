@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-interface OwnerOrderAllHistory {}
+interface OwnerOrderAllHistoryProps {}
 
-const OwnerOrderAllHistory: React.FC = () => {
+const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
   return (
     <>
       <Header nickname="고민봉" />

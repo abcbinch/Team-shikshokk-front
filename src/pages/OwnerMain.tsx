@@ -24,7 +24,7 @@ export default function OwnerMain() {
       // }
 
       const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/owner`,
+        "http://localhost:8082/api-server/owner",
         {
           // headers: {
           //   Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ export default function OwnerMain() {
   };
 
   return (
-    <main className="box-content mt-10">
+    <main className="box-content mt-10 max-w-[1200px]">
       <div className="con w-full flex flex-col items-center">
         {/* 전체 컨테이너 */}
         <div className="titleBorder border-b border-gray-300  w-4/5 relative">
@@ -103,7 +103,7 @@ export default function OwnerMain() {
             </div>
 
             <div
-              onClick={() => handleClick("/")}
+              onClick={() => handleClick("/menu")}
               className="bg-contain bg-no-repeat w-[19rem] h-72 
                   relative my-0 mx-auto "
             >

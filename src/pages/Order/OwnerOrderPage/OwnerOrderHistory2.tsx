@@ -10,7 +10,7 @@ import * as S from "../../../store/socket";
 import { AppState } from "../../../store";
 interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
-const loginId = "owner01";
+const loginId = "owner02";
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(

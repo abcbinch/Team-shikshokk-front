@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import Header from "../../components/Header/Header";
 import axios from "axios";
+
 import {
   XAxis,
   YAxis,
@@ -63,6 +65,7 @@ export default function Income() {
     { name: "햄버거", value: 302, color: "#99ff99" },
   ];
 
+
   const price = async () => {
     const result = await axios.post(
       "http://localhost:8082/api-server/income/orderMenu",
@@ -83,6 +86,8 @@ export default function Income() {
       income: menuData,
     }));
   };
+
+
 
   const visitor = async () => {
     const result = await axios.post(
@@ -137,6 +142,7 @@ export default function Income() {
     );
   }, []);
 
+
   useEffect(() => {
     if (dateRange[1]) {
       price();
@@ -145,25 +151,25 @@ export default function Income() {
     }
   }, [dateRange[1]]);
 
+
   return (
     <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
-      <Header />
       <h1 className="text-3xl font-bold text-center text-white">매출관리</h1>
       <hr className="my-4 border-white" />
 
-      <div className="text-center mb-4">
-        <span className="font-semibold text-lg">선택기간 :</span>
+      <div className="mb-4 text-center">
+        <span className="text-lg font-semibold">선택기간 :</span>
         <span className="ml-2">
           {selectedDateText || "날짜를 선택해주세요"}
         </span>
         <button
           onClick={() => setIsCalendarVisible(!isCalendarVisible)}
-          className="ml-4 px-4 py-2 bg-white text-amber-500 font-bold rounded-lg shadow"
+          className="px-4 py-2 ml-4 font-bold bg-white rounded-lg shadow text-amber-500"
         >
           달력 보기
         </button>
         {isCalendarVisible && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white p-2 rounded-lg shadow-lg z-10">
+          <div className="absolute z-10 p-2 mt-2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg left-1/2">
             <DatePicker
               selectsRange
               startDate={dateRange[0]}
@@ -178,10 +184,11 @@ export default function Income() {
       </div>
 
       <div className="grid grid-cols-3 gap-4 text-white">
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">매출액</h4>
           <hr className="my-2 border-white" />
           <p>
+
             <div>
               {menuData.map((el) => {
                 return (
@@ -191,12 +198,14 @@ export default function Income() {
                 );
               })}
             </div>
+
           </p>
           <p className="text-right font-bold">총 매출액 : {menuSum}원</p>
         </div>
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">고객 수</h4>
           <hr className="my-2 border-white" />
+
           <p>
             방문 고객 수 : {orderVisitor.takeOut ? orderVisitor.takeOut : 0}명
           </p>
@@ -206,8 +215,9 @@ export default function Income() {
           <p className="text-right font-bold">
             총 고객 수 : {orderVisitor.visitors ? orderVisitor.visitors : 0} 명
           </p>
+
         </div>
-        <div className="p-4 bg-amber-500 rounded-lg shadow">
+        <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">재방문율</h4>
           <hr className="my-2 border-white" />
 
@@ -221,18 +231,21 @@ export default function Income() {
 
       <div className="flex justify-center gap-10 mt-10 w-full h-full">
         <div className="bg-white p-4 rounded-lg shadow-lg w-[70%]">
+
           <select
             onChange={(e) => {
               setSelectedOption(e.target.value);
             }}
-            className="mb-4 p-2 border rounded-lg"
+            className="p-2 mb-4 border rounded-lg"
           >
             <option value="income">매출</option>
             <option value="visitors">고객 수</option>
             <option value="reVisit">재방문율</option>
           </select>
         </div>
+
         <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%]">
+
           <h4 className="font-bold">메뉴별 매출 비율</h4>
           <ResponsiveContainer width="100%" height={500}>
             <PieChart>
