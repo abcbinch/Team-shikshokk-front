@@ -55,12 +55,14 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
-    socket.on("order", (data: S.SocketState) => {
+    socket.on("order", (data: S.Order[]) => {
       console.log("받은 값 = ", data);
+
       if (Array.isArray(data)) {
-        setOrderInfo(data);
+        setOrderInfo((prevOrderInfo) => [...prevOrderInfo, ...data]);
+      } else {
+        setOrderInfo((prevOrderInfo) => [data, ...prevOrderInfo]);
       }
-      // dispatch(S.addOrder(data));
     });
 
     socket.on("ownerOrderSync", (data: S.Order[]) => {

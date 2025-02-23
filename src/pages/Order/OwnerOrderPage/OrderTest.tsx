@@ -35,10 +35,12 @@ const OrderTest: React.FC<OrderTestProps> = () => {
     });
 
     socket.on("order", (data: S.Order) => {
-      console.log("주문 알림 받음 = ", data);
+      console.log("주문 넣음 = ", data);
       console.log("받은 값 = ", data);
       if (Array.isArray(data)) {
-        setOrderInfo(data);
+        setOrderInfo((prevOrderInfo) => [...prevOrderInfo, ...data]);
+      } else {
+        setOrderInfo((prevOrderInfo) => [data, ...prevOrderInfo]);
       }
     });
 
@@ -68,7 +70,7 @@ const OrderTest: React.FC<OrderTestProps> = () => {
     });
 
     socket.on("cookingEnd", (data: S.Order) => {
-      console.log("조리 완료료 알림 받음 = ", data);
+      console.log("조리 완료료c 알림 받음 = ", data);
     });
 
     socket.on("disconnect", () => {
