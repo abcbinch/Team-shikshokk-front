@@ -10,7 +10,7 @@ import * as S from "../../../store/socket";
 import { AppState } from "../../../store";
 interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
-
+const loginId = "owner01";
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const dispatch = useDispatch();
   const socketState = useSelector<AppState, S.SocketState>(
@@ -50,7 +50,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   }, []);
 
   useEffect(() => {
-    const data = { loginId: "owner01", socketId: socket.id };
+    const data = { loginId: loginId, socketId: socket.id };
     socket.emit("connectOwner", data);
     socket.on("connect", () => {
       console.log("socket connect~~~");
