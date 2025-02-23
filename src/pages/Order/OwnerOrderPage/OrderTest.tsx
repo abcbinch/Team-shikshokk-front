@@ -13,6 +13,8 @@ interface OrderTestProps {}
 
 const socket = io("http://localhost:8082");
 const loginId = "customer01";
+const shopLoginId = "owner01";
+const shopName = "햄버거집";
 const OrderTest: React.FC<OrderTestProps> = () => {
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
@@ -30,6 +32,14 @@ const OrderTest: React.FC<OrderTestProps> = () => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
       console.log("socket = ", socket);
+    });
+
+    socket.on("order", (data: S.Order) => {
+      console.log("주문 알림 받음 = ", data);
+      console.log("받은 값 = ", data);
+      if (Array.isArray(data)) {
+        setOrderInfo(data);
+      }
     });
 
     socket.on("orderApproval", (data: S.Order) => {
@@ -57,6 +67,10 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       console.log("요리 시작 알림 받음 = ", data);
     });
 
+    socket.on("cookingEnd", (data: S.Order) => {
+      console.log("조리 완료료 알림 받음 = ", data);
+    });
+
     socket.on("disconnect", () => {
       console.log("socket disconnect~~~");
     });
@@ -81,8 +95,8 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       orderType: "매장",
       storeCapacity: "4",
       contactNumber: "010-1234-1234",
-      shopName: "피자가게",
-      shopLoginId: "owner01",
+      shopName: shopName,
+      shopLoginId: shopLoginId,
       total: "85000",
       items: [
         "매우매우맛있는후라x1",

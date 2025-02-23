@@ -103,10 +103,14 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     });
   };
 
-  const handleCookingEnd = (orderNumber: string) => {
+  const handleCookingEnd = (order: S.Order) => {
     console.log("조리 완료 버튼 눌럿다");
+    socket.emit("cookingEnd", order);
     setCookingCompleted((prevState) => {
-      const updatedCompletedStatus = { ...prevState, [orderNumber]: true };
+      const updatedCompletedStatus = {
+        ...prevState,
+        [order.orderNumber]: true,
+      };
       localStorage.setItem(
         "cookingCompleted",
         JSON.stringify(updatedCompletedStatus)
@@ -207,9 +211,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
                                   className={`btn btn-success ${
                                     isSmallScreen ? "btn-sm" : ""
                                   }`}
-                                  onClick={() =>
-                                    handleCookingEnd(order.orderNumber)
-                                  }
+                                  onClick={() => handleCookingEnd(order)}
                                   disabled={!orderStatus[order.orderNumber]}
                                 >
                                   조리 완료
