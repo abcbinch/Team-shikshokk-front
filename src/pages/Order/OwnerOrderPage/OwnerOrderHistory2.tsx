@@ -58,6 +58,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
       console.log("받은 값 = ", data);
       dispatch(S.addOrder(data));
     });
+
     socket.on("disconnect", () => {
       console.log("socket disconnect~~~");
     });
@@ -66,21 +67,24 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
       socket.off("order");
       socket.off("disconnect");
     };
-  }, [dispatch]);
+  }, [socket]);
 
-  const handleOrderApproval = (orderNumber: string) => {
+  const handleOrderApproval = (order: S.Order) => {
     console.log("주문 확인 버튼 눌럿다");
+    console.log("주문확인버튼=", order);
+    socket.emit("orderApproval", order);
     setOrderApproved((prevState) => {
-      const updatedStatus = { ...prevState, [orderNumber]: true };
+      const updatedStatus = { ...prevState, [order.orderNumber]: true };
       localStorage.setItem("orderApproved", JSON.stringify(updatedStatus));
       return updatedStatus;
     });
   };
 
-  const handleCookingStart = (orderNumber: string) => {
+  const handleCookingStart = (order: S.Order) => {
     console.log("조리 시작 버튼 눌럿다");
+    socket.emit("cookingStart", order);
     setOrderStatus((prevState) => {
-      const updatedStatus = { ...prevState, [orderNumber]: true };
+      const updatedStatus = { ...prevState, [order.orderNumber]: true };
       localStorage.setItem("orderStatus", JSON.stringify(updatedStatus));
       return updatedStatus;
     });
@@ -98,11 +102,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     });
   };
 
-  const order = socketState.owners.filter(
-    (owner) => owner.ownerId === "owner02"
-  );
-  const orders = order[0]?.orders ? order[0].orders.map((order) => order) : [];
-
+  const orders = socketState["owner02"] || [];
   return (
     <>
       <Header nickname="고민봉" />
@@ -119,92 +119,96 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
             </div>
             <hr className="border-2 opacity-75 black" />
             <div className="receipt-card-container">
-              {orders.map((order, index) => (
-                <div className="receipt-card" key={index}>
-                  <ul className="receipt-card-list">
-                    <li>
-                      <FontAwesomeIcon icon={faTimes} className="custom-icon" />
-                    </li>
-                    <li>주문시간</li>
-                    <li>
-                      {`${new Date(order.orderTime).getFullYear()}년 ${
-                        new Date(order.orderTime).getMonth() + 1
-                      }월 ${new Date(order.orderTime).getDate()}일`}
-                    </li>
-                    <li>
-                      {new Date(order.orderTime).toLocaleTimeString("ko-KR", {
-                        hour12: false,
-                      })}
-                    </li>
-                    <li>주문고객Id</li>
-                    <li>{order.loginId}</li>
-                    <li>주문번호</li>
-                    <li>{order.orderNumber.slice(-8)}</li>
-                    <li>
-                      {order.orderType} {order.storeCapacity}명
-                    </li>
-                    <li>연락처</li>
-                    <li>{order.contactNumber}</li>
-                    <li>메뉴이름</li>
-                    {order.items.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                    <br />
-                    <li>합계: {order.total}원</li>
-                  </ul>
+              {orders
+                .slice(0)
+                .reverse()
+                .map((order, index) => (
+                  <div className="receipt-card" key={index}>
+                    <ul className="receipt-card-list">
+                      <li>
+                        <FontAwesomeIcon
+                          icon={faTimes}
+                          className="custom-icon"
+                        />
+                      </li>
+                      <li>주문시간</li>
+                      <li>
+                        {`${new Date(order.orderTime).getFullYear()}년 ${
+                          new Date(order.orderTime).getMonth() + 1
+                        }월 ${new Date(order.orderTime).getDate()}일`}
+                      </li>
+                      <li>
+                        {new Date(order.orderTime).toLocaleTimeString("ko-KR", {
+                          hour12: false,
+                        })}
+                      </li>
+                      <li>주문고객Id</li>
+                      <li>{order.loginId}</li>
+                      <li>주문번호</li>
+                      <li>{order.orderNumber.slice(-8)}</li>
+                      <li>
+                        {order.orderType} {order.storeCapacity}명
+                      </li>
+                      <li>연락처</li>
+                      <li>{order.contactNumber}</li>
+                      <li>메뉴이름</li>
+                      {order.items.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                      <br />
+                      <li>합계: {order.total}원</li>
+                    </ul>
 
-                  <div className="mt-2">
-                    <div>
-                      {!orderApproved[order.orderNumber] && (
-                        <button
-                          className={`btn btn-secondary ${
-                            isSmallScreen ? "btn-sm" : ""
-                          }`}
-                          onClick={() => handleOrderApproval(order.orderNumber)}
-                        >
-                          주문 확인
-                        </button>
-                      )}
-                      {orderApproved[order.orderNumber] &&
-                        !cookingCompleted[order.orderNumber] && (
-                          <>
-                            <button
-                              className={`btn btn-warning ${
-                                isSmallScreen ? "btn-sm" : ""
-                              }`}
-                              onClick={() =>
-                                handleCookingStart(order.orderNumber)
-                              }
-                              disabled={orderStatus[order.orderNumber]}
-                            >
-                              조리 시작
-                            </button>
-                            <button
-                              className={`btn btn-success ${
-                                isSmallScreen ? "btn-sm" : ""
-                              }`}
-                              onClick={() =>
-                                handleCookingEnd(order.orderNumber)
-                              }
-                              disabled={!orderStatus[order.orderNumber]}
-                            >
-                              조리 완료
-                            </button>
-                          </>
+                    <div className="mt-2">
+                      <div>
+                        {!orderApproved[order.orderNumber] && (
+                          <button
+                            className={`btn btn-secondary ${
+                              isSmallScreen ? "btn-sm" : ""
+                            }`}
+                            onClick={() => handleOrderApproval(order)}
+                          >
+                            주문 확인
+                          </button>
                         )}
-                      {cookingCompleted[order.orderNumber] && (
-                        <button
-                          className={`btn btn-info ${
-                            isSmallScreen ? "btn-sm" : ""
-                          }`}
-                        >
-                          조리완료되었습니다.
-                        </button>
-                      )}
+                        {orderApproved[order.orderNumber] &&
+                          !cookingCompleted[order.orderNumber] && (
+                            <>
+                              <button
+                                className={`btn btn-warning ${
+                                  isSmallScreen ? "btn-sm" : ""
+                                }`}
+                                onClick={() => handleCookingStart(order)}
+                                disabled={orderStatus[order.orderNumber]}
+                              >
+                                조리 시작
+                              </button>
+                              <button
+                                className={`btn btn-success ${
+                                  isSmallScreen ? "btn-sm" : ""
+                                }`}
+                                onClick={() =>
+                                  handleCookingEnd(order.orderNumber)
+                                }
+                                disabled={!orderStatus[order.orderNumber]}
+                              >
+                                조리 완료
+                              </button>
+                            </>
+                          )}
+                        {cookingCompleted[order.orderNumber] && (
+                          <button
+                            className={`btn btn-info ${
+                              isSmallScreen ? "btn-sm" : ""
+                            }`}
+                          >
+                            조리완료되었습니다.
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </section>
         </div>
