@@ -10,11 +10,13 @@ import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
 
 import CounterTest from "../pages/CounterTest";
+
 import OrderTest from "../pages/Order/OwnerOrderPage/OrderTest";
 import OrderTest2 from "../pages/Order/OwnerOrderPage/OrderTest2";
 import CustomerShopDetail from "../pages/CustomerShopDetail";
 import ShoppingCart from "../components/ShoppingCart";
 import CusReview from "../pages/CusReview";
+
 const AppRoutes = () => {
   let routes = useRoutes([
     // { path: "/", element: <Home /> },
@@ -28,11 +30,13 @@ const AppRoutes = () => {
     { path: "/owner", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
+
     { path: "/testorder", element: <OrderTest /> },
     { path: "/testorder2", element: <OrderTest2 /> },
     { path: "/shopdetail", element: <CustomerShopDetail /> },
     { path: "/cart", element: <ShoppingCart /> },
     { path: "/review", element: <CusReview /> },
+
   ]);
 
   return routes;
