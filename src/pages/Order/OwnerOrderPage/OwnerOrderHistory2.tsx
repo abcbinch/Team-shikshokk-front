@@ -16,7 +16,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const socketState = useSelector<AppState, S.SocketState>(
     ({ socket }) => socket
   );
-  console.log("전체 socketState = ", socketState);
+  // console.log("전체 socketState = ", socketState);
 
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
   const [orderStatus, setOrderStatus] = useState<{ [key: string]: boolean }>(
