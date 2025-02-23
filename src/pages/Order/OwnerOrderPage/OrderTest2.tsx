@@ -13,6 +13,8 @@ interface OrderTestProps {}
 
 const socket = io("http://localhost:8082");
 const loginId = "customer02";
+const shopLoginId = "owner02";
+const shopName = "피자집";
 const OrderTest: React.FC<OrderTestProps> = () => {
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
@@ -30,6 +32,14 @@ const OrderTest: React.FC<OrderTestProps> = () => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
       console.log("socket = ", socket);
+    });
+
+    socket.on("order", (data: S.Order) => {
+      console.log("주문 알림 받음 = ", data);
+      console.log("받은 값 = ", data);
+      if (Array.isArray(data)) {
+        setOrderInfo(data);
+      }
     });
 
     socket.on("orderApproval", (data: S.Order) => {
@@ -81,8 +91,8 @@ const OrderTest: React.FC<OrderTestProps> = () => {
       orderType: "매장",
       storeCapacity: "4",
       contactNumber: "010-1234-1234",
-      shopName: "치킨가게",
-      shopLoginId: "owner02",
+      shopName: shopName,
+      shopLoginId: shopLoginId,
       total: "85000",
       items: [
         "매우매우맛있는후라x1",
