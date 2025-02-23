@@ -1,0 +1,17 @@
+.shop-image-container {
+  display: flex;
+  justify-content: center;
+  width: 1200px;
+  height: 500px;
+  border: 1px solid black;
+  .img-sample {
+    width: 80%;
+    height: 100%;
+    border: 1px solid coral;
+  }
+}
+
+//미디어 쿼리
+//장바구니
+//웹일 때는 옆에서 나온다
+//모바일일 때는 아래에서 나온다
