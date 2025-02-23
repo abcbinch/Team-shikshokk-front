@@ -11,7 +11,9 @@
   }
 }
 
-//미디어 쿼리
-//장바구니
-//웹일 때는 옆에서 나온다
-//모바일일 때는 아래에서 나온다
+@media (max-width: 480px) {
+  .shop-image-container {
+    width: 480px;
+    height: 200px;
+  }
+}

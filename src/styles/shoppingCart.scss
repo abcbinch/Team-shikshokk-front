@@ -16,11 +16,29 @@
     position: absolute;
     top: 30px;
     left: -100px;
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 2px solid black;
     background: whitesmoke;
     cursor: pointer;
+    .menu-length {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: -5px;
+      top: -5px;
+      background: red;
+      border-radius: 50%;
+      color: white;
+    }
+    .cart {
+      font-size: 100%;
+      width: 100%;
+      height: 100%;
+    }
   }
   .pay-info {
     display: flex;
@@ -46,7 +64,7 @@
   }
   button {
     width: 80%;
-    height: 100px;
+    height: 50px;
     margin-top: 20px;
     background-color: white;
     border: 1px solid black;
@@ -56,29 +74,29 @@
   }
 }
 
+.hidden {
+  display: none;
+}
+
 //반응형 장바구니.
 //모바일에서는 아래에서 올라온다.
-//목록이 얼마나 추가될지 모르기 때문에
-//높이가 유동적으로 바뀌어야 한다.
 @media (max-width: 480px) {
   .cart-container {
-    position: fixed;
     width: 100%;
-    height: 60%;
-    // height: 600px;
-    top: 40%;
-    bottom: 0;
+    height: 600px;
+    top: auto;
+    bottom: -600px;
     left: 0;
-    // .pay-info {
-    //   width: 80%;
-    //   min-height: 300px;
-    // }
+    transition: bottom 0.5s ease-in-out;
+    .pay-info {
+      width: 80%;
+      min-height: 300px;
+    }
     .fold-btn {
       position: absolute;
       top: -100px;
       left: calc(100% - 80px);
-      width: 50px;
-      height: 50px;
+
       border: 1px solid black;
     }
   }

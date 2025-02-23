@@ -18,18 +18,22 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
   let [fileInput, setFileInput] = useState("클릭해서 파일을 첨부해주세요.");
 
   const formRef = useRef<HTMLFormElement | null>(null);
-  const form = formRef.current;
 
   const menuAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
       if (formRef.current && formRef.current.checkValidity()) {
-        axios.post("http://localhost:8082/api-server/menu-register", {
-          mname,
-          mcategory,
-          mprice,
-          mdesc,
-        });
+        const response = await axios.post(
+          "http://localhost:8082/api-server/menu-register",
+          {
+            mname,
+            mcategory,
+            mprice,
+            mdesc,
+            mfile,
+          }
+        );
+
+        if (response) alert("등록이 완료됐습니다.");
       }
       setIsShow(false);
     } catch (err) {

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/shoppingCart.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 export default function ShoppingCart() {
   const btnRef = useRef<HTMLDivElement>(null);
@@ -28,20 +30,40 @@ export default function ShoppingCart() {
   }, []);
 
   const cartFold = () => {
-    if (cartRef.current) {
-      const cartStyle = getComputedStyle(cartRef.current);
-      const currentRight = cartStyle.right;
+    console.log(window.innerWidth);
+    console.log(isMobile);
+    if (!isMobile) {
+      //데스크톱
+      if (cartRef.current) {
+        const cartStyle = getComputedStyle(cartRef.current);
+        const cartRight = cartStyle.right;
 
-      if (currentRight === "0px") {
-        cartRef.current.style.right = "-400px"; // 오른쪽으로 숨김
-      } else if (currentRight === "-400px") {
-        cartRef.current.style.right = "0px"; // 나타냄
+        if (cartRight === "0px") {
+          cartRef.current.style.right = "-400px";
+        } else if (cartRight === "-400px") {
+          cartRef.current.style.right = "0px";
+        }
+      }
+    } else {
+      //모바일
+      if (cartRef.current) {
+        const cartStyle = getComputedStyle(cartRef.current);
+        const cartBottom = cartStyle.bottom;
+
+        if (cartBottom === "-600px") {
+          cartRef.current.style.bottom = "0px";
+        } else if (cartBottom === "0px") {
+          cartRef.current.style.bottom = "-600px";
+        }
       }
     }
   };
   return (
     <div className="cart-container" ref={cartRef}>
-      <div className="fold-btn" ref={btnRef} onClick={cartFold}></div>
+      <div className="fold-btn" ref={btnRef} onClick={cartFold}>
+        <div className="menu-length hidden"></div>
+        <FontAwesomeIcon icon={faCartShopping} className="cart" />
+      </div>
       <div className="pay-info">
         <ul>
           <li>주문한 메뉴</li>
@@ -50,7 +72,7 @@ export default function ShoppingCart() {
           <li>주문한 메뉴</li>
         </ul>
         <hr />그 외 주문 옵션 나오는 공간
-        <button type="submit">결제하기</button>
+        <button type="submit">결제하기(50,000원)</button>
       </div>
     </div>
   );
