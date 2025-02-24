@@ -12,6 +12,7 @@ interface Menus {
   category: string;
   price: number;
   menudesc: string;
+  originMfile: string;
 }
 
 export default function Menus() {
@@ -31,8 +32,8 @@ export default function Menus() {
         console.log("response data", response.data);
 
         let result = response.data.map((el: Menus) => {
-          const { id, menuName, price, menudesc, category } = el;
-          return { id, menuName, price, menudesc, category };
+          const { id, menuName, price, menudesc, category, originMfile } = el;
+          return { id, menuName, price, menudesc, category, originMfile };
         });
 
         console.log("result", result);
@@ -90,6 +91,7 @@ export default function Menus() {
                               price: mel.price,
                               menudesc: mel.menudesc,
                               category: mel.category,
+                              originMfile: mel.originMfile,
                             });
                           }}
                         />

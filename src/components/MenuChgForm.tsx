@@ -10,6 +10,7 @@ interface Menus {
   category: string;
   price: number;
   menudesc: string;
+  originMfile: string;
 }
 interface MenuAddFormProps {
   selectMenu: Menus;
@@ -25,7 +26,7 @@ export default function MenuChgForm({
   let [chgcategory, setChgcategory] = useState(selectMenu.category);
   let [chgprice, setChgprice] = useState(selectMenu.price);
   let [chgdesc, setChgcontent] = useState(selectMenu.menudesc);
-  // let [chgfile, setChgfile] = useState(selectMenu.mfile);
+  let [chgfile, setChgfile] = useState(selectMenu.originMfile);
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -100,7 +101,7 @@ export default function MenuChgForm({
           />
         </label>
         <br />
-        {/* <div className="custom-container">
+        <div className="custom-container">
           사진
           <br />
           <div className="custom-input">
@@ -112,7 +113,7 @@ export default function MenuChgForm({
             />
           </div>
         </div>
-        <br /> */}
+        <br />
         <button type="submit">수정하기</button>
       </form>
     </div>
