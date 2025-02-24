@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -20,20 +19,24 @@ import {
 import { ko } from "date-fns/locale";
 
 export default function Income() {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [selectedDateText, setSelectedDateText] = useState(null);
+  const [dateRange, setDateRange] = useState([]);
+  const [selectedDateText, setSelectedDateText] = useState("");
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState("income");
   const [data, setData] = useState({
     income: [],
     visitors: [],
-    재방문율: [],
   });
   const [menuData, setMenuData] = useState([]);
   const [orderVisitor, setOrderVisitor] = useState({});
   const [menuSum, setMenuSum] = useState(0);
   const [reVisit, setReVisit] = useState({});
-  const [menuDate, setMenuDate] = useState([]);
+
+  const [menu, setMenu] = useState([
+    { name: "치킨", value: 102, color: "#ff9999" },
+    { name: "피자", value: 202, color: "#66b3ff" },
+    { name: "햄버거", value: 302, color: "#99ff99" },
+  ]);
   const handleDateChange = (dates) => {
     setDateRange(dates);
     if (dates[0] && dates[1]) {
@@ -42,29 +45,6 @@ export default function Income() {
       );
     }
   };
-
-  const generateChartDataForWeek = (start, end) => {
-    if (!start || !end) return [];
-    const diffDays = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 3600 * 24)
-    );
-    const step = diffDays > 30 ? Math.ceil(diffDays / 30) : 1;
-    return Array.from({ length: Math.ceil(diffDays / step) + 1 }, (_, i) => {
-      const date = new Date(start);
-      date.setDate(start.getDate() + i * step);
-      return {
-        name: `${date.getMonth() + 1}월${date.getDate()}일`,
-        value: data[selectedOption][i % data[selectedOption].length],
-      };
-    });
-  };
-
-  const menu = [
-    { name: "치킨", value: 102, color: "#ff9999" },
-    { name: "피자", value: 202, color: "#66b3ff" },
-    { name: "햄버거", value: 302, color: "#99ff99" },
-  ];
-
 
   const price = async () => {
     const result = await axios.post(
@@ -75,19 +55,20 @@ export default function Income() {
       }
     );
 
-    const menuSum = result.data.menuSum;
+    const menuSum = result.data.priceSum;
     setMenuSum(menuSum);
     const menuData = Object.values(result.data.menu);
     setMenuData(menuData);
-    console.log(menuData);
+    const datePerSum = Object.values(result.data.datePerSum);
 
     setData((prevData) => ({
       ...prevData,
-      income: menuData,
+      income: datePerSum,
     }));
+
+    const menuNumber = Object.values(result.data.groupedMenu);
+    setMenu(menuNumber);
   };
-
-
 
   const visitor = async () => {
     const result = await axios.post(
@@ -97,13 +78,16 @@ export default function Income() {
         endDate: dateRange[1],
       }
     );
-    setOrderVisitor(result.data.takeOutData);
-    const visitDate = Object.values(result.data.takeOutDate);
-    console.log(visitDate);
+
+    const visitData = Object.values(result.data.takeOutData);
+    setOrderVisitor(visitData);
+    console.log(orderVisitor);
+
+    const visitPerDate = Object.values(result.data.totalVisitors);
     setData((prevData) => ({
-      visitors: visitDate,
+      ...prevData,
+      visitors: visitPerDate,
     }));
-    console.log(data);
   };
   const reVisitor = async () => {
     const result = await axios.post(
@@ -142,7 +126,6 @@ export default function Income() {
     );
   }, []);
 
-
   useEffect(() => {
     if (dateRange[1]) {
       price();
@@ -150,7 +133,6 @@ export default function Income() {
       reVisitor();
     }
   }, [dateRange[1]]);
-
 
   return (
     <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
@@ -188,7 +170,6 @@ export default function Income() {
           <h4 className="font-bold">매출액</h4>
           <hr className="my-2 border-white" />
           <p>
-
             <div>
               {menuData.map((el) => {
                 return (
@@ -198,7 +179,6 @@ export default function Income() {
                 );
               })}
             </div>
-
           </p>
           <p className="text-right font-bold">총 매출액 : {menuSum}원</p>
         </div>
@@ -206,23 +186,22 @@ export default function Income() {
           <h4 className="font-bold">고객 수</h4>
           <hr className="my-2 border-white" />
 
-          <p>
-            방문 고객 수 : {orderVisitor.takeOut ? orderVisitor.takeOut : 0}명
-          </p>
-          <p>
-            포장 고객 수 : {orderVisitor.takeIn ? orderVisitor.takeIn : 0}명
-          </p>
+          <p>방문 고객 수 : {orderVisitor[0] ? orderVisitor[0] : 0}명</p>
+          <p>포장 고객 수 : {orderVisitor[1] ? orderVisitor[1] : 0}명</p>
           <p className="text-right font-bold">
-            총 고객 수 : {orderVisitor.visitors ? orderVisitor.visitors : 0} 명
+            총 고객 수 :{" "}
+            {orderVisitor[0] + orderVisitor[1]
+              ? orderVisitor[0] + orderVisitor[1]
+              : "0"}{" "}
+            명
           </p>
-
         </div>
         <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">재방문율</h4>
           <hr className="my-2 border-white" />
 
-          <p>재방문 고객 : {reVisit.reVisit}</p>
-          <p>신규 고객 : {reVisit.firstVisit}</p>
+          <p>재방문 고객 : {reVisit.reVisit}명</p>
+          <p>신규 고객 : {reVisit.firstVisit}명</p>
           <p className="text-right font-bold">
             재방문율 : {reVisit.visitPercent}%{" "}
           </p>
@@ -230,8 +209,7 @@ export default function Income() {
       </div>
 
       <div className="flex justify-center gap-10 mt-10 w-full h-full">
-        <div className="bg-white p-4 rounded-lg shadow-lg w-[70%]">
-
+        <div className="bg-white p-4 rounded-lg shadow-lg w-[70%] h-full">
           <select
             onChange={(e) => {
               setSelectedOption(e.target.value);
@@ -240,15 +218,26 @@ export default function Income() {
           >
             <option value="income">매출</option>
             <option value="visitors">고객 수</option>
-            <option value="reVisit">재방문율</option>
           </select>
+          <ResponsiveContainer width="100%" height={500}>
+            <BarChart data={data[selectedOption]}>
+              <XAxis dataKey="날짜" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="매출" fill="rgb(233, 52, 52)" />
+              <Bar dataKey="포장" fill="rgb(233, 52, 52)" />
+              <Bar
+                dataKey="매장"
+                fill="hsl(0, 59.42028985507246%, 27.058823529411768%)"
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
-        <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%]">
-
+        <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%] ">
           <h4 className="font-bold">메뉴별 매출 비율</h4>
-          <ResponsiveContainer width="100%" height={500}>
-            <PieChart>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart width="100%" height={400}>
               <Pie
                 data={menu}
                 dataKey="value"
@@ -256,24 +245,30 @@ export default function Income() {
                 cx="50%"
                 cy="50%"
                 outerRadius={100}
-                label={({ name, value, percent }) => {
-                  return `${name} (${(percent * 100).toFixed(2)}%)`;
-                }}
+                label={({ name, percent, x, y }) => (
+                  <text
+                    x={x}
+                    y={y}
+                    fill="black"
+                    textAnchor="middle"
+                    fontSize={12}
+                  >
+                    {`${name} (${(percent * 100).toFixed(2)}%)`}
+                  </text>
+                )}
                 labelLine={false}
               >
                 {menu.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-
-              <Tooltip />
             </PieChart>
           </ResponsiveContainer>
           <table className="w-full mt-4 border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
                 <th className="p-2 border">메뉴</th>
-                <th className="p-2 border">매출</th>
+                <th className="p-2 border">판매수량</th>
               </tr>
             </thead>
             <tbody>

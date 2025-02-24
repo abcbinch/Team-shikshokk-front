@@ -1,97 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Header from '../../components/Header/Header'; // 헤더 임포트
 import '../../styles/MyPage.scss';
 
 const MyPage: React.FC = () => {
-  const [username, setUsername] = useState('admin1234');
-  const [userProfileImage, setUserProfileImage] = useState(
-    'path/to/profile/image.jpg',
-  ); // 프로필 이미지 경로 ex
-  const [showEditInfo, setShowEditInfo] = useState(false);
-  const [showRegisterStore, setShowRegisterStore] = useState(false);
-  const [showWithdraw, setShowWithdraw] = useState(false);
+  const navigate = useNavigate();
+  const nickname = 'admin1234'; // nickname 정의
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
   };
 
-  const handleButtonClick = () => {
-    const fileInput = document.getElementById('file-input') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
+  const handleStoreRegistration = () => {
+    navigate('/store-reg');
+  };
+
+  const handleDeleteMember = () => {
+    navigate('/delete-member');
   };
 
   return (
-    <div className="my-page">
-      <header className="my-page-header">
-        <h1>마이페이지</h1>
-      </header>
-
-      <div className="user-info">
-        <img src={userProfileImage} alt="Profile" className="profile-image" />
-        <h2>{username}</h2>
+    <div className="container">
+      <Header nickname={nickname} /> {/* nickname 속성 전달 */}
+      <div className="card">
+        <img
+          src="https://via.placeholder.com/100"
+          alt="Profile"
+          className="profile-pic"
+        />
+        <h2 className="username">{nickname}</h2>
+        <p className="bio"></p>
       </div>
-
-      <div className="user-options">
-        <div className="option">
-          <span onClick={() => setShowEditInfo(!showEditInfo)}>정보수정</span>
-          <button className="toggle-button">▼</button>
-          {showEditInfo && (
-            <div className="sub-options">
-              <button className="upload-button" onClick={handleButtonClick}>
-                프로필 이미지 등록
-              </button>
-              <input
-                type="file"
-                id="file-input"
-                onChange={handleImageUpload}
-                accept="image/*"
-                style={{ display: 'none' }}
-              />
-              <div className="username-edit">
-                <label>
-                  사용자 이름 수정:
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                    style={{ marginLeft: '5px' }}
-                  />
-                </label>
-              </div>
-            </div>
-          )}
+      <div className="menu">
+        <div className="menu-item">
+          <h3 className="menu-title" onClick={handleEditProfile}>
+            정보수정
+          </h3>
         </div>
-        <div className="option">
-          <span onClick={() => setShowRegisterStore(!showRegisterStore)}>
-            가게 등록
-          </span>
-          <button className="toggle-button">▼</button>
-          {showRegisterStore && (
-            <div className="sub-options">
-              {/* 가게 등록 관련 항목들 */}
-              <p>가게 이름 입력</p>
-              <p>가게 위치 입력</p>
-            </div>
-          )}
+        <div className="menu-item">
+          <h3 className="menu-title" onClick={handleStoreRegistration}>
+            가계 등록
+          </h3>
         </div>
-        <div className="option">
-          <span onClick={() => setShowWithdraw(!showWithdraw)}>회원 탈퇴</span>
-          <button className="toggle-button">▼</button>
-          {showWithdraw && (
-            <div className="sub-options">
-              {/* 회원 탈퇴 관련 항목들 */}
-              <p>탈퇴 사유 입력</p>
-              <p>탈퇴 확인</p>
-            </div>
-          )}
+        <div className="menu-item">
+          <h3 className="menu-title" onClick={handleDeleteMember}>
+            회원 탈퇴
+          </h3>
         </div>
       </div>
     </div>
