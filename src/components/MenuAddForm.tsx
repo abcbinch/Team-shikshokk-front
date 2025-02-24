@@ -33,6 +33,22 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           }
         );
 
+        const formData = new FormData();
+        formData.append("image", mfile); // 'image'는 파일 필드 이름이므로 확인 필요
+
+        // S3에 업로드하는 요청
+        const uploadRes = await axios.post(
+          "http://localhost:8082/api-server/upload",
+          formData, // FormData로 파일을 전송
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // 파일 업로드에 필요한 헤더
+            },
+          }
+        );
+
+        console.log(uploadRes);
+
         if (response) alert("등록이 완료됐습니다.");
       }
       setIsShow(false);

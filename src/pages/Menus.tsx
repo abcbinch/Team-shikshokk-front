@@ -29,7 +29,6 @@ export default function Menus() {
         const response = await axios.get(
           "http://localhost:8082/api-server/menu-list"
         );
-        console.log("response data", response.data);
 
         let result = response.data.map((el: Menus) => {
           const { id, menuName, price, menudesc, category, originMfile } = el;
@@ -96,7 +95,16 @@ export default function Menus() {
                           }}
                         />
                       </div>
-                      <div className="img-box"></div>
+                      <div className="img-box">
+                        {/* <img src={"../public/assets/" + mel.originMfile} /> */}
+                        <img
+                          src={
+                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                            mel.originMfile
+                          }
+                          alt="aws s3에 저장된 이미지"
+                        />
+                      </div>
                       <p>{mel.menuName}</p>
                       <p>{mel.price}</p>
                       <div className="content-box">{mel.menudesc}</div>
