@@ -36,7 +36,6 @@ const AppRoutes = () => {
     { path: "/shopdetail", element: <CustomerShopDetail /> },
     { path: "/cart", element: <ShoppingCart /> },
     { path: "/review", element: <CusReview /> },
-
   ]);
 
   return routes;
