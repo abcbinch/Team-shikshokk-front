@@ -26,7 +26,7 @@ export default function MenuChgForm({
   let [chgcategory, setChgcategory] = useState(selectMenu.category);
   let [chgprice, setChgprice] = useState(selectMenu.price);
   let [chgdesc, setChgcontent] = useState(selectMenu.menudesc);
-  let [chgfile, setChgfile] = useState(selectMenu.originMfile);
+  let [chgfile, setChgfile] = useState("");
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -38,6 +38,11 @@ export default function MenuChgForm({
           { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
         );
 
+        const uploadChgRes = await axios.post(
+          "http://localhost:8082/api-server/upload",
+          { chgfile }
+        );
+        if (chgfile === "") setChgfile(selectMenu.originMfile);
         if (response) alert("수정이 완료되었습니다.");
       }
       setIsChgShow(false);
