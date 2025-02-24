@@ -3,14 +3,19 @@
   display: flex;
   flex-direction: column;
   align-items: center; // 중앙 정렬
-  max-width: 1200px; // 최대 너비 설정
+  width: 1200px; // 최대 너비 설정
   margin: 0 auto; // 중앙 정렬
   padding: 20px; // 패딩 추가
+
+  @media (max-width: 480px) {
+    width: 100%; // 모바일 화면에 맞게 변경
+    padding: 0px; // 패딩 추가
+  }
 }
 
 .header {
   padding: 10px;
-  width: 100%; // 전체 너비 사용
+
   display: flex;
   justify-content: center; // 중앙 정렬
 
@@ -33,11 +38,17 @@
       .area-select {
         border-radius: 4px 0 0 4px; // 왼쪽 모서리 둥글게
         width: 200px; // 너비 설정
+        @media (max-width: 480px) {
+          width: 140px; // 모바일 화면에 맞게 변경
+        }
       }
 
       .search-input {
         border-radius: 0 4px 4px 0; // 오른쪽 모서리 둥글게
         width: 400px; // 너비 2배로 설정
+        @media (max-width: 480px) {
+          width: 200px; // 모바일 화면에 맞게 변경
+        }
       }
     }
   }
@@ -53,8 +64,11 @@
     position: relative;
     display: flex;
     align-items: center; // 수직 중앙 정렬
-    width: 100%; // 전체 너비 사용
 
+    @media (max-width: 480px) {
+      width: 80%; // 모바일 화면에 맞게 변경
+      padding: 0px; // 패딩 추가
+    }
     .slider-button {
       background-color: rgba(255, 255, 255, 0.8);
       border: none;
@@ -64,6 +78,9 @@
       border-radius: 50%;
       margin: 0 10px; // 버튼 간격
       transition: background-color 0.3s;
+      @media (max-width: 480px) {
+        margin: 0 5px; // 모바일 화면에 맞게 변경
+      }
 
       &:hover {
         background-color: rgba(255, 255, 255, 1);
@@ -87,6 +104,10 @@
     color: white;
     font-size: 3em;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 480px) {
+      font-size: 2em; // 모바일 화면에 맞게 변경
+    }
   }
 
   .highlight {
@@ -111,7 +132,6 @@
     }
 
     .food-image {
-      width: 100%;
       height: auto;
     }
 
@@ -148,6 +168,10 @@
       transition: box-shadow 0.3s;
       display: flex; // Flexbox로 내부 정렬
       align-items: center; // 세로 중앙 정렬
+
+      @media (max-width: 480px) {
+        width: 100%; // 모바일 화면에 맞게 변경
+      }
 
       &:hover {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
