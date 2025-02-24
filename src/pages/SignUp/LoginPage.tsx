@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../../styles/LoginPage.scss";
 import Header from "../../components/Header/Header";
+import { useDispatch, useSelector } from "react-redux";
+import * as T from "../../store/login";
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ const LoginPage: React.FC = () => {
     membershipType: "individual", // 기본값 개인회원
   });
 
+  //로그인 상태관리 리덕스 커스텀 훅
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
 
   const handleChange = (
@@ -33,6 +37,7 @@ const LoginPage: React.FC = () => {
       const response = await fetch("http://localhost:8082/api-server/login", {
         // 수정된 API URL
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
@@ -50,6 +55,7 @@ const LoginPage: React.FC = () => {
 
       if (data.isSuccess) {
         alert("로그인 성공!"); // 예시로 알림 추가
+        dispatch(T.setLoginId(formData.user_id));
       } else {
         alert("로그인 실패!"); // 예시로 알림 추가
       }

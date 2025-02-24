@@ -1,4 +1,3 @@
-import { RootState } from "../rootReducer";
 import * as T from "./types";
 
 const initialState: T.State = 0;
