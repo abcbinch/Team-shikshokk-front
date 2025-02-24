@@ -18,8 +18,10 @@ import SignUpPage from '../pages/SignUp/SignUpPage';
 import MyPage from '../pages/SignUp/MyPage';
 import UserMain from '../pages/UserMain';
 //@ts-ignore
+
 import Income from '../pages/Income/Income';
 import DeleteMember from '../pages/SignUp/DeleteMember';
+
 const AppRoutes = () => {
   let routes = useRoutes([
     { path: '/Home', element: <Home /> },
@@ -46,4 +48,3 @@ const AppRoutes = () => {
   return routes;
 };
 export default AppRoutes;
-

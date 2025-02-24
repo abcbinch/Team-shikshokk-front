@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import "../../types/Income";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 
@@ -17,61 +17,112 @@ import {
   Cell,
 } from "recharts";
 import { ko } from "date-fns/locale";
-
 export default function Income() {
-  const [dateRange, setDateRange] = useState([]);
+  type MenuItem = {
+    name: string;
+    value: number;
+    color: string;
+    menuName: string;
+    totalPrice: number;
+  };
+  type DataState = {
+    [key: string]: any;
+    income: number[];
+    visitors: number[];
+  };
+  type UserData = {
+    isReVisit: boolean;
+    number: number;
+  };
+
+  type VisitData = {
+    // 🔥 `VisitData` 타입 추가
+    reVisit: number;
+    firstVisit: number;
+    visitPercent: number;
+  };
+  type ReVisitData = {
+    reVisit: number;
+    firstVisit: number;
+    visitPercent: number;
+  };
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [selectedDateText, setSelectedDateText] = useState("");
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState("income");
-  const [data, setData] = useState({
+  const [data, setData] = useState<DataState>({
     income: [],
     visitors: [],
   });
-  const [menuData, setMenuData] = useState([]);
-  const [orderVisitor, setOrderVisitor] = useState({});
+
+  const [menuData, setMenuData] = useState<MenuItem[]>([]);
+
+  const [orderVisitor, setOrderVisitor] = useState<number[]>([]);
+
   const [menuSum, setMenuSum] = useState(0);
-  const [reVisit, setReVisit] = useState({});
+  const [reVisit, setReVisit] = useState<ReVisitData>({
+    reVisit: 0,
+    firstVisit: 0,
+    visitPercent: 0,
+  });
 
   const [menu, setMenu] = useState([
     { name: "치킨", value: 102, color: "#ff9999" },
     { name: "피자", value: 202, color: "#66b3ff" },
     { name: "햄버거", value: 302, color: "#99ff99" },
   ]);
-  const handleDateChange = (dates) => {
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
     setDateRange(dates);
     if (dates[0] && dates[1]) {
       setSelectedDateText(
-        `${dates[0].toLocaleDateString()} - ${dates[1].toLocaleDateString()}`
+        `${dates[0].toLocaleDateString()} ~ ${dates[1].toLocaleDateString()}`
       );
     }
   };
+
   const price = async () => {
     const result = await axios.post(
-      "http://localhost:8082/api-server/income/orderMenu",
+      `${process.env.REACT_APP_API_SERVER}/income/orderMenu`,
       {
         startDate: dateRange[0],
         endDate: dateRange[1],
       }
     );
-
+    console.log(
+      "process.env.REACT_APP_API_SERVER",
+      process.env.REACT_APP_API_SERVER
+    );
     if (result.data) {
       const menuSum = result.data.priceSum;
       setMenuSum(menuSum);
 
-      const menuData = result.data.menu ? Object.values(result.data.menu) : [];
+      const menuData = result.data.menu
+        ? (Object.values(result.data.menu) as MenuItem[])
+        : [];
       setMenuData(menuData);
 
       const datePerSum = result.data.datePerSum
-        ? Object.values(result.data.datePerSum)
+        ? (Object.values(result.data.datePerSum) as number[])
         : [];
+
       setData((prevData) => ({
         ...prevData,
         income: datePerSum,
       }));
-
       const menuNumber = result.data.groupedMenu
-        ? Object.values(result.data.groupedMenu)
+        ? Object.values(result.data.groupedMenu).map((item) => {
+            const menuItem = item as MenuItem; // 🔥 타입 단언 추가
+            return {
+              name: String(menuItem.name),
+              value: Number(menuItem.value),
+              color: String(menuItem.color),
+            };
+          })
         : [];
+
       setMenu(menuNumber);
     } else {
       console.error("Error fetching price data");
@@ -81,7 +132,7 @@ export default function Income() {
   const visitor = async () => {
     try {
       const result = await axios.post(
-        "http://localhost:8082/api-server/income/orderVisitor",
+        `${process.env.REACT_APP_API_SERVER}/income/orderVisitor`,
         {
           startDate: dateRange[0],
           endDate: dateRange[1],
@@ -90,13 +141,14 @@ export default function Income() {
 
       if (result.data) {
         const visitData = result.data.takeOutData
-          ? Object.values(result.data.takeOutData)
+          ? (Object.values(result.data.takeOutData) as number[])
           : [];
         setOrderVisitor(visitData);
 
         const visitPerDate = result.data.totalVisitors
-          ? Object.values(result.data.totalVisitors)
+          ? (Object.values(result.data.totalVisitors) as number[]) // 🔥 타입 단언 추가
           : [];
+
         setData((prevData) => ({
           ...prevData,
           visitors: visitPerDate,
@@ -111,29 +163,34 @@ export default function Income() {
 
   const reVisitor = async () => {
     const result = await axios.post(
-      "http://localhost:8082/api-server/income/reVisitor",
+      `${process.env.REACT_APP_API_SERVER}/income/reVisitor`,
       {
         startDate: dateRange[0],
         endDate: dateRange[1],
       }
     );
-    const reVisitData = Object.values(result.data.reVisitData).reduce(
+
+    const reVisitData = Object.values(
+      result.data.reVisitData
+    ).reduce<VisitData>(
       (acc, user) => {
-        if (user.isReVisit) {
-          acc.reVisit += user.number;
+        const typedUser = user as UserData;
+
+        if (typedUser.isReVisit) {
+          acc.reVisit += typedUser.number;
         } else {
-          acc.firstVisit += user.number;
+          acc.firstVisit += typedUser.number;
         }
-        acc.visitPercent =
-          acc.reVisit === 0
-            ? 0
-            : Math.floor((acc.reVisit / (acc.reVisit + acc.firstVisit)) * 100);
+        acc.visitPercent = Math.floor(
+          (acc.reVisit / (acc.reVisit + acc.firstVisit)) * 100
+        );
         return acc;
       },
       { reVisit: 0, firstVisit: 0, visitPercent: 0 }
     );
 
     setReVisit(reVisitData);
+    console.log(reVisit);
   };
   useEffect(() => {
     const today = new Date();
@@ -156,6 +213,7 @@ export default function Income() {
 
   return (
     <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
+      <Header nickname="고민봉" />
       <h1 className="text-3xl font-bold text-center text-white">매출관리</h1>
       <hr className="my-4 border-white" />
 
@@ -257,7 +315,7 @@ export default function Income() {
         <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%] ">
           <h4 className="font-bold">메뉴별 매출 비율</h4>
           <ResponsiveContainer width="100%" height={400}>
-            <PieChart width="100%" height={400}>
+            <PieChart width={400} height={400}>
               <Pie
                 data={menu}
                 dataKey="value"
