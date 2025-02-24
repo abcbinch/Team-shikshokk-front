@@ -25,22 +25,28 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    // 로그인 요청을 위한 API 호출 (가상의 URL)
+    // 로그인 요청을 위한 API 호출
     try {
-      const response = await fetch('https://api.example.com/login', {
+      const response = await fetch('http://localhost:8082/api-server/login', {
+        // 수정된 API URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // 세션을 사용하므로 필요
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('로그인 실패');
+        const errorData = await response.json();
+        throw new Error(errorData.message || '로그인 실패');
       }
 
       const data = await response.json();
       console.log('로그인 성공:', data);
+      // 로그인 성공 후 추가 동작 (예: 대시보드로 리다이렉트)
+      alert('로그인 성공!'); // 예시로 알림 추가
+      // 이곳에 대시보드로 리다이렉트하는 코드 추가 가능
     } catch (error) {
       setError('로그인에 실패했습니다. 다시 시도해주세요.');
     }
@@ -50,7 +56,6 @@ const LoginPage: React.FC = () => {
     <div className="login-page">
       <h1 className="login-title">로그인</h1>
       <div className="membership-container">
-        {' '}
         {/* 회원 유형 선택 박스 */}
         <div className="membership-type">
           <button
@@ -98,8 +103,6 @@ const LoginPage: React.FC = () => {
         </form>
         {/* 아이디 찾기, 비밀번호 찾기, 회원가입 링크 추가 */}
         <div className="additional-links">
-          <a href="/find-username">아이디 찾기</a>
-          <a href="/find-password">비밀번호 찾기</a>
           <a href="/signup">회원가입</a>
         </div>
       </div>

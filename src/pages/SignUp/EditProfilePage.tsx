@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/EditProfilePage.scss';
+import Header from '../../components/Header/Header';
 
 const EditProfilePage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const EditProfilePage: React.FC = () => {
     businessType: '',
     storeAddress: '',
     representativeName: '',
-    businessAddress: '',
+    businessRegistrationNumber: '',
   });
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -26,23 +27,22 @@ const EditProfilePage: React.FC = () => {
     'individual' | 'business'
   >('individual');
 
+  // 사용자 데이터 로드
   useEffect(() => {
     const fetchUserData = async () => {
-      const userData = {
-        username: 'testuser',
-        name: '이채훈',
-        birthdate: '1990-01-01',
-        gender: 'male',
-        email: 'test@example.com',
-        phoneNumber: '01012345678',
-        address: '서울시 노원구 중계동',
-        companyName: '버거킴',
-        businessType: '레스토랑',
-        storeAddress: '서울시 서초구 신반포로',
-        representativeName: '이채훈',
-        businessAddress: '서울시 서초구 신반포로',
-      };
-      setFormData(userData);
+      try {
+        const response = await fetch('http://localhost:8082/api-server/me', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (!response.ok) {
+          throw new Error('사용자 데이터를 가져오는 데 실패했습니다.');
+        }
+        const userData = await response.json();
+        setFormData(userData);
+      } catch (error) {
+        console.error('사용자 데이터 로드 오류:', error);
+      }
     };
 
     fetchUserData();
@@ -93,10 +93,54 @@ const EditProfilePage: React.FC = () => {
         setPasswordError('');
       }
     }
+
+    // 사용자 정보 수정 요청
+    try {
+      const response = await fetch(
+        'http://localhost:8082/api-server/update', // 수정된 API URL
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            nickname: formData.username, // nickname을 username으로 변경
+            email: formData.email,
+            password: newPassword || undefined, // 비밀번호 변경 시만 포함
+            name: formData.name,
+            gender: formData.gender,
+            birthdate: formData.birthdate,
+            phoneNumber: formData.phoneNumber,
+            address: formData.address,
+            companyName: formData.companyName,
+            businessType: formData.businessType,
+            storeAddress: formData.storeAddress,
+            representativeName: formData.representativeName,
+            businessRegistrationNumber: formData.businessRegistrationNumber,
+            membershipType,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '회원 정보 수정에 실패했습니다.');
+      }
+
+      const data = await response.json();
+      console.log('회원 정보 수정 성공:', data);
+      alert('회원 정보가 수정되었습니다.');
+    } catch (error) {
+      console.error('회원 정보 수정 오류:', error);
+      alert('회원 정보 수정 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <div className="edit-profile-page">
+      <Header nickname={formData.username} />
       <h1>회원정보 수정</h1>
       <div className="edit-profile-container">
         <div className="membership-type">
@@ -269,13 +313,13 @@ const EditProfilePage: React.FC = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label>사업자 주소</label>
+                <label>사업자 등록증 번호</label>
                 <input
                   type="text"
-                  name="businessAddress"
-                  value={formData.businessAddress}
+                  name="businessRegistrationNumber"
+                  value={formData.businessRegistrationNumber}
                   onChange={handleChange}
-                  placeholder="사업자 주소를 입력해주세요"
+                  placeholder="사업자 등록증 번호를 입력해주세요"
                   required
                 />
               </div>
