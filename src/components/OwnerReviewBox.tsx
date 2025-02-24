@@ -153,7 +153,7 @@ export default function OwnerReviewBox({ review, isOpen, onClick }: Props) {
                   <img
                     className="w-4 h-5 inline-block mx-1"
                     key={index}
-                    src={process.env.PUBLIC_URL + "/assets/fork-F.png"}
+                    src={process.env.PUBLIC_URL + "/assets/fork-F.svg"}
                   />
                 ))}
                 {review.isDelete == null && cusRe == true ? (

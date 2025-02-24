@@ -67,7 +67,7 @@ export default function OwnerMain() {
   };
 
   return (
-    <main className="box-content mt-10 max-w-[1200px]">
+    <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
       <div className="con w-full flex flex-col items-center">
         {/* 전체 컨테이너 */}
         <div className="titleBorder border-b border-gray-300  w-4/5 relative">
