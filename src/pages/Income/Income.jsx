@@ -45,7 +45,6 @@ export default function Income() {
       );
     }
   };
-
   const price = async () => {
     const result = await axios.post(
       "http://localhost:8082/api-server/income/orderMenu",
@@ -55,40 +54,61 @@ export default function Income() {
       }
     );
 
-    const menuSum = result.data.priceSum;
-    setMenuSum(menuSum);
-    const menuData = Object.values(result.data.menu);
-    setMenuData(menuData);
-    const datePerSum = Object.values(result.data.datePerSum);
+    if (result.data) {
+      const menuSum = result.data.priceSum;
+      setMenuSum(menuSum);
 
-    setData((prevData) => ({
-      ...prevData,
-      income: datePerSum,
-    }));
+      const menuData = result.data.menu ? Object.values(result.data.menu) : [];
+      setMenuData(menuData);
 
-    const menuNumber = Object.values(result.data.groupedMenu);
-    setMenu(menuNumber);
+      const datePerSum = result.data.datePerSum
+        ? Object.values(result.data.datePerSum)
+        : [];
+      setData((prevData) => ({
+        ...prevData,
+        income: datePerSum,
+      }));
+
+      const menuNumber = result.data.groupedMenu
+        ? Object.values(result.data.groupedMenu)
+        : [];
+      setMenu(menuNumber);
+    } else {
+      console.error("Error fetching price data");
+    }
   };
 
   const visitor = async () => {
-    const result = await axios.post(
-      "http://localhost:8082/api-server/income/orderVisitor",
-      {
-        startDate: dateRange[0],
-        endDate: dateRange[1],
+    try {
+      const result = await axios.post(
+        "http://localhost:8082/api-server/income/orderVisitor",
+        {
+          startDate: dateRange[0],
+          endDate: dateRange[1],
+        }
+      );
+
+      if (result.data) {
+        const visitData = result.data.takeOutData
+          ? Object.values(result.data.takeOutData)
+          : [];
+        setOrderVisitor(visitData);
+
+        const visitPerDate = result.data.totalVisitors
+          ? Object.values(result.data.totalVisitors)
+          : [];
+        setData((prevData) => ({
+          ...prevData,
+          visitors: visitPerDate,
+        }));
+      } else {
+        console.error("Error fetching visitor data: No data received");
       }
-    );
-
-    const visitData = Object.values(result.data.takeOutData);
-    setOrderVisitor(visitData);
-    console.log(orderVisitor);
-
-    const visitPerDate = Object.values(result.data.totalVisitors);
-    setData((prevData) => ({
-      ...prevData,
-      visitors: visitPerDate,
-    }));
+    } catch (error) {
+      console.error("Error fetching visitor data:", error);
+    }
   };
+
   const reVisitor = async () => {
     const result = await axios.post(
       "http://localhost:8082/api-server/income/reVisitor",
@@ -180,7 +200,7 @@ export default function Income() {
               })}
             </div>
           </p>
-          <p className="text-right font-bold">총 매출액 : {menuSum}원</p>
+          <p className="font-bold text-right">총 매출액 : {menuSum}원</p>
         </div>
         <div className="p-4 rounded-lg shadow bg-amber-500">
           <h4 className="font-bold">고객 수</h4>
@@ -188,7 +208,7 @@ export default function Income() {
 
           <p>방문 고객 수 : {orderVisitor[0] ? orderVisitor[0] : 0}명</p>
           <p>포장 고객 수 : {orderVisitor[1] ? orderVisitor[1] : 0}명</p>
-          <p className="text-right font-bold">
+          <p className="font-bold text-right">
             총 고객 수 :{" "}
             {orderVisitor[0] + orderVisitor[1]
               ? orderVisitor[0] + orderVisitor[1]
@@ -202,13 +222,13 @@ export default function Income() {
 
           <p>재방문 고객 : {reVisit.reVisit}명</p>
           <p>신규 고객 : {reVisit.firstVisit}명</p>
-          <p className="text-right font-bold">
+          <p className="font-bold text-right">
             재방문율 : {reVisit.visitPercent}%{" "}
           </p>
         </div>
       </div>
 
-      <div className="flex justify-center gap-10 mt-10 w-full h-full">
+      <div className="flex justify-center w-full h-full gap-10 mt-10">
         <div className="bg-white p-4 rounded-lg shadow-lg w-[70%] h-full">
           <select
             onChange={(e) => {
