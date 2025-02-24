@@ -88,7 +88,7 @@ export default function OwnerReview() {
 
   return (
     <>
-      <div className="con max-w-[1200px] m-10 flex flex-col items-center">
+      <div className="con max-w-[1200px] m-10 flex flex-col items-center my-0 mx-auto">
         <div className="reviewTitle mb-8 pb-2 w-3/5 border-b ">
           <h1 className="text-2xl font-bold">리뷰 관리</h1>
         </div>
