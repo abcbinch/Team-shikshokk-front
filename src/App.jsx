@@ -1,5 +1,3 @@
-
-
 import OwnerOrderHistory from "./pages/Order/OwnerOrderPage/OwnerOrderHistory";
 import OwnerOrderAllHistory from "./pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import SignUpPage from "./pages/SignUp/SignUpPage";
@@ -18,7 +16,7 @@ function App() {
       <MyPage />
       <OwnerOrderHistory />
       <OwnerOrderAllHistory /> */}
-      <Income />
+      {/* <Income /> */}
     </div>
   );
 }

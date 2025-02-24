@@ -6,9 +6,13 @@ import axios from "axios";
 
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setImgS3route: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
+export default function MenuAddForm({
+  setIsShow,
+  setImgS3route,
+}: MenuAddFormProps) {
   let [mname, setMname] = useState("");
   let [mcategory, setMcategory] = useState("");
   let [mprice, setMprice] = useState(0);
@@ -36,18 +40,9 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
         const formData = new FormData();
         formData.append("image", mfile); // 'image'는 파일 필드 이름이므로 확인 필요
 
-        // S3에 업로드하는 요청
-        const uploadRes = await axios.post(
-          "http://localhost:8082/api-server/upload",
-          formData, // FormData로 파일을 전송
-          {
-            headers: {
-              "Content-Type": "multipart/form-data", // 파일 업로드에 필요한 헤더
-            },
-          }
-        );
-
-        console.log(uploadRes);
+        //s3에 업로드하고 나서, 그 결과값으로 나온 경로를 state에 넣기
+        const { imgUrl } = response.data;
+        setImgS3route(imgUrl);
 
         if (response) alert("등록이 완료됐습니다.");
       }

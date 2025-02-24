@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/ownerMain.scss";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Header from "../components/Header/Header";
 
 //가게 정보 interface
 interface shopIn {
@@ -22,6 +23,8 @@ export default function OwnerMain() {
       //   console.error("No token found");
       //   return;
       // }
+      const token = localStorage.getItem("authToken");
+      console.log("토큰?", token);
 
       const response = await axios.get(
         "http://localhost:8082/api-server/owner",
@@ -39,7 +42,8 @@ export default function OwnerMain() {
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
-      if (shopsList.legnth > 0) {
+      if (shopsList.length > 0) {
+        //shopsList.legnth  수정
         setShopId(shopsList[0].id);
       }
     } catch (error) {
@@ -70,6 +74,7 @@ export default function OwnerMain() {
     <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
       <div className="con w-full flex flex-col items-center">
         {/* 전체 컨테이너 */}
+        <Header nickname="고민봉" />
         <div className="titleBorder border-b border-gray-300  w-4/5 relative">
           <div className="selctBox w-56 relative left-10 mb-2 ">
             <select
@@ -93,7 +98,7 @@ export default function OwnerMain() {
         <div className="folderBox border shadow rounded w-4/5 my-7 flex justify-center">
           <div className="folder w-11/12 grid grid-cols-2 box-content">
             <div
-              onClick={() => handleClick("/")}
+              onClick={() => handleClick("/testorder")}
               className="bg-contain bg-no-repeat w-[19rem] h-72 
                   relative my-0 mx-auto "
             >
@@ -105,7 +110,7 @@ export default function OwnerMain() {
             <div
               onClick={() => handleClick("/menu")}
               className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
+              relative my-0 mx-auto "
             >
               <p className="relative top-12 left-6 text-white text-lg">
                 메뉴관리
@@ -113,19 +118,18 @@ export default function OwnerMain() {
             </div>
 
             <div
-              onClick={() => handleClick("/")}
+              onClick={() => handleClick("/income")}
               className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
+              relative my-0 mx-auto "
             >
               <p className="relative top-12 left-6 text-white text-lg">
                 매출관리
               </p>
             </div>
-
             <div
               onClick={() => handleClick("/owner-review")}
               className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
+              relative my-0 mx-auto "
             >
               <p className="relative top-12 left-6 text-white text-lg">
                 리뷰관리
