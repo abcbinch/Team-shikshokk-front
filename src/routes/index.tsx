@@ -22,6 +22,7 @@ import MyPage from "../pages/SignUp/MyPage";
 import UserMain from "../pages/UserMain";
 //@ts-ignore
 import Income from "../pages/Income/Income";
+
 const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
