@@ -4,60 +4,55 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-interface MenuAddFormProps {
-  setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
+interface Menus {
+  id: number;
+  menuName: string;
+  category: string;
+  price: number;
+  menudesc: string;
 }
-
-export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
-  let [mname, setMname] = useState("");
-  let [mcategory, setMcategory] = useState("");
-  let [mprice, setMprice] = useState(0);
-  let [mdesc, setMcontent] = useState("");
+interface MenuAddFormProps {
+  selectMenu: Menus;
+  setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+//props로 Menus에서 메뉴 정보를 여기로 전달한다.
+//value에 메뉴 정보를 넣는다.
+export default function MenuChgForm({
+  selectMenu,
+  setIsChgShow,
+}: MenuAddFormProps) {
+  let [chgname, setChgname] = useState(selectMenu.menuName);
+  let [chgcategory, setChgcategory] = useState(selectMenu.category);
+  let [chgprice, setChgprice] = useState(selectMenu.price);
+  let [chgdesc, setChgcontent] = useState(selectMenu.menudesc);
+  // let [chgfile, setChgfile] = useState(selectMenu.mfile);
 
   const formRef = useRef<HTMLFormElement | null>(null);
-  const form = formRef.current;
 
-  const menuAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const menuChg = async (e: React.FormEvent) => {
     try {
       if (formRef.current && formRef.current.checkValidity()) {
-        axios.patch("http://localhost:8082/api-server/menu-change", {
-          mname,
-          mcategory,
-          mprice,
-          mdesc,
-        });
+        const response = await axios.patch(
+          "http://localhost:8082/api-server/menu-change",
+          { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
+        );
+
+        if (response) alert("수정이 완료되었습니다.");
       }
-      setIsShow(false);
+      setIsChgShow(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  // onSubmit={menuAdd}
-
-  useEffect(() => {
-    const menuOne = async () => {
-      const response = await axios.get(
-        "http://localhost:8082/api-server/menu-one"
-      );
-      console.log("response data", response.data);
-      //아마 menuName, price, menudesc, category가 들어있을테니
-      //이를 참고해서 구조분해할당을 해주면 될 것 같다.
-      //확인을 해 봐야 한다.
-    };
-
-    menuOne();
-  }, []);
-
   return (
     <div className="m-reg-container">
-      <form className="menu-modal" ref={formRef} onSubmit={menuAdd}>
+      <form className="menu-modal" ref={formRef} onSubmit={menuChg}>
         <div className="x-box">
           <FontAwesomeIcon
             icon={faXmark}
             className="close-btn"
-            onClick={() => setIsShow(false)}
+            onClick={() => setIsChgShow(false)}
           />
         </div>
 
@@ -67,8 +62,8 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mname"
-            value={mname}
-            onChange={(e) => setMname(e.target.value)}
+            value={chgname}
+            onChange={(e) => setChgname(e.target.value)}
           />
         </label>
         <br />
@@ -78,8 +73,8 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mcategory"
-            value={mcategory}
-            onChange={(e) => setMcategory(e.target.value)}
+            value={chgcategory}
+            onChange={(e) => setChgcategory(e.target.value)}
           />
         </label>
         <br />
@@ -89,8 +84,8 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mprice"
-            value={mprice}
-            onChange={(e) => setMprice(Number(e.target.value))}
+            value={chgprice}
+            onChange={(e) => setChgprice(Number(e.target.value))}
           />
         </label>
         <br />
@@ -100,11 +95,24 @@ export default function MenuAddForm({ setIsShow }: MenuAddFormProps) {
           <input
             type="text"
             name="mdesc"
-            value={mdesc}
-            onChange={(e) => setMcontent(e.target.value)}
+            value={chgdesc}
+            onChange={(e) => setChgcontent(e.target.value)}
           />
         </label>
         <br />
+        {/* <div className="custom-container">
+          사진
+          <br />
+          <div className="custom-input">
+            <input
+              type="file"
+              name="mfile"
+              value={chgfile}
+              onChange={(e) => setChgfile(e.target.value)}
+            />
+          </div>
+        </div>
+        <br /> */}
         <button type="submit">수정하기</button>
       </form>
     </div>

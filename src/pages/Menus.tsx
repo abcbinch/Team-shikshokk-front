@@ -4,8 +4,10 @@ import { faPlus, faGear } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import MenuAddForm from "../components/MenuAddForm";
 import axios from "axios";
+import MenuChgForm from "../components/MenuChgForm";
 
 interface Menus {
+  id: number;
   menuName: string;
   category: string;
   price: number;
@@ -14,47 +16,40 @@ interface Menus {
 
 export default function Menus() {
   let [isShow, setIsShow] = useState(false);
+  let [isChgShow, setIsChgShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
+  let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
-    const menuList = async () => {
-      const response = await axios.get(
-        "http://localhost:8082/api-server/menu-list"
-      );
-      console.log("response data", response.data);
+    try {
+      const menuList = async () => {
+        const response = await axios.get(
+          "http://localhost:8082/api-server/menu-list"
+        );
+        console.log("response data", response.data);
 
-      let result = response.data.map((el: Menus) => {
-        const { menuName, price, menudesc, category } = el;
-        return { menuName, price, menudesc, category };
-      });
+        let result = response.data.map((el: Menus) => {
+          const { id, menuName, price, menudesc, category } = el;
+          return { id, menuName, price, menudesc, category };
+        });
 
-      console.log("result", result);
+        console.log("result", result);
 
-      setMenuArr((prevMenuArr) => [
-        // ...prevMenuArr, // 기존 메뉴 항목들
-        ...result,
-        // {
-        //   mname: menuName,
-        //   mprice: price,
-        //   mdesc: menudesc,
-        //   mcategory: category,
-        // }, // 새로운 메뉴 객체 추가
-      ]);
-      //이제 이 state를 map으로 돌리면 된다.
-    };
+        setMenuArr(() => [...result]);
+      };
 
-    menuList();
+      menuList();
+    } catch (err) {
+      console.log("err", err);
+    }
   }, []);
 
-  //menuArr 확인용.
+  //카테고리 set. 중복 제거.
   useEffect(() => {
-    console.log("menuArr", menuArr); // menuArr가 업데이트 된 후 이 코드가 실행됩니다.
     let categories = [...new Set(menuArr.map((el) => el.category))];
     setCategoryArr(categories);
-
-    console.log("categories", categories);
   }, [menuArr]);
 
   return (
@@ -82,11 +77,21 @@ export default function Menus() {
               {menuArr.map((mel) => {
                 if (comp === mel.category) {
                   return (
-                    <li>
+                    <li key={mel.id}>
                       <div className="icon-box">
                         <FontAwesomeIcon
                           icon={faGear}
                           className="setting-icon m-2"
+                          onClick={() => {
+                            setIsChgShow(true);
+                            setSelectMenu({
+                              id: mel.id,
+                              menuName: mel.menuName,
+                              price: mel.price,
+                              menudesc: mel.menudesc,
+                              category: mel.category,
+                            });
+                          }}
                         />
                       </div>
                       <div className="img-box"></div>
@@ -107,6 +112,10 @@ export default function Menus() {
       })}
 
       {isShow && <MenuAddForm setIsShow={setIsShow} />}
+      {isChgShow && selectMenu && (
+        <MenuChgForm selectMenu={selectMenu} setIsChgShow={setIsChgShow} />
+      )}
+      {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>
   );
 }
