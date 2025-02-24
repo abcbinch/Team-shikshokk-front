@@ -23,6 +23,8 @@ export default function OwnerMain() {
       //   console.error("No token found");
       //   return;
       // }
+      const token = localStorage.getItem("authToken");
+      console.log("토큰?", token);
 
       const response = await axios.get(
         "http://localhost:8082/api-server/owner",
@@ -40,7 +42,8 @@ export default function OwnerMain() {
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
-      if (shopsList.legnth > 0) {
+      if (shopsList.length > 0) {
+        //shopsList.legnth  수정
         setShopId(shopsList[0].id);
       }
     } catch (error) {
@@ -94,50 +97,44 @@ export default function OwnerMain() {
 
         <div className="folderBox border shadow rounded w-4/5 my-7 flex justify-center">
           <div className="folder w-11/12 grid grid-cols-2 box-content">
-            <Link to="/testorder">
-              <div
-                onClick={() => handleClick("/")}
-                className="bg-contain bg-no-repeat w-[19rem] h-72 
+            <div
+              onClick={() => handleClick("/testorder")}
+              className="bg-contain bg-no-repeat w-[19rem] h-72 
                   relative my-0 mx-auto "
-              >
-                <p className="relative top-12 left-6 text-white text-lg">
-                  주문내역
-                </p>
-              </div>
-            </Link>
-            <Link to="/menu">
-              <div
-                onClick={() => handleClick("/menu")}
-                className="bg-contain bg-no-repeat w-[19rem] h-72 
+            >
+              <p className="relative top-12 left-6 text-white text-lg">
+                주문내역
+              </p>
+            </div>
+
+            <div
+              onClick={() => handleClick("/menu")}
+              className="bg-contain bg-no-repeat w-[19rem] h-72 
               relative my-0 mx-auto "
-              >
-                <p className="relative top-12 left-6 text-white text-lg">
-                  메뉴관리
-                </p>
-              </div>
-            </Link>
-            <Link to="/income">
-              <div
-                onClick={() => handleClick("/")}
-                className="bg-contain bg-no-repeat w-[19rem] h-72 
+            >
+              <p className="relative top-12 left-6 text-white text-lg">
+                메뉴관리
+              </p>
+            </div>
+
+            <div
+              onClick={() => handleClick("/income")}
+              className="bg-contain bg-no-repeat w-[19rem] h-72 
               relative my-0 mx-auto "
-              >
-                <p className="relative top-12 left-6 text-white text-lg">
-                  매출관리
-                </p>
-              </div>
-            </Link>
-            <Link to="/review">
-              <div
-                onClick={() => handleClick("/owner-review")}
-                className="bg-contain bg-no-repeat w-[19rem] h-72 
+            >
+              <p className="relative top-12 left-6 text-white text-lg">
+                매출관리
+              </p>
+            </div>
+            <div
+              onClick={() => handleClick("/owner-review")}
+              className="bg-contain bg-no-repeat w-[19rem] h-72 
               relative my-0 mx-auto "
-              >
-                <p className="relative top-12 left-6 text-white text-lg">
-                  리뷰관리
-                </p>
-              </div>
-            </Link>
+            >
+              <p className="relative top-12 left-6 text-white text-lg">
+                리뷰관리
+              </p>
+            </div>
           </div>
         </div>
       </div>
