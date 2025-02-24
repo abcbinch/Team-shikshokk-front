@@ -11,7 +11,7 @@ interface OwnerOrderAllHistoryProps {}
 const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
   return (
     <>
-      <Header nickname="고민봉" />
+      <Header />
       <div className="wrap-container-all">
         <div>
           <section className="order-history-container-all">

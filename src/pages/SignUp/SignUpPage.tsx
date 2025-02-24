@@ -149,7 +149,7 @@ const SignUpPage: React.FC = () => {
 
   return (
     <>
-      <Header nickname={formData.username} /> {/* 헤더 추가 */}
+      <Header /> {/* 헤더 추가 */}
       <div className="signup-page">
         <h1>회원가입</h1>
         <div className="signup-container">

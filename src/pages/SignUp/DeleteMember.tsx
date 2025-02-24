@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import '../../styles/DeleteMember.scss';
-import Header from '../../components/Header/Header';
+import React, { useState } from "react";
+import "../../styles/DeleteMember.scss";
+import Header from "../../components/Header/Header";
 
 interface DeleteMemberProps {
   nickname?: string; // nickname을 선택적으로 변경
 }
 
 const DeleteMember: React.FC<DeleteMemberProps> = ({
-  nickname = '사용자 이름',
+  nickname = "사용자 이름",
 }) => {
   const [isAgreed, setIsAgreed] = useState(false);
 
@@ -17,17 +17,17 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
 
   const handleDelete = () => {
     if (isAgreed) {
-      alert('회원 탈퇴가 진행되었습니다.');
+      alert("회원 탈퇴가 진행되었습니다.");
     } else {
-      alert('이용 약관에 동의해주세요.');
+      alert("이용 약관에 동의해주세요.");
     }
   };
 
   return (
     <div className="delete-member-container">
-      <Header nickname={nickname} />
+      <Header />
       <div className="content-wrapper">
-        {' '}
+        {" "}
         {/* 새로 추가된 div 그룹 */}
         <div className="content-container">
           <h1 className="title">

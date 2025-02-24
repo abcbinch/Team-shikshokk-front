@@ -35,7 +35,7 @@ const UserMain: React.FC = () => {
 
   return (
     <>
-      <Header nickname="사용자 이름" /> {/* 여기에 사용자 이름을 전달 */}
+      <Header />
       <div className="user-main">
         <header className="header">
           <div className="header-controls">

@@ -182,7 +182,7 @@ const OrderTest: React.FC<OrderTestProps> = () => {
 
   return (
     <>
-      <Header nickname="고민봉" />
+      <Header />
 
       <div className="wrap-container">
         <div>

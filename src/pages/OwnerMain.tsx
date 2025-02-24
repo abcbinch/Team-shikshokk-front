@@ -72,7 +72,7 @@ export default function OwnerMain() {
 
   return (
     <>
-      <Header nickname="고민봉" />
+      <Header />
       <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
         <div className="flex flex-col items-center w-full con">
           {/* 전체 컨테이너 */}
