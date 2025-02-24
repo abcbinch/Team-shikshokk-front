@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/SignUpPage.scss';
+import Header from '../../components/Header/Header';
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,11 +16,12 @@ const SignUpPage: React.FC = () => {
     businessType: '',
     storeAddress: '',
     representativeName: '',
-    businessAddress: '',
+    businessRegistrationNumber: '',
   });
 
   const [passwordError, setPasswordError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [emailExists, setEmailExists] = useState(false);
   const [membershipType, setMembershipType] = useState<
     'individual' | 'business'
   >('individual');
@@ -73,21 +75,81 @@ const SignUpPage: React.FC = () => {
       businessType: '',
       storeAddress: '',
       representativeName: '',
-      businessAddress: '',
+      businessRegistrationNumber: '',
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const checkEmailExists = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8082/api-server/check-email?email=${formData.email}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('이메일 중복 확인에 실패했습니다.');
+      }
+      const data = await response.json();
+      setEmailExists(data.exists);
+    } catch (error) {
+      console.error('이메일 중복 확인 오류:', error);
+      alert('이메일 중복 확인 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordError || emailError) {
+    if (passwordError || emailError || emailExists) {
       alert('입력한 정보가 유효하지 않습니다.');
       return;
     }
-    console.log(formData);
+
+    // 백엔드에 회원가입 요청
+    try {
+      const response = await fetch('http://localhost:8082/api-server/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          name: formData.name,
+          birthdate: formData.birthdate,
+          gender: formData.gender,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          address: formData.address,
+          companyName: formData.companyName,
+          businessType: formData.businessType,
+          storeAddress: formData.storeAddress,
+          representativeName: formData.representativeName,
+          businessRegistrationNumber: formData.businessRegistrationNumber,
+          membershipType,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('회원가입 실패');
+      }
+
+      const data = await response.json();
+      console.log('회원가입 성공:', data);
+      alert('회원가입이 완료되었습니다.');
+    } catch (error) {
+      console.error('회원가입 오류:', error);
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <div className="signup-page">
+      <Header nickname={formData.username} /> {/* 헤더 추가 */}
       <h1>회원가입</h1>
       <div className="signup-container">
         <div className="membership-type">
@@ -140,7 +202,7 @@ const SignUpPage: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label>생년월일(예: 20000131)</label>
+            <label>생년월일(예: 2000-01-31)</label>
             <input
               type="date"
               name="birthdate"
@@ -165,18 +227,29 @@ const SignUpPage: React.FC = () => {
           </div>
           <div className="form-group">
             <label>이메일</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@example.com"
-              required
-            />
+            <div className="email-container">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="example@example.com"
+                required
+              />
+              <button
+                type="button"
+                onClick={checkEmailExists}
+                className="check-email-button"
+              >
+                중복 확인
+              </button>
+            </div>
             {emailError && <span className="error">{emailError}</span>}
+            {emailExists && (
+              <span className="error">이미 사용 중인 이메일입니다.</span>
+            )}
           </div>
 
-          {/* 휴대폰 번호 및 주소 입력란 추가 */}
           <div className="form-group">
             <label>휴대폰 번호</label>
             <input
@@ -200,7 +273,6 @@ const SignUpPage: React.FC = () => {
             />
           </div>
 
-          {/* 기업회원 추가 입력란 */}
           {membershipType === 'business' && (
             <>
               <div className="form-group-inline">
@@ -252,13 +324,13 @@ const SignUpPage: React.FC = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label>사업자 주소</label>
+                <label>사업자 등록증 번호</label>
                 <input
                   type="text"
-                  name="businessAddress"
-                  value={formData.businessAddress}
+                  name="businessRegistrationNumber"
+                  value={formData.businessRegistrationNumber}
                   onChange={handleChange}
-                  placeholder="사업자 주소를 입력해주세요"
+                  placeholder="사업자 등록증 번호를 입력해주세요"
                   required
                 />
               </div>
