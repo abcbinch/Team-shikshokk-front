@@ -15,12 +15,14 @@ interface Menus {
 interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setImgS3route: React.Dispatch<React.SetStateAction<string>>;
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.
 export default function MenuChgForm({
   selectMenu,
   setIsChgShow,
+  setImgS3route,
 }: MenuAddFormProps) {
   let [chgname, setChgname] = useState(selectMenu.menuName);
   let [chgcategory, setChgcategory] = useState(selectMenu.category);
@@ -38,11 +40,6 @@ export default function MenuChgForm({
           { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
         );
 
-        const uploadChgRes = await axios.post(
-          "http://localhost:8082/api-server/upload",
-          { chgfile }
-        );
-        if (chgfile === "") setChgfile(selectMenu.originMfile);
         if (response) alert("수정이 완료되었습니다.");
       }
       setIsChgShow(false);

@@ -138,101 +138,94 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
             <hr className="border-2 opacity-75 black" />
             <div className="receipt-card-container">
               {Array.isArray(orderInfo) && orderInfo.length > 0 ? (
-                orderInfo
-                  .slice()
-                  .reverse()
-                  .map((order, index) => (
-                    <div key={index} className="receipt-card">
-                      <ul className="receipt-card-list">
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faTimes}
-                            className="custom-icon"
-                          />
-                        </li>
-                        <li>주문시간</li>
-                        <li>
-                          {`${new Date(order.orderTime).getFullYear()}년 ${
-                            new Date(order.orderTime).getMonth() + 1
-                          }월 ${new Date(order.orderTime).getDate()}일`}
-                        </li>
-                        <li>
-                          {new Date(order.orderTime).toLocaleTimeString(
-                            "ko-KR",
-                            {
-                              hour12: false,
-                            }
-                          )}
-                        </li>
-                        <li>주문고객Id</li>
-                        <li>{order.loginId}</li>
-                        <li>주문번호</li>
-                        <li>{order.orderNumber.slice(-8)}</li>
-                        <li>
-                          {order.orderType} {order.storeCapacity}명
-                        </li>
-                        <li>연락처</li>
-                        <li>{order.contactNumber}</li>
-                        <li>메뉴이름</li>
-                        {Array.isArray(order.items) &&
-                        order.items.length > 0 ? (
-                          order.items.map((item, index) => (
-                            <li key={index}>{item}</li>
-                          ))
-                        ) : (
-                          <li>-</li>
+                orderInfo.map((order, index) => (
+                  <div key={index} className="receipt-card">
+                    <ul className="receipt-card-list">
+                      <li>
+                        <FontAwesomeIcon
+                          icon={faTimes}
+                          className="custom-icon"
+                        />
+                      </li>
+                      <li>주문시간</li>
+                      <li>
+                        {`${new Date(order.orderTime).getFullYear()}년 ${
+                          new Date(order.orderTime).getMonth() + 1
+                        }월 ${new Date(order.orderTime).getDate()}일`}
+                      </li>
+                      <li>
+                        {new Date(order.orderTime).toLocaleTimeString("ko-KR", {
+                          hour12: false,
+                        })}
+                      </li>
+                      <li>주문고객Id</li>
+                      <li>{order.loginId}</li>
+                      <li>주문번호</li>
+                      <li>{order.orderNumber.slice(-8)}</li>
+                      <li>
+                        {order.orderType} {order.storeCapacity}명
+                      </li>
+                      <li>연락처</li>
+                      <li>{order.contactNumber}</li>
+                      <li>메뉴이름</li>
+                      {Array.isArray(order.items) && order.items.length > 0 ? (
+                        order.items.map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))
+                      ) : (
+                        <li>-</li>
+                      )}
+                      <br />
+                      <li>합계: {order.total}원</li>
+                    </ul>
+                    <div className="mt-2">
+                      <div>
+                        {!orderApproved[order.orderNumber] && (
+                          <button
+                            className={`btn btn-secondary ${
+                              isSmallScreen ? "btn-sm" : ""
+                            }`}
+                            onClick={() => handleOrderApproval(order)}
+                          >
+                            주문 확인
+                          </button>
                         )}
-                        <br />
-                        <li>합계: {order.total}원</li>
-                      </ul>
-                      <div className="mt-2">
-                        <div>
-                          {!orderApproved[order.orderNumber] && (
-                            <button
-                              className={`btn btn-secondary ${
-                                isSmallScreen ? "btn-sm" : ""
-                              }`}
-                              onClick={() => handleOrderApproval(order)}
-                            >
-                              주문 확인
-                            </button>
+                        {orderApproved[order.orderNumber] &&
+                          !cookingCompleted[order.orderNumber] && (
+                            <>
+                              <button
+                                className={`btn btn-warning ${
+                                  isSmallScreen ? "btn-sm" : ""
+                                }`}
+                                onClick={() => handleCookingStart(order)}
+                                disabled={orderStatus[order.orderNumber]}
+                              >
+                                조리 시작
+                              </button>
+                              <button
+                                className={`btn btn-success ${
+                                  isSmallScreen ? "btn-sm" : ""
+                                }`}
+                                onClick={() => handleCookingEnd(order)}
+                                disabled={!orderStatus[order.orderNumber]}
+                              >
+                                조리 완료
+                              </button>
+                            </>
                           )}
-                          {orderApproved[order.orderNumber] &&
-                            !cookingCompleted[order.orderNumber] && (
-                              <>
-                                <button
-                                  className={`btn btn-warning ${
-                                    isSmallScreen ? "btn-sm" : ""
-                                  }`}
-                                  onClick={() => handleCookingStart(order)}
-                                  disabled={orderStatus[order.orderNumber]}
-                                >
-                                  조리 시작
-                                </button>
-                                <button
-                                  className={`btn btn-success ${
-                                    isSmallScreen ? "btn-sm" : ""
-                                  }`}
-                                  onClick={() => handleCookingEnd(order)}
-                                  disabled={!orderStatus[order.orderNumber]}
-                                >
-                                  조리 완료
-                                </button>
-                              </>
-                            )}
-                          {cookingCompleted[order.orderNumber] && (
-                            <button
-                              className={`btn btn-info ${
-                                isSmallScreen ? "btn-sm" : ""
-                              }`}
-                            >
-                              조리완료되었습니다.
-                            </button>
-                          )}
-                        </div>
+                        {cookingCompleted[order.orderNumber] && (
+                          <button
+                            className={`btn btn-info ${
+                              isSmallScreen ? "btn-sm" : ""
+                            }`}
+                          >
+                            조리완료되었습니다.
+                          </button>
+                        )}
                       </div>
                     </div>
-                  ))
+                  </div>
+                ))
               ) : (
                 <p>주문 정보가 없습니다.</p>
               )}
