@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "../../styles/header.scss"; // Sass 파일 불러오기
 import { Link } from "react-router-dom";
 import { RootState } from "../../store/rootReducer";
@@ -8,7 +8,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ nickname }) => {
-  const dispatch = useDispatch();
   const loginId = useSelector((state: RootState) => state.login.loginId);
   console.log("loginId 나와라 =", loginId);
   return (
