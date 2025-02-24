@@ -11,12 +11,8 @@ const MyPage: React.FC = () => {
     navigate('/edit-profile');
   };
 
-  const handleStoreRegistration = () => {
-    navigate('/store-reg');
-  };
-
   const handleDeleteMember = () => {
-    navigate('/delete-member');
+    navigate('/delete');
   };
 
   return (
@@ -35,11 +31,6 @@ const MyPage: React.FC = () => {
         <div className="menu-item">
           <h3 className="menu-title" onClick={handleEditProfile}>
             정보수정
-          </h3>
-        </div>
-        <div className="menu-item">
-          <h3 className="menu-title" onClick={handleStoreRegistration}>
-            가계 등록
           </h3>
         </div>
         <div className="menu-item">

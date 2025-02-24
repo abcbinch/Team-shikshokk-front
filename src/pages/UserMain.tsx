@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import "../styles/UserMain.scss";
-import pizza from "../assets/pizza.jpg";
-import pizza2 from "../assets/pizza2.jpg";
-import vietnam from "../assets/vietnam.jpg";
-import mexican from "../assets/mexican.jpg";
-import burger from "../assets/burger.jpg";
-import Header from "../components/Header/Header";
+import React, { useState } from 'react';
+import '../styles/UserMain.scss';
+import pizza from '../assets/pizza.jpg';
+import pizza2 from '../assets/pizza2.jpg';
+import vietnam from '../assets/vietnam.jpg';
+import mexican from '../assets/mexican.jpg';
+import burger from '../assets/burger.jpg';
+import Header from '../components/Header/Header';
 
 const UserMain: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedArea, setSelectedArea] = useState("서울시 종로구");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedArea, setSelectedArea] = useState('서울시 종로구');
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,16 +20,16 @@ const UserMain: React.FC = () => {
     setSelectedArea(event.target.value);
   };
 
-  const foodItems = Array(8).fill("패스트푸드");
+  const foodItems = Array(8).fill('패스트푸드');
   const images = [pizza, pizza2, vietnam, mexican];
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    setCurrentIndex(prevIndex =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1,
     );
   };
 
@@ -77,7 +77,7 @@ const UserMain: React.FC = () => {
         {foodItems.map((item, index) => (
           <div
             key={index}
-            className={`food-item ${index === 0 ? "active" : ""}`}
+            className={`food-item ${index === 0 ? 'active' : ''}`}
           >
             <img
               src={burger} // burger 이미지로 대체
@@ -113,3 +113,4 @@ const UserMain: React.FC = () => {
 };
 
 export default UserMain;
+
