@@ -30,7 +30,7 @@ export default function Star() {
             i.toString()
           ) as HTMLImageElement;
           if (star_id) {
-            star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.png`;
+            star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.svg`;
           }
         }
       } else {
@@ -41,7 +41,7 @@ export default function Star() {
               i.toString()
             ) as HTMLImageElement;
             if (star_id) {
-              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-F.png`;
+              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-F.svg`;
               console.log(`Star ${i} changed to fork-F`);
             }
           }
@@ -51,7 +51,7 @@ export default function Star() {
               i.toString()
             ) as HTMLImageElement;
             if (star_id) {
-              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-F.png`;
+              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-F.svg`;
               console.log(`Star ${i} changed to fork-F`);
             }
           }
@@ -60,7 +60,7 @@ export default function Star() {
               j.toString()
             ) as HTMLImageElement;
             if (star_id) {
-              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.png`;
+              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.svg`;
               console.log(`Star ${j} changed to fork-E`);
             }
           }
@@ -70,7 +70,7 @@ export default function Star() {
               i.toString()
             ) as HTMLImageElement;
             if (star_id) {
-              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.png`;
+              star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.svg`;
               console.log(`Star ${i} changed to fork-E`);
             }
           }
@@ -92,7 +92,7 @@ export default function Star() {
           i.toString()
         ) as HTMLImageElement;
         if (star_id) {
-          star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.png`;
+          star_id.src = `${process.env.PUBLIC_URL}/assets/fork-E.svg`;
         }
       }
     }
@@ -108,7 +108,7 @@ export default function Star() {
           key={el}
           id={`${el}`}
           className="w-8 h-5/6  cursor-pointer m-1"
-          src={`${process.env.PUBLIC_URL}/assets/fork-E.png`}
+          src={`${process.env.PUBLIC_URL}/assets/fork-E.svg`}
           alt="reivew"
           onClick={goToFetch}
         />

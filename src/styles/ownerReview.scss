@@ -12,10 +12,10 @@
   }
   @media (max-width: 480px) {
     .reviewTitle {
-      width: 100%;
+      width: 80%;
     }
     .title {
-      width: 100%;
+      width: 80%;
       > div > p {
         font-size: 0.7rem;
       }
@@ -40,7 +40,7 @@
       }
     }
     @media (max-width: 480px) {
-      width: 100%;
+      width: 80%;
       > header > div > p {
         font-size: 0.7rem;
       }

@@ -5,10 +5,8 @@ import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
 import OnwerOrderHistory2 from "../pages/Order/OwnerOrderPage/OwnerOrderHistory2";
 
 import Menus from "../pages/Menus";
-
 import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
-
 import CounterTest from "../pages/CounterTest";
 
 import OrderTest from "../pages/Order/OwnerOrderPage/OrderTest";
@@ -31,9 +29,7 @@ const AppRoutes = () => {
     { path: "/order2", element: <OnwerOrderHistory2 /> },
 
     { path: "/menu", element: <Menus /> },
-
     { path: "/OwnerOrderHistory", element: <OwnerOrderHistory /> },
-
     { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
@@ -51,8 +47,6 @@ const AppRoutes = () => {
     { path: "/mypage", element: <MyPage /> },
     { path: "/UserMain", element: <UserMain /> },
   ]);
-
   return routes;
 };
-
 export default AppRoutes;

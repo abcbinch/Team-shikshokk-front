@@ -50,7 +50,7 @@ export default function CusReview() {
 
   return (
     <>
-      <main className="max-w-[1200px] flex justify-center ">
+      <main className="max-w-[1200px] flex justify-center my-0 mx-auto">
         <form
           className="con my-10 border rounded w-3/5 
         flex flex-col items-center shadow-md"
