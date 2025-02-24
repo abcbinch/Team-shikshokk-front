@@ -37,6 +37,7 @@ const AppRoutes = () => {
     { path: '/owner-review', element: <OwnerReview /> },
     { path: '/counter', element: <CounterTest /> },
 
+
     { path: '/testorder', element: <OrderTest /> },
     { path: '/testorder2', element: <OrderTest2 /> },
     { path: '/shopdetail', element: <CustomerShopDetail /> },
@@ -48,6 +49,7 @@ const AppRoutes = () => {
     { path: '/signup', element: <SignUpPage /> },
     { path: '/mypage', element: <MyPage /> },
     { path: '/UserMain', element: <UserMain /> },
+
   ]);
 
   return routes;
