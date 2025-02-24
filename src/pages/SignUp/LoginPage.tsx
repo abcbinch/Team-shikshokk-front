@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    user_id: "",
     password: "",
     membershipType: "individual", // 기본값 개인회원
   });
@@ -21,7 +21,9 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
+
+    console.log("폼데이터 확인 = ", formData);
+    if (!formData.user_id || !formData.password) {
       setError("아이디와 비밀번호를 입력해주세요.");
       return;
     }
@@ -44,10 +46,13 @@ const LoginPage: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("로그인 성공:", data);
-      // 로그인 성공 후 추가 동작 (예: 대시보드로 리다이렉트)
-      alert("로그인 성공!"); // 예시로 알림 추가
-      // 이곳에 대시보드로 리다이렉트하는 코드 추가 가능
+      console.log("결과값 = :", data);
+
+      if (data.isSuccess) {
+        alert("로그인 성공!"); // 예시로 알림 추가
+      } else {
+        alert("로그인 실패!"); // 예시로 알림 추가
+      }
     } catch (error) {
       setError("로그인에 실패했습니다. 다시 시도해주세요.");
     }
@@ -85,8 +90,8 @@ const LoginPage: React.FC = () => {
               <label>아이디</label>
               <input
                 type="text"
-                name="username"
-                value={formData.username}
+                name="user_id"
+                value={formData.user_id}
                 onChange={handleChange}
                 placeholder="아이디를 입력해주세요"
                 required
