@@ -21,6 +21,7 @@ export default function Menus() {
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
+  let [imgS3route, setImgS3route] = useState<string>("");
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -97,13 +98,14 @@ export default function Menus() {
                       </div>
                       <div className="img-box">
                         {/* <img src={"../public/assets/" + mel.originMfile} /> */}
-                        <img
+                        {/* <img
                           src={
                             "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
                             mel.originMfile
                           }
                           alt="aws s3에 저장된 이미지"
-                        />
+                        /> */}
+                        <img src={imgS3route} alt="aws s3에 저장된 이미지" />
                       </div>
                       <p>{mel.menuName}</p>
                       <p>{mel.price}</p>
@@ -121,9 +123,15 @@ export default function Menus() {
         );
       })}
 
-      {isShow && <MenuAddForm setIsShow={setIsShow} />}
+      {isShow && (
+        <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
+      )}
       {isChgShow && selectMenu && (
-        <MenuChgForm selectMenu={selectMenu} setIsChgShow={setIsChgShow} />
+        <MenuChgForm
+          selectMenu={selectMenu}
+          setIsChgShow={setIsChgShow}
+          setImgS3route={setImgS3route}
+        />
       )}
       {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>
