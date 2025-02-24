@@ -57,11 +57,11 @@ const LoginPage: React.FC = () => {
         alert("로그인 성공!"); // 예시로 알림 추가
 
         // 로그인 아이디 저장 리덕스에
-        dispatch(T.setLoginId(data.user.user_id));
+        dispatch(T.setLoginId(data.user_id));
         //기본키 id 저장 나중에 db 쿼리사용할때 사용
-        dispatch(T.setUserId(data.user.id));
+        dispatch(T.setUserId(data.id));
         //헤더에서 닉네임 표시위한 리덕스 저장
-        dispatch(T.setNickname(data.user.nickname));
+        dispatch(T.setNickname(data.nickname));
       } else {
         alert("로그인 실패!"); // 예시로 알림 추가
       }

@@ -21,4 +21,4 @@ export type SetNicknameAction = Action<"@auth/setNickname"> & {
 };
 
 // 전체 액션 타입 정의
-export type AuthActions = SetLoginIdAction | SetIdAction;
+export type AuthActions = SetLoginIdAction | SetIdAction | SetNicknameAction;
