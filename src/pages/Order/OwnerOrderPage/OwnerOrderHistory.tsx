@@ -51,7 +51,15 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
 
   useEffect(() => {
     const data = { loginId: loginId, socketId: socket.id };
-    socket.emit("connectOwner", data);
+
+    socket.emit(
+      "connectOwner",
+      data,
+      orderStatus,
+      cookingCompleted,
+      orderApproved
+    );
+
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
@@ -65,6 +73,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
       }
     });
 
+    //새로고침시 소켓이 변경된다. 주문정보를 동기화 emit 보내면 서버는 받아서
     socket.on("ownerOrderSync", (data: S.Order[]) => {
       console.log("주문 동기화 = ", data);
       if (Array.isArray(data)) {
@@ -73,6 +82,8 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
         setOrderInfo((prevOrderInfo) => [data, ...prevOrderInfo]); // 배열이 아닐 경우 추가
       }
     });
+
+    //새로고침시 소켓이 변경된다. 주문 버튼 상태를 동기화 emit 보내면 서버는 받아서
 
     socket.on("disconnect", () => {
       console.log("socket disconnect~~~");
@@ -88,9 +99,11 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     console.log("주문 확인 버튼 눌럿다");
     console.log("주문확인버튼=", order);
     socket.emit("orderApproval", order);
+
     setOrderApproved((prevState) => {
       const updatedStatus = { ...prevState, [order.orderNumber]: true };
       localStorage.setItem("orderApproved", JSON.stringify(updatedStatus));
+      socket.emit("setOrderApproved", updatedStatus, order.shopLoginId); // 업데이트된 상태 값을 소켓 이벤트로 보냅니다.
       return updatedStatus;
     });
   };
@@ -98,9 +111,11 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const handleCookingStart = (order: S.Order) => {
     console.log("조리 시작 버튼 눌럿다");
     socket.emit("cookingStart", order);
+
     setOrderStatus((prevState) => {
       const updatedStatus = { ...prevState, [order.orderNumber]: true };
       localStorage.setItem("orderStatus", JSON.stringify(updatedStatus));
+      socket.emit("setOrderStatus", updatedStatus, order.shopLoginId); // 업데이트된 상태 값을 소켓 이벤트로 보냅니다.
       return updatedStatus;
     });
   };
@@ -108,6 +123,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const handleCookingEnd = (order: S.Order) => {
     console.log("조리 완료 버튼 눌럿다");
     socket.emit("cookingEnd", order);
+
     setCookingCompleted((prevState) => {
       const updatedCompletedStatus = {
         ...prevState,
@@ -117,6 +133,11 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
         "cookingCompleted",
         JSON.stringify(updatedCompletedStatus)
       );
+      socket.emit(
+        "setCookingCompleted",
+        updatedCompletedStatus,
+        order.shopLoginId
+      ); // 업데이트된 상태 값을 소켓 이벤트로 보냅니다.
       return updatedCompletedStatus;
     });
   };

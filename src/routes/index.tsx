@@ -37,17 +37,20 @@ const AppRoutes = () => {
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
 
-    { path: "/testorder", element: <OrderTest /> },
-    { path: "/testorder2", element: <OrderTest2 /> },
-    { path: "/shopdetail", element: <CustomerShopDetail /> },
-    { path: "/cart", element: <ShoppingCart /> },
-    { path: "/review", element: <CusReview /> },
 
-    { path: "/edit-profile", element: <EditProfilePage /> },
-    { path: "/login", element: <LoginPage /> },
-    { path: "/signup", element: <SignUpPage /> },
-    { path: "/mypage", element: <MyPage /> },
-    // { path: "/UserMain", element: <UserMain /> },
+    { path: '/testorder', element: <OrderTest /> },
+    { path: '/testorder2', element: <OrderTest2 /> },
+    { path: '/shopdetail', element: <CustomerShopDetail /> },
+    { path: '/cart', element: <ShoppingCart /> },
+    { path: '/review', element: <CusReview /> },
+
+    { path: '/edit-profile', element: <EditProfilePage /> },
+    { path: '/login', element: <LoginPage /> },
+    { path: '/signup', element: <SignUpPage /> },
+    { path: '/mypage', element: <MyPage /> },
+    { path: '/UserMain', element: <UserMain /> },
+
+
   ]);
 
   return routes;
