@@ -183,18 +183,19 @@ const OrderTest: React.FC<OrderTestProps> = () => {
   return (
     <>
       <Header nickname="고민봉" />
-      <div>
-        <button
-          onClick={() => {
-            order2();
-          }}
-          className="btn btn-primary btn-lg"
-        >
-          주문하기
-        </button>
-      </div>
+
       <div className="wrap-container">
         <div>
+          <div>
+            <button
+              onClick={() => {
+                order2();
+              }}
+              className="btn btn-primary btn-lg"
+            >
+              주문하기
+            </button>
+          </div>
           <section className="order-history-container">
             <div className="menu-tab-container">
               <div className="menu-tab-1">
