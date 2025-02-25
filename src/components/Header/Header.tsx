@@ -39,6 +39,21 @@ const Header: React.FC = () => {
             </Link>
           </div>
           <div className="menu-container">
+            {/* 비로그인 헤더 */}
+            {loginId === null && (
+              <>
+                <Link to="/login" className="menu-item">
+                  <div>로그인</div>
+                </Link>
+                <Link to="/register" className="menu-item">
+                  <div>회원가입</div>
+                </Link>
+                <div className="menu-sidebar" onClick={toggleSideMenu}>
+                  <FontAwesomeIcon icon={faBars} size="4x" />
+                </div>
+              </>
+            )}
+
             {/* 점주회원 헤더  */}
             {type === "business" && (
               <>
@@ -104,6 +119,17 @@ const Header: React.FC = () => {
               </Link>
               <Link to="/logout">
                 <div className="side-menu">로그아웃</div>
+              </Link>
+            </div>
+          )}
+
+          {sideMenuVisible && loginId === null && (
+            <div className="side-menu-container">
+              <Link to="/login">
+                <div className="side-menu">로그인</div>
+              </Link>
+              <Link to="/signup">
+                <div className="side-menu">회원가입</div>
               </Link>
             </div>
           )}

@@ -22,11 +22,13 @@ import Payment from "../pages/Order/Payment/Payment";
 
 import Income from "../pages/Income/Income";
 import DeleteMember from "../pages/SignUp/DeleteMember";
+import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
 
 const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
     { path: "/ownerOrderHistory", element: <OwnerOrderHistory /> },
+    { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
     { path: "/menu", element: <Menus /> },
     { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
