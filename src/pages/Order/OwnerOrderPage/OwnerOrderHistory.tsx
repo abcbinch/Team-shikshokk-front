@@ -13,12 +13,6 @@ interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
 const loginId = "owner01";
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
-  const dispatch = useDispatch();
-  const socketState = useSelector<AppState, S.SocketState>(
-    ({ socket }) => socket
-  );
-  // console.log("전체 socketState = ", socketState);
-
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
   const [orderStatus, setOrderStatus] = useState<{ [key: string]: boolean }>();
   const [cookingCompleted, setCookingCompleted] = useState<{
@@ -181,7 +175,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
 
   return (
     <>
-      <Header nickname="고민봉" />
+      <Header />
       <div className="wrap-container">
         <div>
           <section className="order-history-container">

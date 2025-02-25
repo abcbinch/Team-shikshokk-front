@@ -1,10 +1,19 @@
+import { useSelector } from "react-redux";
 import "../../styles/header.scss"; // Sass 파일 불러오기
 import { Link } from "react-router-dom";
-interface HeaderProps {
-  nickname: string;
-}
+import { RootState } from "../../store/rootReducer";
+import { useEffect } from "react";
 
-const Header: React.FC<HeaderProps> = ({ nickname }) => {
+const Header: React.FC = () => {
+  const id = useSelector((state: RootState) => state.login.id);
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+  const nickname = useSelector((state: RootState) => state.login.nickname);
+
+  useEffect(() => {
+    console.log("id 나와라(기본키 나중에 db쿼리에서 사용) =", id);
+    console.log("loginId 나와라 =", loginId);
+    console.log("nickname 나와라 =", nickname);
+  }, [id, loginId, nickname]);
   return (
     <header>
       <div className="wrap-container-header">
