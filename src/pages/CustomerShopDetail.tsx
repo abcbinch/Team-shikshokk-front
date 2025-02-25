@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "..//styles/shopDetail.scss";
 import ShoppingCart from "../components/ShoppingCart";
+import ShopAddForm from "../components/ShopAddForm";
 
 interface Menus {
   menuName: string;
@@ -98,6 +99,7 @@ export default function CustomerShopDetail() {
         );
       })}
       <ShoppingCart />
+      <ShopAddForm />
     </main>
   );
 }

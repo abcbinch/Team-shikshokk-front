@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import '../../styles/EditProfilePage.scss';
-import Header from '../../components/Header/Header';
+import React, { useState, useEffect } from "react";
+import "../../styles/EditProfilePage.scss";
+import Header from "../../components/Header/Header";
 
 const EditProfilePage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: '',
-    name: '',
-    birthdate: '',
-    gender: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    companyName: '',
-    businessType: '',
-    storeAddress: '',
-    representativeName: '',
-    businessRegistrationNumber: '',
+    username: "",
+    name: "",
+    birthdate: "",
+    gender: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    companyName: "",
+    businessType: "",
+    storeAddress: "",
+    representativeName: "",
+    businessRegistrationNumber: "",
   });
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [membershipType, setMembershipType] = useState<
-    'individual' | 'business'
-  >('individual');
+    "individual" | "business"
+  >("individual");
 
   // 사용자 데이터 로드
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8082/api-server/me', {
-          method: 'GET',
-          credentials: 'include',
+        const response = await fetch("http://localhost:8082/api-server/me", {
+          method: "GET",
+          credentials: "include",
         });
         if (!response.ok) {
-          throw new Error('사용자 데이터를 가져오는 데 실패했습니다.');
+          throw new Error("사용자 데이터를 가져오는 데 실패했습니다.");
         }
         const userData = await response.json();
         setFormData(userData);
       } catch (error) {
-        console.error('사용자 데이터 로드 오류:', error);
+        console.error("사용자 데이터 로드 오류:", error);
       }
     };
 
@@ -49,23 +49,23 @@ const EditProfilePage: React.FC = () => {
   }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     // 이메일 유효성 검사
-    if (name === 'email') {
+    if (name === "email") {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        setEmailError('유효하지 않은 이메일 형식입니다.');
+        setEmailError("유효하지 않은 이메일 형식입니다.");
       } else {
-        setEmailError('');
+        setEmailError("");
       }
     }
   };
 
-  const handleMembershipChange = (type: 'individual' | 'business') => {
+  const handleMembershipChange = (type: "individual" | "business") => {
     setMembershipType(type);
   };
 
@@ -75,7 +75,7 @@ const EditProfilePage: React.FC = () => {
     // 비밀번호 유효성 검사
     if (newPassword && confirmPassword) {
       if (newPassword.length < 8 || newPassword.length > 16) {
-        setPasswordError('비밀번호는 8-16자 이내여야 합니다.');
+        setPasswordError("비밀번호는 8-16자 이내여야 합니다.");
         return;
       } else if (
         !/[a-z]/.test(newPassword) ||
@@ -83,28 +83,28 @@ const EditProfilePage: React.FC = () => {
         !/[!@#$%^&*]/.test(newPassword)
       ) {
         setPasswordError(
-          '비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다.',
+          "비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다."
         );
         return;
       } else if (newPassword !== confirmPassword) {
-        setPasswordError('새 비밀번호가 일치하지 않습니다.');
+        setPasswordError("새 비밀번호가 일치하지 않습니다.");
         return;
       } else {
-        setPasswordError('');
+        setPasswordError("");
       }
     }
 
     // 사용자 정보 수정 요청
     try {
       const response = await fetch(
-        'http://localhost:8082/api-server/update', // 수정된 API URL
+        "http://localhost:8082/api-server/update", // 수정된 API URL
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
           body: JSON.stringify({
             nickname: formData.username, // nickname을 username으로 변경
             email: formData.email,
@@ -121,38 +121,38 @@ const EditProfilePage: React.FC = () => {
             businessRegistrationNumber: formData.businessRegistrationNumber,
             membershipType,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || '회원 정보 수정에 실패했습니다.');
+        throw new Error(errorData.message || "회원 정보 수정에 실패했습니다.");
       }
 
       const data = await response.json();
-      console.log('회원 정보 수정 성공:', data);
-      alert('회원 정보가 수정되었습니다.');
+      console.log("회원 정보 수정 성공:", data);
+      alert("회원 정보가 수정되었습니다.");
     } catch (error) {
-      console.error('회원 정보 수정 오류:', error);
-      alert('회원 정보 수정 중 오류가 발생했습니다.');
+      console.error("회원 정보 수정 오류:", error);
+      alert("회원 정보 수정 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div className="edit-profile-page">
-      <Header nickname={formData.username} />
+      <Header />
       <h1>회원정보 수정</h1>
       <div className="edit-profile-container">
         <div className="membership-type">
           <button
-            onClick={() => handleMembershipChange('individual')}
-            className={membershipType === 'individual' ? 'active' : ''}
+            onClick={() => handleMembershipChange("individual")}
+            className={membershipType === "individual" ? "active" : ""}
           >
             개인회원
           </button>
           <button
-            onClick={() => handleMembershipChange('business')}
-            className={membershipType === 'business' ? 'active' : ''}
+            onClick={() => handleMembershipChange("business")}
+            className={membershipType === "business" ? "active" : ""}
           >
             기업회원
           </button>
@@ -176,7 +176,7 @@ const EditProfilePage: React.FC = () => {
             <input
               type="password"
               value={currentPassword}
-              onChange={e => setCurrentPassword(e.target.value)}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="현재 비밀번호를 입력해주세요"
               required
             />
@@ -186,7 +186,7 @@ const EditProfilePage: React.FC = () => {
             <input
               type="password"
               value={newPassword}
-              onChange={e => setNewPassword(e.target.value)}
+              onChange={(e) => setNewPassword(e.target.value)}
               placeholder="비밀번호(8-16자 이내, 소문자, 특수문자)"
               required
             />
@@ -196,7 +196,7 @@ const EditProfilePage: React.FC = () => {
             <input
               type="password"
               value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="새 비밀번호를 다시 입력해주세요"
               required
             />
@@ -262,7 +262,7 @@ const EditProfilePage: React.FC = () => {
           </div>
 
           {/* 기업회원 추가 입력란 */}
-          {membershipType === 'business' && (
+          {membershipType === "business" && (
             <>
               <div className="form-group-inline">
                 <div className="inline-input">

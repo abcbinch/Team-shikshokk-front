@@ -6,9 +6,9 @@ import Header from "../../../components/Header/Header";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-interface OwnerOrderAllHistoryProps {}
+interface CustomerOrderAllhistoryProps {}
 
-const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
+const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
   return (
     <>
       <Header />
@@ -156,4 +156,4 @@ const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
   );
 };
 
-export default OwnerOrderAllHistory;
+export default CustomerOrderAllhistory;
