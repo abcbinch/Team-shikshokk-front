@@ -19,18 +19,30 @@ import MyPage from "../pages/SignUp/MyPage";
 import UserMain from "../pages/UserMain";
 import Payment from "../pages/Order/Payment/Payment";
 import Payment2 from "../pages/Order/Payment/Payment2";
-//@ts-ignore
+
+
+
 
 import Income from "../pages/Income/Income";
 import DeleteMember from "../pages/SignUp/DeleteMember";
+
+import Pay from "../pages/Payment/Pay";
+
 import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
+
 
 const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
+
+    { path: "/order1", element: <OwnerOrderHistory /> },
+    { path: "/order2", element: <OnwerOrderHistory2 /> },
+    { path: "/menu", element: <Menus /> },
+
     { path: "/ownerOrderHistory", element: <OwnerOrderHistory /> },
     { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
     { path: "/menu", element: <Menus /> },
+
     { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
@@ -48,6 +60,9 @@ const AppRoutes = () => {
     { path: "/Delete", element: <DeleteMember /> },
     { path: "/pay", element: <Payment /> },
     { path: "/pay2", element: <Payment2 /> },
+    { path: "/Payment", element: <Pay /> },
+
+
   ]);
   return routes;
 };
