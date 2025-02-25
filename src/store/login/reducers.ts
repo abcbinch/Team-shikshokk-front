@@ -9,7 +9,7 @@ const initialState: T.AuthState = {
 
 export const reducer = (
   state: T.AuthState = initialState,
-  action: T.AuthActions | any
+  action: T.Actions | any
 ): T.AuthState => {
   switch (action.type) {
     //유저 로그인 아이디 (Customer user_id)
