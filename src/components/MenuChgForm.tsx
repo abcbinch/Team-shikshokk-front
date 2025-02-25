@@ -8,7 +8,7 @@ interface Menus {
   id: number;
   menuName: string;
   category: string;
-  price: number;
+  price: string;
   menudesc: string;
   originMfile: string;
 }
@@ -28,16 +28,32 @@ export default function MenuChgForm({
   let [chgcategory, setChgcategory] = useState(selectMenu.category);
   let [chgprice, setChgprice] = useState(selectMenu.price);
   let [chgdesc, setChgcontent] = useState(selectMenu.menudesc);
-  let [chgfile, setChgfile] = useState("");
+  let [chgfile, setChgfile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement | null>(null);
 
+  //메뉴 수정정
   const menuChg = async (e: React.FormEvent) => {
     try {
       if (formRef.current && formRef.current.checkValidity()) {
+        const formData = new FormData();
+        formData.append("chgname", chgname);
+        formData.append("chgcategory", chgcategory);
+        formData.append("chgprice", chgprice);
+        formData.append("chgdesc", chgdesc);
+        if (chgfile) {
+          formData.append("image", chgfile);
+          formData.append("chgfile", chgfile.name);
+        }
         const response = await axios.patch(
           "http://localhost:8082/api-server/menu-change",
-          { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
+          // { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
 
         if (response) alert("수정이 완료되었습니다.");
@@ -45,6 +61,28 @@ export default function MenuChgForm({
       setIsChgShow(false);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //메뉴 삭제
+  const menuDel = async () => {
+    try {
+      const result = await axios.delete(
+        "http://localhost:8082/api-server/menu-delete",
+        {
+          data: {
+            id: selectMenu.id,
+          },
+        }
+      );
+      console.log(result.data.isDelete);
+      if (result.data.isDelete) {
+        alert("삭제되었습니다");
+
+        setIsChgShow(false);
+      }
+    } catch (err) {
+      console.log("삭제 실패:", err);
     }
   };
 
@@ -86,9 +124,9 @@ export default function MenuChgForm({
           <br />{" "}
           <input
             type="text"
-            name="mprice"
+            name="chgprice"
             value={chgprice}
-            onChange={(e) => setChgprice(Number(e.target.value))}
+            onChange={(e) => setChgprice(e.target.value)}
           />
         </label>
         <br />
@@ -97,7 +135,7 @@ export default function MenuChgForm({
           <br />{" "}
           <input
             type="text"
-            name="mdesc"
+            name="chgdesc"
             value={chgdesc}
             onChange={(e) => setChgcontent(e.target.value)}
           />
@@ -109,14 +147,23 @@ export default function MenuChgForm({
           <div className="custom-input">
             <input
               type="file"
-              name="mfile"
-              value={chgfile}
-              onChange={(e) => setChgfile(e.target.value)}
+              name="chgfile"
+              onChange={(e) => {
+                if (e.target.files) {
+                  console.log(e.target.files[0]);
+                  setChgfile(e.target.files[0]);
+                }
+              }}
             />
           </div>
         </div>
         <br />
-        <button type="submit">수정하기</button>
+        <div className="btn-container">
+          <button type="submit">수정하기</button>
+          <button type="button" onClick={menuDel}>
+            삭제하기
+          </button>
+        </div>
       </form>
     </div>
   );
