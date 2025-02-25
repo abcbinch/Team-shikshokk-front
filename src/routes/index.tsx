@@ -18,6 +18,7 @@ import SignUpPage from "../pages/SignUp/SignUpPage";
 import MyPage from "../pages/SignUp/MyPage";
 import UserMain from "../pages/UserMain";
 import Payment from "../pages/Order/Payment/Payment";
+import Payment2 from "../pages/Order/Payment/Payment2";
 //@ts-ignore
 
 import Income from "../pages/Income/Income";
@@ -46,6 +47,7 @@ const AppRoutes = () => {
     { path: "/UserMain", element: <UserMain /> },
     { path: "/Delete", element: <DeleteMember /> },
     { path: "/pay", element: <Payment /> },
+    { path: "/pay2", element: <Payment2 /> },
   ]);
   return routes;
 };
