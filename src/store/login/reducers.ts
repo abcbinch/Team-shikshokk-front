@@ -5,11 +5,12 @@ const initialState: T.AuthState = {
   loginId: null,
   id: 0,
   nickname: null,
+  type: null,
 };
 
 export const reducer = (
   state: T.AuthState = initialState,
-  action: T.AuthActions | any
+  action: T.Actions | any
 ): T.AuthState => {
   switch (action.type) {
     //유저 로그인 아이디 (Customer user_id)
@@ -32,6 +33,11 @@ export const reducer = (
         nickname: action.payload,
       };
 
+    case "@auth/setType":
+      return {
+        ...state,
+        type: action.payload,
+      };
     default:
       return state;
   }

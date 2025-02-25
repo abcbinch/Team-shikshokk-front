@@ -14,3 +14,8 @@ export const setNickname = (payload: string): T.SetNicknameAction => ({
   type: "@auth/setNickname",
   payload,
 });
+
+export const setType = (payload: string): T.SetTypeAction => ({
+  type: "@auth/setType",
+  payload,
+});
