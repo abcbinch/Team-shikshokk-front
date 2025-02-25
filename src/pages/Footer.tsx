@@ -1,16 +1,28 @@
 export default function Footer() {
   return (
-    <div className="mt-3 mb-3 ">
-      <div className="text-center text-gray-600">
+    <div className="mt-5 mb-3 ">
+      <div className="text-center text-xs text-gray-600">
         Copylight 2025 Team Copulagi All Right reserved.{" "}
       </div>
-      <div className="flex mt-1 justify-between w-[400px] text-gray-600">
-        <p>Kopuragi</p>
-        <p>고민봉</p>
-        <p>김효진</p>
-        <p>이채훈</p>
-        <p>이혜민</p>
-        <p>임진우</p>
+      <div className="flex mt-2 justify-between w-[350px] text-xs text-gray-600">
+        <p>
+          <a href="https://github.com/kopuragi">Kopuragi</a>
+        </p>
+        <p>
+          <a href="https://github.com/Gominbong">고민봉</a>
+        </p>
+        <p>
+          <a href="https://github.com/hjink11">김효진</a>
+        </p>
+        <p>
+          <a href="https://github.com/maxbeny">이채훈</a>
+        </p>
+        <p>
+          <a href="https://github.com/abcbinch">이혜민</a>
+        </p>
+        <p>
+          <a href="https://github.com/imujinu">임진우</a>
+        </p>
       </div>
     </div>
   );

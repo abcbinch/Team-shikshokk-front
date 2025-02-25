@@ -17,16 +17,16 @@ export interface Order {
   //     "매우매우맛있는순살x1",
   //   ],
 
-  loginId: string;
-  orderTime: string;
-  orderNumber: string;
-  storeCapacity: string;
-  orderType: string;
-  contactNumber: string;
-  shopName: string;
-  shopLoginId: string;
-  total: string;
-  items: string[];
+  loginId?: string;
+  orderTime?: string;
+  orderNumber?: string;
+  storeCapacity?: string;
+  orderType?: string;
+  contactNumber?: string;
+  shopName?: string;
+  shopLoginId?: string;
+  total?: string;
+  items?: string[];
 }
 
 export interface OrderState {

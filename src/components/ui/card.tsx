@@ -1,6 +1,6 @@
 interface CardProps {
   children: React.ReactNode;
-  className?: string; // ✅ className 추가
+  className?: string;
 }
 
 export function Card({ children, className }: CardProps) {

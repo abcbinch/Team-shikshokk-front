@@ -1,11 +1,11 @@
 interface ModalProps {
-  open: boolean; // ✅ open 추가
-  onClose: () => void; // ✅ onClose 추가
+  open: boolean; //
+  onClose: () => void; //
   children: React.ReactNode;
 }
 
 export function Modal({ open, onClose, children }: ModalProps) {
-  if (!open) return null; // ✅ 모달이 닫혀있으면 렌더링 안 함
+  if (!open) return null; //
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -5,6 +5,9 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Modal } from "../../components/ui/modal";
 import Footer from "../Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { Order, OrderState } from "../../store/order";
+import { RootState } from "../../store/rootReducer";
 
 const Pay: React.FC = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -21,12 +24,28 @@ const Pay: React.FC = () => {
 
   const increaseGuests = () => setGuests((prev) => prev + 1);
   const decreaseGuests = () => setGuests((prev) => (prev > 1 ? prev - 1 : 1));
+  const orderData = useSelector((state: RootState) => state.order.orders);
+  const dispatch = useDispatch();
+
+  const handleOrder = () => {
+    const lastOrder =
+      orderData.length > 0 ? orderData[orderData.length - 1] : {};
+
+    const newOrder = {
+      ...lastOrder,
+
+      storeCapacity: guests,
+      orderType: orderType,
+    };
+
+    dispatch({ type: "order/addOrder", payload: newOrder });
+    console.log(orderData);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-amber-100 text-white">
       <Card className="mt-5 p-6 w-96 bg-white shadow-lg rounded-lg border border-amber-400">
         <CardContent className="flex flex-col gap-6">
-          {/* 방문 유형 선택 */}
           <div className="flex justify-center gap-6 text-lg font-semibold text-amber-600">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -66,7 +85,6 @@ const Pay: React.FC = () => {
             </label>
           </div>
 
-          {/* 방문 날짜 선택 */}
           <Button
             className="bg-amber-400 hover:bg-amber-500 text-white"
             onClick={() => setIsOpen(true)}
@@ -95,7 +113,6 @@ const Pay: React.FC = () => {
             선택한 날짜: {date.toLocaleDateString("ko-KR")}
           </div>
 
-          {/* 시간 선택 */}
           <div className="flex flex-col items-center gap-2">
             <div className="text-lg font-bold text-amber-600">방문 시간</div>
             <div className="flex gap-2">
@@ -124,7 +141,6 @@ const Pay: React.FC = () => {
             </div>
           </div>
 
-          {/* 방문 인원 선택 */}
           <div className="flex items-center gap-4 justify-center">
             <Button
               className="bg-amber-400 hover:bg-amber-500 text-white"
@@ -134,7 +150,7 @@ const Pay: React.FC = () => {
             </Button>
             <span className="text-lg font-bold text-amber-600">{guests}명</span>
             <Button
-              className="bg-amber-400 hover:bg-amber-500 text-white"
+              className="bg-amber-400 text-lg hover:bg-amber-500 text-white"
               onClick={increaseGuests}
             >
               +
@@ -143,7 +159,6 @@ const Pay: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* 장바구니 목록 */}
       <div className="mt-6 w-96 bg-white shadow-lg rounded-lg p-4 border border-amber-400 text-amber-600">
         <div className="text-lg font-bold">장바구니</div>
         <hr className="my-2" />
@@ -162,8 +177,8 @@ const Pay: React.FC = () => {
         </div>
       </div>
       <div className="mt-2 ">
-        <Button className="">
-          <a href="/">결제하기 : 50,000원</a>
+        <Button onClick={handleOrder} className="">
+          결제하기 : 50,000원
         </Button>
       </div>
       <Footer />
