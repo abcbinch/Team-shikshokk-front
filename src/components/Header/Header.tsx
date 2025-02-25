@@ -11,6 +11,7 @@ const Header: React.FC = () => {
   const id = useSelector((state: RootState) => state.login.id);
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const nickname = useSelector((state: RootState) => state.login.nickname);
+  const type = useSelector((state: RootState) => state.login.type);
 
   const [sideMenuVisible, setSideMenuVisible] = useState(false);
 
@@ -18,7 +19,8 @@ const Header: React.FC = () => {
     console.log("id 나와라(기본키 나중에 db쿼리에서 사용) =", id);
     console.log("loginId 나와라 =", loginId);
     console.log("nickname 나와라 =", nickname);
-  }, [id, loginId, nickname]);
+    console.log("type 나와라 = ", type);
+  }, [id, loginId, nickname, type]);
 
   const toggleSideMenu = () => {
     setSideMenuVisible(!sideMenuVisible);
@@ -37,29 +39,37 @@ const Header: React.FC = () => {
             </Link>
           </div>
           <div className="menu-container">
-            {id ? (
+            {/* 점주회원 헤더  */}
+            {type === "business" && (
               <>
                 <div className="menu-item">{nickname}님 환영합니다</div>
                 <Link to="/mypage" className="menu-item">
                   <div>마이페이지</div>
                 </Link>
-                <Link to="/testorder" className="menu-item">
+                <Link to="/ownerOrderHistory" className="menu-item">
                   <div>주문내역</div>
                 </Link>
-                <Link to="" className="menu-item">
-                  <div>로그아웃</div>
+                <Link to="/logout" className="menu-item">
+                  <div>점로그아웃</div>
                 </Link>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
                   <FontAwesomeIcon icon={faBars} size="4x" />
                 </div>
               </>
-            ) : (
+            )}
+
+            {/* 일반회원원 헤더 */}
+            {type === "individual" && (
               <>
-                <Link to="/login" className="menu-item">
-                  <div> 로그인</div>
+                <div className="menu-item">{nickname}님 환영합니다</div>
+                <Link to="/mypage" className="menu-item">
+                  <div>마이페이지</div>
                 </Link>
-                <Link to="/signup" className="menu-item">
-                  <div>회원가입</div>
+                <Link to="/customerOrderHistory" className="menu-item">
+                  <div>주문내역</div>
+                </Link>
+                <Link to="/logout" className="menu-item">
+                  <div>로그아웃</div>
                 </Link>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
                   <FontAwesomeIcon icon={faBars} size="4x" />
@@ -67,19 +77,36 @@ const Header: React.FC = () => {
               </>
             )}
           </div>
-          {sideMenuVisible &&
-            (id ? (
-              <div className="side-menu-container">
+
+          {/* 점주회원 헤더 */}
+          {sideMenuVisible && type === "business" && (
+            <div className="side-menu-container">
+              <Link to="/mypage">
                 <div className="side-menu">마이페이지</div>
+              </Link>
+              <Link to="/ownerOrderHistory">
                 <div className="side-menu">주문내역</div>
+              </Link>
+              <Link to="/logout">
                 <div className="side-menu">로그아웃</div>
-              </div>
-            ) : (
-              <div className="side-menu-container">
-                <div className="side-menu">로그인</div>
-                <div className="side-menu">회원가입</div>
-              </div>
-            ))}
+              </Link>
+            </div>
+          )}
+
+          {/* 일반회원 헤더 */}
+          {sideMenuVisible && type === "individual" && (
+            <div className="side-menu-container">
+              <Link to="/mypage">
+                <div className="side-menu">마이페이지</div>
+              </Link>
+              <Link to="/customerOrderHistory">
+                <div className="side-menu">주문내역</div>
+              </Link>
+              <Link to="/logout">
+                <div className="side-menu">로그아웃</div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

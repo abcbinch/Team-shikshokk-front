@@ -5,6 +5,7 @@ const initialState: T.AuthState = {
   loginId: null,
   id: 0,
   nickname: null,
+  type: null,
 };
 
 export const reducer = (
@@ -32,6 +33,11 @@ export const reducer = (
         nickname: action.payload,
       };
 
+    case "@auth/setType":
+      return {
+        ...state,
+        type: action.payload,
+      };
     default:
       return state;
   }

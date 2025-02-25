@@ -4,15 +4,17 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import * as S from "../../../store/socket";
-import { AppState } from "../../../store";
-import { Prev } from "react-bootstrap/esm/PageItem";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/rootReducer";
+
 interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
-const loginId = "owner01";
+// const loginId = "owner01";
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+  console.log("리덕스 스토어 loginId = ", loginId);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
   const [orderStatus, setOrderStatus] = useState<{ [key: string]: boolean }>();
   const [cookingCompleted, setCookingCompleted] = useState<{
