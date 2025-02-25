@@ -50,7 +50,7 @@ const Header: React.FC = () => {
                   <div>주문내역</div>
                 </Link>
                 <Link to="/logout" className="menu-item">
-                  <div>점로그아웃</div>
+                  <div>로그아웃</div>
                 </Link>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
                   <FontAwesomeIcon icon={faBars} size="4x" />
