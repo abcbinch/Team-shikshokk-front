@@ -67,15 +67,21 @@ const Header: React.FC = () => {
               </>
             )}
           </div>
+          {sideMenuVisible &&
+            (id ? (
+              <div className="side-menu-container">
+                <div className="side-menu">마이페이지</div>
+                <div className="side-menu">주문내역</div>
+                <div className="side-menu">로그아웃</div>
+              </div>
+            ) : (
+              <div className="side-menu-container">
+                <div className="side-menu">로그인</div>
+                <div className="side-menu">회원가입</div>
+              </div>
+            ))}
         </div>
       </div>
-      {sideMenuVisible && (
-        <div className="side-menu-container">
-          <div className="side-menu">마이페이지</div>
-          <div className="side-menu">주문내역</div>
-          <div className="side-menu">로그아웃</div>
-        </div>
-      )}
     </header>
   );
 };
