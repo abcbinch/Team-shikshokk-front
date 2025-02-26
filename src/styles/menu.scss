@@ -50,13 +50,21 @@ span {
     }
     .img-box {
       width: 150px;
-      height: 150px;
+      height: 130px;
       border: 1px solid black;
+      img {
+        height: 130px;
+      }
     }
     .content-box {
       width: 150px;
-      height: 75px;
-      border: 1px solid black;
+      height: 60px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-radius: 5px;
+      border: 1px solid lightgray;
     }
   }
 }
@@ -72,6 +80,7 @@ span {
     color: blue;
   }
   .menu-board {
+    height: 200px;
     flex-wrap: wrap;
     overflow-x: auto;
   }
