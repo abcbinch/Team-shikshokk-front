@@ -17,8 +17,12 @@ export default function OwnerMain() {
   // 로그인 확인
   const id = useSelector((state: RootState) => state.login.id);
   const loginId = useSelector((state: RootState) => state.login.loginId);
-  console.log("---------id?", id);
-  console.log("---------id?", loginId);
+  const ownerShopId = useSelector((state: RootState) => state.login.shopId);
+  const owneRShopLoginId = useSelector(
+    (state: RootState) => state.login.shopOwnerLoginId
+  );
+  console.log("가게 기본키 = ", ownerShopId);
+  console.log("가게 주인 로그인 아이디 = ", owneRShopLoginId);
 
   const [shopId, setShopId] = useState<number | null>(null); //선택된 shop id
   const [shops, setShops] = useState<shopIn[]>([]);

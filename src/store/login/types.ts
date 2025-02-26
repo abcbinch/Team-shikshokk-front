@@ -6,10 +6,9 @@ export type AuthState = {
   id: number | null;
   nickname: string | null;
   type: string | null;
-
-  storeId: string | null; // 가게 ID 추가
-
   phoneNumber: string | null;
+  shopId: number | null;
+  shopOwnerLoginId: string | null;
 };
 
 // Action 타입 정의
@@ -37,6 +36,14 @@ export type SetPhoneNumberAction = Action<"@auth/setPhoneNumber"> & {
   payload: string;
 };
 
+export type setShopIdAction = Action<"@auth/setShopId"> & {
+  payload: number;
+};
+
+export type setShopOwnerLoginIdAction = Action<"@auth/setShopOwnerLoginId"> & {
+  payload: string;
+};
+
 // 전체 액션 타입 정의
 export type Actions =
   | SetLoginIdAction
@@ -44,4 +51,6 @@ export type Actions =
   | SetNicknameAction
   | SetTypeAction
   | SetLogoutAction
-  | SetPhoneNumberAction;
+  | SetPhoneNumberAction
+  | setShopIdAction
+  | setShopOwnerLoginIdAction;

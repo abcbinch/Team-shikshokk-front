@@ -56,6 +56,8 @@ const LoginPage: React.FC = () => {
         dispatch(T.setNickname(data.nickname));
         dispatch(T.setType(data.membershipType)); // 회원 유형 저장
         dispatch(T.setPhoneNumber(data.phone)); // 전화번호 저
+        dispatch(T.setShopId(data.shopId)); // 가게 아이디 저장
+        dispatch(T.setShopOwnerLoginId(data.shopOwnerLoginId)); // 가게 주인 로그인 아이디 저장
 
         // 사용자 유형에 따라 리다이렉트
         if (data.membershipType === "business") {

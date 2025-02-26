@@ -7,9 +7,9 @@ const initialState: T.AuthState = {
   nickname: null,
   type: null,
 
-  storeId: null, // 가게 ID 추가
-
   phoneNumber: null,
+  shopId: null,
+  shopOwnerLoginId: null,
 };
 
 export const reducer = (
@@ -53,13 +53,29 @@ export const reducer = (
         id: null,
         nickname: null,
         type: null,
-        storeId: null, // 로그아웃 시 가게 ID 초기화
+        phoneNumber: null,
+        shopId: null,
+        shopOwnerLoginId: null,
       };
 
     case "@auth/setPhoneNumber":
       return {
         ...state,
         phoneNumber: action.payload,
+      };
+
+    //가게 기본키 id
+    case "@auth/setShopId":
+      return {
+        ...state,
+        shopId: action.payload,
+      };
+
+    //가게 주인 로그인  아이디
+    case "@auth/setShopOwnerLoginId":
+      return {
+        ...state,
+        shopOwnerLoginId: action.payload,
       };
 
     default:

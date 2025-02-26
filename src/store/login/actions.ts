@@ -29,3 +29,15 @@ export const setLogout = (): T.SetLogoutAction => ({
   type: "@auth/setLogout",
   payload: null,
 });
+
+export const setShopId = (payload: number): T.setShopIdAction => ({
+  type: "@auth/setShopId",
+  payload,
+});
+
+export const setShopOwnerLoginId = (
+  payload: string
+): T.setShopOwnerLoginIdAction => ({
+  type: "@auth/setShopOwnerLoginId",
+  payload,
+});
