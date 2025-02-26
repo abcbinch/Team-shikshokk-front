@@ -1,0 +1,44 @@
+import { Action } from "redux";
+
+export interface Order {
+  //  예시
+  //   loginId: loginId,
+  //   orderTime: clock,
+  //   orderNumber: uuidv4(),
+  //   orderType: "매장",
+  //   storeCapacity: "4",
+  //   contactNumber: "010-1234-1234",
+  //   shopName: shopName,
+  //   shopLoginId: shopLoginId,
+  //   total: "85000",
+  //   items: [
+  //     "매우매우맛있는후라x1",
+  //     "매우매우맛있는양념x1",
+  //     "매우매우맛있는순살x1",
+  //   ],
+
+  loginId?: string;
+  orderTime?: string;
+  orderNumber?: string;
+  storeCapacity?: string;
+  orderType?: string;
+  contactNumber?: string;
+  shopName?: string;
+  shopLoginId?: string;
+  total?: string;
+  items?: string[];
+}
+
+export interface OrderState {
+  orders: Order[];
+}
+
+export type AddOrderAction = Action<"order/addOrder"> & {
+  payload: OrderState;
+};
+
+export type DelOrderAction = Action<"order/delOrder"> & {
+  payload: OrderState;
+};
+
+export type Actions = AddOrderAction | DelOrderAction;

@@ -62,6 +62,8 @@ const LoginPage: React.FC = () => {
         dispatch(T.setUserId(data.id));
         //헤더에서 닉네임 표시위한 리덕스 저장
         dispatch(T.setNickname(data.nickname));
+        //점주인지 일반인지 type
+        dispatch(T.setType(data.membershipType));
       } else {
         alert("로그인 실패!"); // 예시로 알림 추가
       }
