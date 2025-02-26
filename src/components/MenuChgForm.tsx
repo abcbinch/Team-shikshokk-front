@@ -16,7 +16,7 @@ interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
-  crossId: number;
+  crossId: number | null;
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.

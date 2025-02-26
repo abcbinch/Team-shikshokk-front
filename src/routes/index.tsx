@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
@@ -48,7 +48,7 @@ const AppRoutes = () => {
     { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
 
-    { path: "/shopdetail/:id", element: <CustomerShopDetail /> },
+    { path: "/shopdetail", element: <CustomerShopDetail /> },
 
     { path: "/cart", element: <ShoppingCart /> },
 

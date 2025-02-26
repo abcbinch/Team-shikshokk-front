@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
 import Header from "../components/Header/Header";
 import { RootState } from "../store/rootReducer";
+import { useLocation, useParams } from "react-router-dom";
 
 interface Menus {
   id: number;
@@ -19,6 +20,11 @@ interface Menus {
   saveMfile: string;
 }
 export default function CustomerShopDetail() {
+  const location = useLocation();
+  const { shopId, owner_id } = location.state || {};
+  console.log("shopId = ", shopId);
+  console.log("owner_id = ", owner_id);
+
   let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
@@ -40,9 +46,9 @@ export default function CustomerShopDetail() {
   useEffect(() => {
     const menuList = async () => {
       const response = await axios.get(
-        "http://localhost:8082/api-server/menu-list"
+        `${process.env.REACT_APP_API_SERVER}/menu-list`,
+        { params: { shopId: shopId, owner_id: owner_id } }
       );
-
       let result = response.data.map((el: Menus) => {
         const {
           id,
@@ -79,14 +85,14 @@ export default function CustomerShopDetail() {
   }, [menuArr]);
 
   return (
-    <main className="max-w-7xl m-auto">
+    <main className="m-auto max-w-7xl">
       <Header />
       <div className="shop-image-container">
         <div className="img-sample"></div>
       </div>
       <hr />
       {/* 메뉴 탭 */}
-      <ul className="menu-tab flex list-none">
+      <ul className="flex list-none menu-tab">
         <li className="choose">전체 메뉴</li>
         {categoryArr.map((el) => {
           return <li>{el}</li>;
@@ -103,7 +109,7 @@ export default function CustomerShopDetail() {
               {comp}
             </span>
 
-            <ul className="menu-board flex list-none overflow-x-scroll">
+            <ul className="flex overflow-x-scroll list-none menu-board">
               {menuArr.map((mel) => {
                 if (comp === mel.category) {
                   return (
