@@ -22,7 +22,9 @@ export default function MenuAddForm({
   let [fileInput, setFileInput] = useState("클릭해서 파일을 첨부해주세요.");
 
   const formRef = useRef<HTMLFormElement | null>(null);
+  const customRef = useRef<HTMLDivElement | null>(null);
 
+  //메뉴 추가 함수
   const menuAdd = async (e: React.FormEvent) => {
     try {
       if (formRef.current && formRef.current.checkValidity()) {
@@ -58,6 +60,19 @@ export default function MenuAddForm({
       setIsShow(false);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  //파일명 보여주는 함수
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setMfile(file); // 파일 이름을 state에 저장
+
+      // ref로 선택된 div에 파일 이름을 넣어줌
+      if (customRef.current) {
+        customRef.current.textContent = file.name;
+      }
     }
   };
 
@@ -119,17 +134,9 @@ export default function MenuAddForm({
         <div className="custom-container">
           사진
           <br />
-          <div className="custom-input">
-            <input
-              type="file"
-              name="mfile"
-              onChange={(e) => {
-                if (e.target.files) {
-                  console.log(e.target.files[0]);
-                  setMfile(e.target.files[0]);
-                }
-              }}
-            />
+          <div className="custom-input" ref={customRef}>
+            <p>{mfile ? mfile.name : "파일을 입력해 주세요."}</p>
+            <input type="file" name="mfile" onChange={handleFileChange} />
           </div>
         </div>
         <br />
