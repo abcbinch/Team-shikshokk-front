@@ -6,6 +6,7 @@ import ShoppingCart from "../components/ShoppingCart";
 import ShopAddForm from "../components/ShopAddForm";
 import { useDispatch } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
+import Header from "../components/Header/Header";
 
 interface Menus {
   id: number;
@@ -20,14 +21,11 @@ export default function CustomerShopDetail() {
   let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
-  
 
   const dispatch = useDispatch();
   const handleMenuClick = (mel: Menus) => {
     dispatch(addMenu({ name: mel.menuName, price: Number(mel.price) }));
   };
-
-  
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -75,6 +73,7 @@ export default function CustomerShopDetail() {
 
   return (
     <main className="max-w-7xl m-auto">
+      <Header />
       <div className="shop-image-container">
         <div className="img-sample"></div>
       </div>
@@ -124,7 +123,6 @@ export default function CustomerShopDetail() {
         );
       })}
       <ShoppingCart />
-      {isShopShow && <ShopAddForm />}
     </main>
   );
 }

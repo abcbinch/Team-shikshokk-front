@@ -5,6 +5,7 @@ import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { removeMenu } from "../store/menupick/actions";
 import { RootState } from "../store/rootReducer";
+import Header from "./Header/Header";
 
 // interface Pickups {
 //   setItems: React.Dispatch<
@@ -110,26 +111,28 @@ export default function ShoppingCart() {
     <div className="cart-container" ref={cartRef}>
       <div className="fold-btn" ref={btnRef} onClick={cartFold}>
         <div className="menu-length">
-          {menuWithPrice.length > 0 ? menuWithPrice.length : 0}{" "}
+          {menuWithPrice &&
+            (menuWithPrice.length > 0 ? menuWithPrice.length : 0)}{" "}
         </div>
         <FontAwesomeIcon icon={faCartShopping} className="cart" />
       </div>
       <div className="pay-info">
         <ul>
-          {menuWithPrice.length > 0
-            ? menuWithPrice.map((el: { name: string; price: number }) => {
-                return (
-                  <li>
-                    {el.name} {el.price}원
-                    <FontAwesomeIcon
-                      icon={faXmark}
-                      className="delete-btn"
-                      onClick={() => handleRemoveMenu(el.name)}
-                    />
-                  </li>
-                );
-              })
-            : "주문한 메뉴가 없습니다."}
+          {menuWithPrice &&
+            (menuWithPrice.length > 0
+              ? menuWithPrice.map((el: { name: string; price: number }) => {
+                  return (
+                    <li>
+                      {el.name} {el.price}원
+                      <FontAwesomeIcon
+                        icon={faXmark}
+                        className="delete-btn"
+                        onClick={() => handleRemoveMenu(el.name)}
+                      />
+                    </li>
+                  );
+                })
+              : "주문한 메뉴가 없습니다.")}
         </ul>
         <hr />
         <button type="submit">결제하기({total}원)</button>

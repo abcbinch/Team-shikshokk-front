@@ -7,7 +7,7 @@ export interface Items {
 
 export interface MenuState {
   items: Items[];
-  menuWithPrice: [];
+  menuWithPrice?: [];
 }
 
 const initialState: MenuState = {
