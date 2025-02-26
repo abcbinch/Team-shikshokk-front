@@ -32,7 +32,9 @@ export default function ShopAddForm({ setIsShopShow }: ShopAddFormProps) {
         sowner: shopowner,
       }
     );
-    if (response) alert("등록이 완료됐습니다!");
+    response.data.isAdd
+      ? alert("등록이 완료되었습니다.")
+      : alert("등록에 실패했습니다.");
   };
   return (
     <div className="sh-reg-container">
