@@ -3,7 +3,11 @@ import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
 
+import OnwerOrderHistory2 from "../pages/Order/OwnerOrderPage/OwnerOrderHistory2";
+
+
 import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOrderAllhistory";
+
 
 import Menus from "../pages/Menus";
 import OwnerMain from "../pages/OwnerMain";
@@ -33,6 +37,7 @@ const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
 
+
     { path: "/order1", element: <OwnerOrderHistory /> },
 
     { path: "/menu", element: <Menus /> },
@@ -59,6 +64,7 @@ const AppRoutes = () => {
     { path: "/mypage", element: <MyPage /> },
 
     { path: "/", element: <UserMain /> },
+
 
     { path: "/delete/:nickname", element: <DeleteMember /> },
 

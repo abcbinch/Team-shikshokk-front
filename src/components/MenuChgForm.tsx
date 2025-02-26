@@ -16,10 +16,12 @@ interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
+  crossId: number;
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.
 export default function MenuChgForm({
+  crossId,
   selectMenu,
   setIsChgShow,
   setImgS3route,
@@ -44,6 +46,9 @@ export default function MenuChgForm({
         if (chgfile) {
           formData.append("image", chgfile);
           formData.append("chgfile", chgfile.name);
+        }
+        if (crossId) {
+          formData.append("shopId", String(crossId));
         }
         const response = await axios.patch(
           "http://localhost:8082/api-server/menu-change",

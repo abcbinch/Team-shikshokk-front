@@ -7,9 +7,13 @@ import axios from "axios";
 import MenuChgForm from "../components/MenuChgForm";
 import Header from "../components/Header/Header";
 import ShopAddForm from "../components/ShopAddForm";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
+import { useLocation } from "react-router-dom";
 
 interface Menus {
   id: number;
+  shop_menu_id: number;
   menuName: string;
   category: string;
   price: string;
@@ -26,18 +30,33 @@ export default function Menus() {
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
   let [isShopShow, setIsShopShow] = useState<boolean>(false);
+  const owner_id = useSelector((state: RootState) => state.login.id);
+  const location = useLocation();
+  const crossId = location.state?.shopId;
+
+  console.log("이것은 crossId다", crossId);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
     try {
+      //점주 하나, 가게 하나의 메뉴를 가져와야 한다.
       const menuList = async () => {
         const response = await axios.get(
-          "http://localhost:8082/api-server/menu-list"
+          `http://localhost:8082/api-server/menu-list`,
+          {
+            params: {
+              owner_id: owner_id,
+              shopId: crossId,
+            },
+          }
         );
+
+        console.log(owner_id);
 
         let result = response.data.map((el: Menus) => {
           const {
             id,
+            shop_menu_id,
             menuName,
             price,
             menudesc,
@@ -47,6 +66,7 @@ export default function Menus() {
           } = el;
           return {
             id,
+            shop_menu_id,
             menuName,
             price,
             menudesc,
@@ -108,6 +128,7 @@ export default function Menus() {
                               setIsChgShow(true);
                               setSelectMenu({
                                 id: mel.id,
+                                shop_menu_id: mel.shop_menu_id,
                                 menuName: mel.menuName,
                                 price: mel.price,
                                 menudesc: mel.menudesc,
@@ -156,10 +177,15 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
-        <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
+        <MenuAddForm
+          crossId={crossId}
+          setIsShow={setIsShow}
+          setImgS3route={setImgS3route}
+        />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
+          crossId={crossId}
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}
