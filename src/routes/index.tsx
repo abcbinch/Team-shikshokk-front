@@ -2,12 +2,18 @@ import { useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
+
+import OnwerOrderHistory2 from "../pages/Order/OwnerOrderPage/OwnerOrderHistory2";
+
 import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOrderAllhistory";
 
 import Menus from "../pages/Menus";
 import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
 import CounterTest from "../pages/CounterTest";
+
+import OrderTest from "../pages/Order/OwnerOrderPage/OrderTest";
+import OrderTest2 from "../pages/Order/OwnerOrderPage/OrderTest2";
 
 import CustomerShopDetail from "../pages/CustomerShopDetail";
 import ShoppingCart from "../components/ShoppingCart";
@@ -32,6 +38,7 @@ const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
 
+
     { path: "/order1", element: <OwnerOrderHistory /> },
 
     { path: "/menu", element: <Menus /> },
@@ -46,6 +53,7 @@ const AppRoutes = () => {
     { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
 
+
     { path: "/shopdetail", element: <CustomerShopDetail /> },
 
     { path: "/cart", element: <ShoppingCart /> },
@@ -56,7 +64,9 @@ const AppRoutes = () => {
     { path: "/login", element: <LoginPage /> },
     { path: "/signup", element: <SignUpPage /> },
     { path: "/mypage", element: <MyPage /> },
-    { path: "/UserMain", element: <UserMain /> },
+
+    { path: "/", element: <UserMain /> },
+
     { path: "/delete/:nickname", element: <DeleteMember /> },
 
     { path: "/Payment", element: <Pay /> },
