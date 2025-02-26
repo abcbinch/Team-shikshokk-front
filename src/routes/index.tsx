@@ -2,6 +2,7 @@ import { useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
+import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOrderAllhistory";
 
 import Menus from "../pages/Menus";
 import OwnerMain from "../pages/OwnerMain";
@@ -36,7 +37,9 @@ const AppRoutes = () => {
     { path: "/menu", element: <Menus /> },
 
     { path: "/ownerOrderHistory", element: <OwnerOrderHistory /> },
+    { path: "/ownerOrderAllHistory", element: <OwnerOrderAllHistory /> },
     { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
+    { path: "/customerOrderAllHistory", element: <CustomerOrderAllHistory /> },
 
     { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },

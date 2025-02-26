@@ -54,17 +54,11 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                 <div className="mt-2">
                   {window.innerWidth >= 480 ? (
                     <div>
-                      <button className="btn btn-warning">조리 시작</button>
-                      <button className="btn btn-success">조리 완료</button>
+                      <button className="btn btn-warning">리뷰</button>
                     </div>
                   ) : (
                     <div>
-                      <button className="btn btn-warning btn-sm">
-                        조리 시작
-                      </button>
-                      <button className="btn btn-success btn-sm">
-                        조리 완료
-                      </button>
+                      <button className="btn btn-warning btn-sm">리뷰</button>
                     </div>
                   )}
                 </div>
@@ -98,17 +92,11 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                 <div className="mt-2">
                   {window.innerWidth >= 480 ? (
                     <div>
-                      <button className="btn btn-warning">조리 시작</button>
-                      <button className="btn btn-success">조리 완료</button>
+                      <button className="btn btn-warning">리뷰</button>
                     </div>
                   ) : (
                     <div>
-                      <button className="btn btn-warning btn-sm">
-                        조리 시작
-                      </button>
-                      <button className="btn btn-success btn-sm">
-                        조리 완료
-                      </button>
+                      <button className="btn btn-warning btn-sm">리뷰</button>
                     </div>
                   )}
                 </div>
