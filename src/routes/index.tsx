@@ -61,7 +61,12 @@ const AppRoutes = () => {
 
     {
       path: "/",
-      element: userType === "individual" ? <UserMain /> : <OwnerMain />,
+      element:
+        userType === "individual" || userType === null ? (
+          <UserMain />
+        ) : (
+          <OwnerMain />
+        ),
     },
     { path: "/", element: <OwnerMain /> },
 
