@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import * as C from "../../../store/clock";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RootState } from "../../../store/rootReducer";
 
 interface CustomerOrderHistoryProps {}
 
@@ -15,8 +16,9 @@ const socket = io("http://localhost:8082");
 
 const shopLoginId = "owner1";
 const shopName = "햄버거집";
-const loginId = "customer1";
+
 const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
+  const loginId = useSelector((state: RootState) => state.login.id);
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
   );
