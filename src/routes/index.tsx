@@ -48,7 +48,7 @@ const AppRoutes = () => {
     { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
 
-    { path: "/shopdetail", element: <CustomerShopDetail /> },
+    { path: "/shopdetail/:id", element: <CustomerShopDetail /> },
 
     { path: "/cart", element: <ShoppingCart /> },
 

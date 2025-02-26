@@ -88,8 +88,8 @@ const UserMain: React.FC = () => {
     );
   };
 
-  const handleStoreClick = (id: number) => {
-    navigate(`/shopdetail/${id}`); // 가게 상세 페이지로 이동
+  const handleStoreClick = (shopId: number) => {
+    navigate(`/shopdetail/${shopId}`);
   };
 
   return (
