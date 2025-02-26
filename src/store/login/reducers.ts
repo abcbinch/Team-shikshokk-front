@@ -38,6 +38,16 @@ export const reducer = (
         ...state,
         type: action.payload,
       };
+
+    case "@auth/setLogout":
+      return {
+        ...state,
+        loginId: null,
+        id: 0,
+        nickname: null,
+        type: null,
+      };
+
     default:
       return state;
   }

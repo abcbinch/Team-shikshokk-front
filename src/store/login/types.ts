@@ -25,9 +25,14 @@ export type SetTypeAction = Action<"@auth/setType"> & {
   payload: string;
 };
 
+export type SetLogoutAction = Action<"@auth/setLogout"> & {
+  payload: null;
+};
+
 // 전체 액션 타입 정의
 export type Actions =
   | SetLoginIdAction
   | SetIdAction
   | SetNicknameAction
-  | SetTypeAction;
+  | SetTypeAction
+  | SetLogoutAction;
