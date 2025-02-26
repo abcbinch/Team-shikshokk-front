@@ -3,6 +3,7 @@ import "../styles/ownerMain.scss";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
+import Footer from "./Footer";
 
 //가게 정보 interface
 interface shopIn {
@@ -73,7 +74,7 @@ export default function OwnerMain() {
   return (
     <>
       <Header />
-      <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
+      <main className="box-content  max-w-[1200px] my-20 mx-auto">
         <div className="flex flex-col items-center w-full con">
           {/* 전체 컨테이너 */}
 
@@ -139,6 +140,7 @@ export default function OwnerMain() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
