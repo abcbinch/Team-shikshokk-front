@@ -9,13 +9,12 @@
 
   @media (max-width: 480px) {
     width: 100%; // 모바일 화면에 맞게 변경
-    padding: 0px; // 패딩 추가
+    padding: 0; // 패딩 제거
   }
 }
 
 .header {
   padding: 10px;
-
   display: flex;
   justify-content: center; // 중앙 정렬
 
@@ -63,6 +62,7 @@
   @media (max-width: 480px) {
     height: 200px; // 모바일 화면에 맞게 변경
   }
+
   .slider {
     position: relative;
     display: flex;
@@ -71,8 +71,9 @@
     @media (max-width: 480px) {
       width: 80%; // 모바일 화면에 맞게 변경
       height: 100%;
-      padding: 0px; // 패딩 추가
+      padding: 0; // 패딩 제거
     }
+
     .slider-button {
       background-color: rgba(255, 255, 255, 0.8);
       border: none;
@@ -127,7 +128,7 @@
 .food-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 20px; // 간격을 더 넓게 조정
   padding: 20px;
 
   .food-item {
@@ -142,6 +143,8 @@
 
     .food-image {
       height: auto;
+      width: 100%; // 이미지 너비를 100%로 설정
+      border-radius: 8px 8px 0 0; // 상단 모서리 둥글게
     }
 
     .food-name {
