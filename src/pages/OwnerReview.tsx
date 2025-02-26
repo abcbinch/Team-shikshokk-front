@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../store";
 import { RootState } from "../store/rootReducer";
 import { fetchReviews } from "../store/modules/reviewSlice";
+import Header from "../components/Header/Header";
+import Footer from "./Footer";
 
 //test interface
 interface Review {
@@ -45,18 +47,9 @@ export default function OwnerReview() {
   //--- 추가
   async function getData() {
     try {
-      // 세션 로컬 스토리지에서 토큰 가져오기
-      // const token = localStorage.getItem("authToken");
-      // if (!token) {
-      //   console.error("No token found");
-      //   return;
-      // }
       const response = await axios.get(
         "http://localhost:8082/api-server/owner-review",
         {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
           params: {
             shopId: shopId, // 가게 아이디 test
           },
@@ -88,7 +81,8 @@ export default function OwnerReview() {
 
   return (
     <>
-      <div className="con max-w-[1200px] m-10 flex flex-col items-center my-0 mx-auto">
+      <Header />
+      <div className="con max-w-[1200px]  flex flex-col items-center my-20 mx-auto">
         <div className="reviewTitle mb-8 pb-2 w-3/5 border-b ">
           <h1 className="text-2xl font-bold">리뷰 관리</h1>
         </div>
@@ -141,6 +135,7 @@ export default function OwnerReview() {
           </button>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

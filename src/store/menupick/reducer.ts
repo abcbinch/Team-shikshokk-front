@@ -1,34 +1,25 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import * as T from "./types";
 
-export interface Items {
-  name: string;
-  price: number;
-}
-
-export interface MenuState {
-  items: Items[];
-  menuWithPrice: [];
-}
-
-const initialState: MenuState = {
-  menuWithPrice: [],
+const initialState: T.MenuState = {
   items: [],
 };
 
-const menuSlice = createSlice({
-  name: 'menu',
-  initialState: initialState,
-  reducers: {
-    addMenu: (state, action: PayloadAction<Items>) => {
-      state.items.push(action.payload);
-    },
-    removeMenu: (state, action: PayloadAction<{ name: string }>) => {
-      state.items = state.items.filter(
-        item => item.name !== action.payload.name,
-      );
-    },
-  },
-});
-
-export const { addMenu, removeMenu } = menuSlice.actions;
-export default menuSlice.reducer;
+export const firstOrderReducer = (
+  state = initialState,
+  action: T.Actions | any
+): T.MenuState => {
+  switch (action.type) {
+    case "menu/addMenu":
+      return {
+        ...state,
+        items: [...state.items, action.payload],
+      };
+    case "menu/delMenu":
+      return {
+        ...state,
+        items: [],
+      };
+    default:
+      return state;
+  }
+};

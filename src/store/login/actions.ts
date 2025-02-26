@@ -40,4 +40,9 @@ export const setUserData = (userData: {
 }): T.SetUserDataAction => ({
   type: '@auth/setUserData',
   payload: userData,
+
+export const setPhoneNumber = (payload: string): T.SetPhoneNumberAction => ({
+  type: "@auth/setPhoneNumber",
+  payload,
+
 });

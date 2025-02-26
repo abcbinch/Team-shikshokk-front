@@ -6,7 +6,11 @@ const initialState: T.AuthState = {
   id: 0,
   nickname: null,
   type: null,
+
   storeId: null, // 가게 ID 추가
+
+  phoneNumber: null,
+
 };
 
 export const reducer = (
@@ -42,6 +46,7 @@ export const reducer = (
         type: action.payload,
       };
 
+
     // 가게 ID 설정
     case '@auth/setStoreId': // 새로운 액션 타입 추가
       return {
@@ -51,6 +56,15 @@ export const reducer = (
 
     // 로그아웃
     case '@auth/setLogout':
+
+    case "@auth/setPhoneNumber":
+      return {
+        ...state,
+        phoneNumber: action.payload,
+      };
+
+    case "@auth/setLogout":
+
       return {
         ...state,
         loginId: null,

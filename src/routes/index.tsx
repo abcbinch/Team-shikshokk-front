@@ -1,68 +1,72 @@
-import { useRoutes } from 'react-router-dom';
-import Home from '../pages/Home/Home';
-import OwnerOrderAllHistory from '../pages/Order/OwnerOrderPage/OwnerOrderAllHistory';
-import OwnerOrderHistory from '../pages/Order/OwnerOrderPage/OwnerOrderHistory';
-import OnwerOrderHistory2 from '../pages/Order/OwnerOrderPage/OwnerOrderHistory2';
-import Menus from '../pages/Menus';
-import OwnerMain from '../pages/OwnerMain';
-import OwnerReview from '../pages/OwnerReview';
-import CounterTest from '../pages/CounterTest';
-import OrderTest from '../pages/Order/OwnerOrderPage/OrderTest';
-import OrderTest2 from '../pages/Order/OwnerOrderPage/OrderTest2';
-import CustomerShopDetail from '../pages/CustomerShopDetail';
-import ShoppingCart from '../components/ShoppingCart';
-import CusReview from '../pages/CusReview';
-import EditProfilePage from '../pages/SignUp/EditProfilePage';
-import LoginPage from '../pages/SignUp/LoginPage';
-import SignUpPage from '../pages/SignUp/SignUpPage';
-import MyPage from '../pages/SignUp/MyPage';
-import UserMain from '../pages/UserMain';
+import { useRoutes } from "react-router-dom";
+import Home from "../pages/Home/Home";
+import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
+import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
 
-import Payment from '../pages/Order/Payment/Payment';
-import Payment2 from '../pages/Order/Payment/Payment2';
+import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOrderAllhistory";
 
-import Income from '../pages/Income/Income';
-import DeleteMember from '../pages/SignUp/DeleteMember';
+import Menus from "../pages/Menus";
+import OwnerMain from "../pages/OwnerMain";
+import OwnerReview from "../pages/OwnerReview";
+import CounterTest from "../pages/CounterTest";
 
-import Pay from '../pages/Payment/Pay';
+import CustomerShopDetail from "../pages/CustomerShopDetail";
+import ShoppingCart from "../components/ShoppingCart";
+import CusReview from "../pages/CusReview";
+import EditProfilePage from "../pages/SignUp/EditProfilePage";
+import LoginPage from "../pages/SignUp/LoginPage";
+import SignUpPage from "../pages/SignUp/SignUpPage";
+import MyPage from "../pages/SignUp/MyPage";
+import UserMain from "../pages/UserMain";
 
-import CustomerOrderHistory from '../pages/Order/CustomerOrderPage/CustomerOrderHistory';
+import Payment from "../pages/Order/Payment/Payment";
+import Payment2 from "../pages/Order/Payment/Payment2";
+
+import Income from "../pages/Income/Income";
+import DeleteMember from "../pages/SignUp/DeleteMember";
+
+import Pay from "../pages/Payment/Pay";
+
+import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: '/Home', element: <Home /> },
+    { path: "/Home", element: <Home /> },
 
-    { path: '/order1', element: <OwnerOrderHistory /> },
-    { path: '/order2', element: <OnwerOrderHistory2 /> },
-    { path: '/menu', element: <Menus /> },
+    { path: "/order1", element: <OwnerOrderHistory /> },
 
-    { path: '/ownerOrderHistory', element: <OwnerOrderHistory /> },
-    { path: '/customerOrderHistory', element: <CustomerOrderHistory /> },
+    { path: "/menu", element: <Menus /> },
 
-    { path: '/', element: <OwnerMain /> },
-    { path: '/owner-review', element: <OwnerReview /> },
-    { path: '/counter', element: <CounterTest /> },
-    { path: '/income', element: <Income /> },
-    { path: '/testorder', element: <OrderTest /> },
-    { path: '/testorder2', element: <OrderTest2 /> },
-    { path: '/shopdetail', element: <CustomerShopDetail /> },
+    { path: "/ownerOrderHistory", element: <OwnerOrderHistory /> },
+    { path: "/ownerOrderAllHistory", element: <OwnerOrderAllHistory /> },
+    { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
+    { path: "/customerOrderAllHistory", element: <CustomerOrderAllHistory /> },
 
-    { path: '/cart', element: <ShoppingCart /> },
+    { path: "/", element: <OwnerMain /> },
+    { path: "/owner-review", element: <OwnerReview /> },
+    { path: "/counter", element: <CounterTest /> },
+    { path: "/income", element: <Income /> },
 
-    { path: '/review', element: <CusReview /> },
+    { path: "/shopdetail", element: <CustomerShopDetail /> },
 
-    { path: '/edit-profile', element: <EditProfilePage /> },
-    { path: '/login', element: <LoginPage /> },
-    { path: '/signup', element: <SignUpPage /> },
-    { path: '/mypage', element: <MyPage /> },
-    { path: '/UserMain', element: <UserMain /> },
-    { path: '/delete/:nickname', element: <DeleteMember /> },
+    { path: "/cart", element: <ShoppingCart /> },
 
-    { path: '/Payment', element: <Pay /> },
+    { path: "/review", element: <CusReview /> },
 
-    { path: '/pay', element: <Payment /> },
-    { path: '/pay2', element: <Payment2 /> },
-    { path: '/Payment', element: <Pay /> },
+    { path: "/edit-profile", element: <EditProfilePage /> },
+    { path: "/login", element: <LoginPage /> },
+    { path: "/signup", element: <SignUpPage /> },
+    { path: "/mypage", element: <MyPage /> },
+
+    { path: "/", element: <UserMain /> },
+
+    { path: "/delete/:nickname", element: <DeleteMember /> },
+
+    { path: "/Payment", element: <Pay /> },
+
+    { path: "/pay", element: <Payment /> },
+    { path: "/pay2", element: <Payment2 /> },
+    { path: "/Payment", element: <Pay /> },
   ]);
   return routes;
 };

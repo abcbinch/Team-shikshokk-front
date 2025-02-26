@@ -8,6 +8,7 @@ import Footer from "../Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { Order, OrderState } from "../../store/order";
 import { RootState } from "../../store/rootReducer";
+import Header from "../../components/Header/Header";
 
 const Pay: React.FC = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -34,7 +35,8 @@ const Pay: React.FC = () => {
     const newOrder = {
       ...lastOrder,
       guests: guests,
-      visitTime: { hour, minute },
+      visitHour: hour,
+      visitMinute: minute,
       visitDate: date,
       orderType: orderType,
     };
@@ -44,7 +46,8 @@ const Pay: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-amber-100 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen  text-white">
+      <Header />
       <Card className="mt-5 p-6 w-96 bg-white shadow-lg rounded-lg border border-amber-400">
         <CardContent className="flex flex-col gap-6">
           <div className="flex justify-center gap-6 text-lg font-semibold text-amber-600">

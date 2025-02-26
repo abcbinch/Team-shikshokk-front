@@ -214,8 +214,10 @@ export default function Income() {
   return (
     <>
       <Header />
-      <div className="w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-white">매출관리</h1>
+      <div className="max-w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-white">
+          매출관리
+        </h1>
         <hr className="my-4 border-white" />
 
         <div className="mb-4 text-center">
@@ -230,7 +232,7 @@ export default function Income() {
             달력 보기
           </button>
           {isCalendarVisible && (
-            <div className="absolute z-10 p-2 mt-2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg left-1/2">
+            <div className="relative md:absolute z-10 p-2 mt-2 bg-white rounded-lg shadow-lg">
               <DatePicker
                 selectsRange
                 startDate={dateRange[0]}
@@ -244,7 +246,7 @@ export default function Income() {
           )}
         </div>
 
-        <div className="grid grid-cols-3 gap-4 text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
           <div className="p-4 rounded-lg shadow bg-amber-500">
             <h4 className="font-bold">매출액</h4>
             <hr className="my-2 border-white" />
@@ -287,8 +289,8 @@ export default function Income() {
           </div>
         </div>
 
-        <div className="flex justify-center w-full h-full gap-10 mt-10">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-[70%] h-full">
+        <div className="flex flex-col lg:flex-row justify-center w-full h-full gap-10 mt-10">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
             <select
               onChange={(e) => {
                 setSelectedOption(e.target.value);
@@ -312,10 +314,12 @@ export default function Income() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-
-          <div className="text-center bg-white p-4 rounded-lg shadow-lg w-[30%] ">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[30%]">
             <h4 className="font-bold">메뉴별 매출 비율</h4>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer
+              width="100%"
+              height={window.innerWidth < 900 ? 300 : 400}
+            >
               <PieChart width={400} height={400}>
                 <Pie
                   data={menu}
@@ -343,7 +347,7 @@ export default function Income() {
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
-            <table className="w-full mt-4 border border-gray-300">
+            <table className="w-full mt-4 border border-gray-300 ">
               <thead>
                 <tr className="bg-gray-200">
                   <th className="p-2 border">메뉴</th>

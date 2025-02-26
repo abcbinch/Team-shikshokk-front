@@ -16,25 +16,21 @@ export interface Order {
   //     "매우매우맛있는양념x1",
   //     "매우매우맛있는순살x1",
   //   ],
-
-  loginId?: string;
-  orderTime?: string;
-  orderNumber?: string;
-  orderType?: string;
+  loginId: string;
+  orderTime: string;
+  orderNumber: string;
+  orderType: string;
   guests: number; // 방문 인원
-  visitTime: VisitInfo["visitTime"]; // 방문 시각
-  visitDate: VisitInfo["visitDate"]; //방문 날짜
-  contactNumber?: string;
-  shopName?: string;
-  shopLoginId?: string;
-  total?: string;
-  items?: string[];
+  visitDate: string; //방문 날짜
+  visitHour: string; // 방문 시간
+  visitMinute: string; //방문 분
+  contactNumber: string;
+  shopName: string;
+  shopLoginId: string;
+  total: string;
+  items: string[];
 }
 
-interface VisitInfo {
-  visitTime: { hour: string; minute: string };
-  visitDate: Date;
-}
 export interface OrderState {
   orders: Order[];
 }

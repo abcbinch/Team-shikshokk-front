@@ -3,6 +3,9 @@ import "../styles/ownerMain.scss";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
+import Footer from "./Footer";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 
 //가게 정보 interface
 interface shopIn {
@@ -11,33 +14,27 @@ interface shopIn {
 }
 
 export default function OwnerMain() {
+  // 로그인 확인
+  const id = useSelector((state: RootState) => state.login.id);
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+  console.log("---------id?", id);
+  console.log("---------id?", loginId);
+
   const [shopId, setShopId] = useState<number | null>(null); //선택된 shop id
   const [shops, setShops] = useState<shopIn[]>([]);
   const navigate = useNavigate();
 
   async function getData() {
     try {
-      // 세션 로컬 스토리지에서 토큰 가져오기
-      // const token = localStorage.getItem("authToken");
-      // if (!token) {
-      //   console.error("No token found");
-      //   return;
-      // }
-      const token = localStorage.getItem("authToken");
-      console.log("토큰?", token);
-
       const response = await axios.get(
         "http://localhost:8082/api-server/owner",
         {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
           params: {
-            userId: "1", // 로그인시에 점주 아이디 test
+            userId: id, // redux state로
           },
         }
       );
-      console.log(response.data.shops);
+      console.log("응답 샵id", response.data.shops);
       const shopsList = response.data.shops.map((shop: shopIn) => shop);
       setShops(shopsList);
 
@@ -73,7 +70,7 @@ export default function OwnerMain() {
   return (
     <>
       <Header />
-      <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
+      <main className="box-content  max-w-[1200px] my-20 mx-auto">
         <div className="flex flex-col items-center w-full con">
           {/* 전체 컨테이너 */}
 
@@ -139,6 +136,7 @@ export default function OwnerMain() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

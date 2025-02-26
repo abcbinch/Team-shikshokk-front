@@ -3,6 +3,8 @@ import "../styles/menu-form.scss";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,12 +25,16 @@ export default function MenuAddForm({
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const customRef = useRef<HTMLDivElement | null>(null);
+  const id = useSelector((state: RootState) => state.login.id);
 
   //메뉴 추가 함수
   const menuAdd = async (e: React.FormEvent) => {
     try {
       if (formRef.current && formRef.current.checkValidity()) {
+        //redux
+
         const formData = new FormData();
+
         formData.append("mname", mname);
         formData.append("mcategory", mcategory);
         formData.append("mprice", mprice);
@@ -36,6 +42,9 @@ export default function MenuAddForm({
         if (mfile) {
           formData.append("image", mfile);
           formData.append("mfile", mfile.name);
+        }
+        if (id) {
+          formData.append("owner_id", String(id));
         }
 
         const response = await axios.post(

@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import "..//styles/shopDetail.scss";
 import ShoppingCart from "../components/ShoppingCart";
 import ShopAddForm from "../components/ShopAddForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
+import Header from "../components/Header/Header";
+import { RootState } from "../store/rootReducer";
 
 interface Menus {
   id: number;
@@ -20,15 +22,20 @@ export default function CustomerShopDetail() {
   let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
-  
 
+  const menuData = useSelector((state: RootState) => state.menu.items);
   const dispatch = useDispatch();
-  const handleMenuClick = (mel: Menus) => {
-    dispatch(addMenu({ name: mel.menuName, price: Number(mel.price) }));
+
+  const handlerOrder = (menu: string[]) => {
+    const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
+    const newMenu = {
+      ...lastMenu,
+
+      items: menu,
+    };
+    dispatch({ type: "menu/addMenu", payload: newMenu });
+    console.log(newMenu);
   };
-
-  
-
   //메뉴 전체 조회 axios
   useEffect(() => {
     const menuList = async () => {
@@ -57,8 +64,6 @@ export default function CustomerShopDetail() {
         };
       });
 
-      console.log("result", result);
-
       setMenuArr(() => [...result]);
     };
 
@@ -75,6 +80,7 @@ export default function CustomerShopDetail() {
 
   return (
     <main className="max-w-7xl m-auto">
+      <Header />
       <div className="shop-image-container">
         <div className="img-sample"></div>
       </div>
@@ -101,7 +107,11 @@ export default function CustomerShopDetail() {
               {menuArr.map((mel) => {
                 if (comp === mel.category) {
                   return (
-                    <li onClick={() => handleMenuClick(mel)}>
+                    <li
+                      onClick={() => {
+                        handlerOrder([`${mel.menuName}, ${mel.price}`]);
+                      }}
+                    >
                       <div className="icon-box"></div>
                       <div className="img-box">
                         <img
@@ -124,7 +134,6 @@ export default function CustomerShopDetail() {
         );
       })}
       <ShoppingCart />
-      {isShopShow && <ShopAddForm />}
     </main>
   );
 }
