@@ -20,8 +20,10 @@ export interface Order {
   loginId?: string;
   orderTime?: string;
   orderNumber?: string;
-  storeCapacity?: string;
   orderType?: string;
+  guests: number; // 방문 인원
+  visitTime: VisitInfo["visitTime"]; // 방문 시각
+  visitDate: VisitInfo["visitDate"]; //방문 날짜
   contactNumber?: string;
   shopName?: string;
   shopLoginId?: string;
@@ -29,6 +31,10 @@ export interface Order {
   items?: string[];
 }
 
+interface VisitInfo {
+  visitTime: { hour: string; minute: string };
+  visitDate: Date;
+}
 export interface OrderState {
   orders: Order[];
 }
