@@ -28,8 +28,11 @@ import DeleteMember from "../pages/SignUp/DeleteMember";
 import Pay from "../pages/Payment/Pay";
 
 import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 const AppRoutes = () => {
+  const userType = useSelector((state: RootState) => state.login.type);
+
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
 
@@ -41,8 +44,6 @@ const AppRoutes = () => {
     { path: "/ownerOrderAllHistory", element: <OwnerOrderAllHistory /> },
     { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
     { path: "/customerOrderAllHistory", element: <CustomerOrderAllHistory /> },
-
-    { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
     { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
@@ -58,7 +59,11 @@ const AppRoutes = () => {
     { path: "/signup", element: <SignUpPage /> },
     { path: "/mypage", element: <MyPage /> },
 
-    { path: "/", element: <UserMain /> },
+    {
+      path: "/",
+      element: userType === "individual" ? <UserMain /> : <OwnerMain />,
+    },
+    { path: "/", element: <OwnerMain /> },
 
     { path: "/delete/:nickname", element: <DeleteMember /> },
 

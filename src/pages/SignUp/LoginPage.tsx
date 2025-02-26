@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
         if (data.membershipType === "business") {
           setTimeout(() => navigate("/"), 1000); // 1초 후 홈으로 리다이렉트
         } else {
-          setTimeout(() => navigate("/UserMain"), 1000); // 1초 후 사용자 메인으로 리다이렉트
+          setTimeout(() => navigate("/"), 1000); // 1초 후 사용자 메인으로 리다이렉트
         }
       } else {
         // 로그인 실패 시 에러 메시지를 서버의 메시지로 변경
