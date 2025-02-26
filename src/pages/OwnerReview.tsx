@@ -47,18 +47,9 @@ export default function OwnerReview() {
   //--- 추가
   async function getData() {
     try {
-      // 세션 로컬 스토리지에서 토큰 가져오기
-      // const token = localStorage.getItem("authToken");
-      // if (!token) {
-      //   console.error("No token found");
-      //   return;
-      // }
       const response = await axios.get(
         "http://localhost:8082/api-server/owner-review",
         {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
           params: {
             shopId: shopId, // 가게 아이디 test
           },

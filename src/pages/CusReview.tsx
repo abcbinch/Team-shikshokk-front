@@ -42,20 +42,11 @@ export default function CusReview() {
   //----------------------- 처음 조회
   async function getData() {
     try {
-      // 세션 로컬 스토리지에서 토큰 가져오기
-      // const token = localStorage.getItem("authToken");
-      // if (!token) {
-      //   console.error("No token found");
-      //   return;
-      // }
       const response = await axios.get(
         "http://localhost:8082/api-server/review",
         {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
           params: {
-            orderId: "5", // 주문 아이디 test  여기 다르게
+            orderId: "1", //---- 여기 주문id 받아야 한다.
           },
         }
       );
