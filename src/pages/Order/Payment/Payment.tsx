@@ -1,12 +1,18 @@
 import Header from "../../../components/Header/Header";
+
 import "../../../styles/payment.scss";
 import { useState } from "react";
+
 interface PaymentProps {}
 
 const Payment: React.FC<PaymentProps> = () => {
   return (
     <>
       <Header />
+
+      <div>
+        <h1>Payment</h1>
+
       <div className="wrap-container-payment">
         <div className="wrap-content-payment-1">
           <div className="wrap-content-payment-1-1">
@@ -55,6 +61,7 @@ const Payment: React.FC<PaymentProps> = () => {
             </div>
           </div>
         </div>
+
       </div>
     </>
   );
