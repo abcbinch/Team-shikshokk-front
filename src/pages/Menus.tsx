@@ -6,7 +6,6 @@ import MenuAddForm from "../components/MenuAddForm";
 import axios from "axios";
 import MenuChgForm from "../components/MenuChgForm";
 import Header from "../components/Header/Header";
-import ShopAddForm from "../components/ShopAddForm";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import { useLocation } from "react-router-dom";
@@ -29,7 +28,6 @@ export default function Menus() {
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
-  let [isShopShow, setIsShopShow] = useState<boolean>(false);
   const owner_id = useSelector((state: RootState) => state.login.id);
   const location = useLocation();
   const crossId = location.state?.shopId;
@@ -101,7 +99,6 @@ export default function Menus() {
         {categoryArr.map((el) => {
           return <li>{el}</li>;
         })}
-        <li onClick={() => setIsShopShow(true)}>가게 등록</li>
       </ul>
 
       {/* 메뉴 보드들 */}
@@ -191,8 +188,6 @@ export default function Menus() {
           setImgS3route={setImgS3route}
         />
       )}
-      {isShopShow && <ShopAddForm setIsShopShow={setIsShopShow} />}
-      {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>
   );
 }
