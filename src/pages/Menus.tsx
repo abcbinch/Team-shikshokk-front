@@ -99,16 +99,16 @@ export default function Menus() {
       {/* 메뉴 탭 */}
       <ul className="flex list-none menu-tab">
         <li className="choose">전체 메뉴</li>
-        {categoryArr.map((el) => {
-          return <li>{el}</li>;
+        {categoryArr.map((el, index) => {
+          return <li key={index}>{el}</li>;
         })}
       </ul>
 
       {/* 메뉴 보드들 */}
       {categoryArr.length > 0 ? (
-        categoryArr.map((comp) => {
+        categoryArr.map((comp, index) => {
           return (
-            <div>
+            <div key={index}>
               <hr className="mb-3" />
 
               <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
