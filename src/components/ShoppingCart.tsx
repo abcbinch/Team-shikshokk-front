@@ -6,8 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../store/rootReducer";
 import Header from "./Header/Header";
-import { MenuState } from "../store/menupick";
-
+import { v4 as uuidv4 } from "uuid";
 // interface Pickups {
 //   setItems: React.Dispatch<
 //     React.SetStateAction<{ name: string; price: number }[]>
@@ -37,6 +36,22 @@ export default function ShoppingCart() {
     dispatch({ type: "order/delOrder", payload: name });
   };
 
+  const menuData = useSelector((state: RootState) => state.menu.items);
+  const userId = useSelector((state: RootState) => state.login.loginId);
+  const lastOrder = () => {
+    const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
+    const orderMenu = {
+      ...lastMenu,
+      loginId: userId,
+      orderTime: new Date(),
+      orderNumber: uuidv4(),
+      // shopName : ,
+      // shopLoginId :,
+      // total : ,
+      // items : [],
+      // price : [],
+    };
+  };
   // 화면 크기에 따라 isMobile 상태 업데이트
   useEffect(() => {
     const checkIfMobile = () => {
