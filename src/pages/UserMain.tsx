@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/rootReducer'; // 경로 수정
+import {
+  setUserId,
+  setLoginId,
+  setNickname,
+  setType,
+  setStoreId,
+  setUserData, // 액션 임포트 추가
+} from '../store/login/actions'; // 경로 수정
 import '../styles/UserMain.scss';
 import Header from '../components/Header/Header';
 import axios from 'axios';
@@ -32,6 +42,7 @@ interface StoreItem {
 
 const UserMain: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // dispatch 훅 사용
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedArea, setSelectedArea] = useState('서울시 종로구');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -78,10 +89,37 @@ const UserMain: React.FC = () => {
             params: { userId: 1 },
           },
         );
-        setStoreItems(
-          shopResponse.data.shops.length
-            ? shopResponse.data.shops
-            : defaultStoreItems,
+
+        const shops = shopResponse.data.shops.length
+          ? shopResponse.data.shops
+          : defaultStoreItems;
+
+        setStoreItems(shops);
+
+        // 가게 ID를 리덕스에 저장
+        if (shops.length > 0) {
+          dispatch(setStoreId(shops[0].id)); // 첫 번째 가게 ID를 리덕스에 저장
+        }
+
+        // 사용자 정보 가져오기
+        const userResponse = await axios.get(
+          'http://localhost:8082/api-server/me',
+          {
+            withCredentials: true,
+          },
+        );
+        const { id, loginId, nickname, membershipType, storeId } =
+          userResponse.data.user;
+
+        // Redux에 사용자 정보 저장
+        dispatch(
+          setUserData({
+            id,
+            loginId,
+            nickname: nickname || '', // 응답에서 닉네임 설정
+            type: membershipType,
+            storeId: storeId || '', // 가게 ID 저장
+          }),
         );
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
@@ -91,7 +129,7 @@ const UserMain: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -185,7 +223,7 @@ const UserMain: React.FC = () => {
                 onClick={() => handleStoreClick(store.id)} // 클릭 시 상세 페이지로 이동
               >
                 <img
-                  src="default_image_url.jpg"
+                  src="default_image_url.jpg" // 하드코딩된 기본 이미지
                   alt={store.shopName}
                   className="store-image"
                 />

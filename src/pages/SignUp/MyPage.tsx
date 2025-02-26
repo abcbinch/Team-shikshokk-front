@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/rootReducer';
-import Header from '../../components/Header/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/rootReducer'; // 경로 수정
+import {
+  setUserId,
+  setLoginId,
+  setNickname,
+  setType,
+  setStoreId,
+  setUserData, // 액션 임포트 추가
+} from '../../store/login/actions'; // 경로 수정
+import Header from '../../components/Header/Header'; // 경로 수정
 import axios from 'axios';
-import '../../styles/MyPage.scss';
+import '../../styles/MyPage.scss'; // 경로 수정
+import profileImage from '../../assets/dprofile.jpg'; // import 형식으로 수정
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
-  const id = useSelector((state: RootState) => state.login.id);
+  const dispatch = useDispatch(); // dispatch 훅 사용
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const nicknameFromStore = useSelector(
     (state: RootState) => state.login.nickname,
   );
   const type = useSelector((state: RootState) => state.login.type);
-
-  // 닉네임 상태 정의
-  const [nickname, setNickname] = useState<string>(nicknameFromStore || ''); // 초기값을 빈 문자열로 설정
 
   // 사용자 정보 로드
   useEffect(() => {
@@ -29,7 +35,19 @@ const MyPage: React.FC = () => {
           },
         );
         console.log('응답 데이터:', response.data);
-        setNickname(response.data.user.nickname || nicknameFromStore || ''); // 응답에서 닉네임 설정
+        const { id, loginId, nickname, membershipType, storeId } =
+          response.data.user;
+
+        // Redux에 사용자 정보 저장
+        dispatch(
+          setUserData({
+            id,
+            loginId,
+            nickname: nickname || nicknameFromStore || '', // 응답에서 닉네임 설정
+            type: membershipType,
+            storeId: storeId || '', // 가게 ID 저장
+          }),
+        );
       } catch (error) {
         console.error('사용자 정보 로드 오류:', error);
         alert('사용자 정보를 로드하는 데 오류가 발생했습니다.');
@@ -37,15 +55,15 @@ const MyPage: React.FC = () => {
     };
 
     fetchUserData();
-  }, [nicknameFromStore]);
+  }, [nicknameFromStore, dispatch]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile');
   };
 
   const handleDeleteMember = () => {
-    if (nickname) {
-      navigate(`/delete/${nickname}`);
+    if (nicknameFromStore) {
+      navigate(`/delete/${nicknameFromStore}`);
     } else {
       alert('사용자 닉네임을 찾을 수 없습니다.');
     }
@@ -56,13 +74,19 @@ const MyPage: React.FC = () => {
       <Header />
       <div className="card">
         <img
-          src={require('../../assets/dprofile.jpg')}
+          src={profileImage} // import한 이미지 사용
           alt="Profile"
           className="profile-pic"
         />
-        <h2 className="username">{nickname || '사용자 이름'}</h2>
+        <h2 className="username">{nicknameFromStore || '사용자 이름'}</h2>
         <p className="bio">로그인 ID: {loginId}</p> {/* 로그인 ID 표시 */}
         <p className="bio">회원 유형: {type}</p> {/* 회원 유형 표시 */}
+        <p className="bio">
+          가게 ID:{' '}
+          {useSelector((state: RootState) => state.login.storeId) ||
+            '가게 ID 없음'}
+        </p>{' '}
+        {/* 가게 ID 표시 */}
       </div>
       <div className="menu">
         <div className="menu-item">
