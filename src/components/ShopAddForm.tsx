@@ -3,19 +3,27 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 
-export default function ShopAddForm() {
+interface ShopAddFormProps {
+  setIsShopShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function ShopAddForm({ setIsShopShow }: ShopAddFormProps) {
   let [shopname, setShopname] = useState("");
   let [shopbrn, setShopbrn] = useState("");
   let [shopaddress, setShopaddress] = useState("");
   let [shopphone, setShopphone] = useState("");
   let [shoptype, setShoptype] = useState("");
   let [shopowner, setShopowner] = useState("");
+  const id = useSelector((state: RootState) => state.login.id);
 
   const shopAdd = async () => {
     const response = await axios.post(
       "http://localhost:8082/api-server/shop-register",
       {
+        owner_id: id,
         sname: shopname,
         sbrn: shopbrn,
         saddress: shopaddress,
@@ -30,7 +38,11 @@ export default function ShopAddForm() {
     <div className="sh-reg-container">
       <form className="shop-modal" onSubmit={shopAdd}>
         <div className="x-box">
-          <FontAwesomeIcon icon={faXmark} className="close-btn" />
+          <FontAwesomeIcon
+            icon={faXmark}
+            className="close-btn"
+            onClick={() => setIsShopShow(false)}
+          />
         </div>
 
         <label>

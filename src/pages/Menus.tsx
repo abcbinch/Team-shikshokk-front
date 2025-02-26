@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import MenuAddForm from "../components/MenuAddForm";
 import axios from "axios";
 import MenuChgForm from "../components/MenuChgForm";
+import Header from "../components/Header/Header";
+import ShopAddForm from "../components/ShopAddForm";
 
 interface Menus {
   id: number;
@@ -23,6 +25,7 @@ export default function Menus() {
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
+  let [isShopShow, setIsShopShow] = useState<boolean>(false);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -70,6 +73,7 @@ export default function Menus() {
 
   return (
     <main className="max-w-7xl m-auto">
+      <Header />
       <h3 className="text-3xl font-bold m-5">메뉴 관리</h3>
       {/* 메뉴 탭 */}
       <ul className="menu-tab flex list-none">
@@ -77,6 +81,7 @@ export default function Menus() {
         {categoryArr.map((el) => {
           return <li>{el}</li>;
         })}
+        <li onClick={() => setIsShopShow(true)}>가게 등록</li>
       </ul>
 
       {/* 메뉴 보드들 */}
@@ -160,6 +165,7 @@ export default function Menus() {
           setImgS3route={setImgS3route}
         />
       )}
+      {isShopShow && <ShopAddForm setIsShopShow={setIsShopShow} />}
       {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>
   );
