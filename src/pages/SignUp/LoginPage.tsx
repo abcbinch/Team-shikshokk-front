@@ -55,7 +55,7 @@ const LoginPage: React.FC = () => {
         // 헤더에서 닉네임 표시 위한 리덕스 저장
         dispatch(T.setNickname(data.nickname));
         dispatch(T.setType(data.membershipType)); // 회원 유형 저장
-        dispatch(T.setPhoneNumber(data.phone)); // 전화번호 저장
+        dispatch(T.setPhoneNumber(data.phone)); // 전화번호 저
 
         // 사용자 유형에 따라 리다이렉트
         if (data.membershipType === "business") {
