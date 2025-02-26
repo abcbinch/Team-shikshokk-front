@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
+import axios from 'axios'; // axios 임포트
 import '../../styles/SignUpPage.scss';
 
 const SignUpPage: React.FC = () => {
@@ -84,21 +85,11 @@ const SignUpPage: React.FC = () => {
 
   const checkEmailExists = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `http://localhost:8082/api-server/check-email?email=${formData.email}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
       );
 
-      if (!response.ok) {
-        throw new Error('이메일 중복 확인에 실패했습니다.');
-      }
-      const data = await response.json();
-      setEmailExists(data.exists);
+      setEmailExists(response.data.exists);
     } catch (error) {
       console.error('이메일 중복 확인 오류:', error);
       alert('이메일 중복 확인 중 오류가 발생했습니다.');
@@ -114,13 +105,10 @@ const SignUpPage: React.FC = () => {
 
     // 백엔드에 회원가입 요청
     try {
-      const response = await fetch('http://localhost:8082/api-server/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: formData.username, // user_id에 username을 할당
+      const response = await axios.post(
+        'http://localhost:8082/api-server/signup',
+        {
+          user_id: formData.username,
           password: formData.password,
           name: formData.name,
           gender: formData.gender,
@@ -132,21 +120,13 @@ const SignUpPage: React.FC = () => {
           storeAddress: formData.storeAddress,
           representativeName: formData.representativeName,
           businessRegistrationNumber: formData.businessRegistrationNumber,
-          nickname: formData.nickname, // 닉네임 추가
+          nickname: formData.nickname,
           membershipType,
-        }),
-      });
+        },
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || '회원가입 실패');
-      }
-
-      const data = await response.json();
-      console.log('회원가입 성공:', data);
+      console.log('회원가입 성공:', response.data);
       alert('회원가입이 완료되었습니다.');
-
-      // 로그인 페이지로 리다이렉트
       navigate('/login');
     } catch (error) {
       console.error('회원가입 오류:', error);
@@ -186,7 +166,7 @@ const SignUpPage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label>닉네임</label> {/* 닉네임 필드 추가 */}
+              <label>닉네임</label>
               <input
                 type="text"
                 name="nickname"
