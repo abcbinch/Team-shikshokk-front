@@ -1,3 +1,4 @@
+
 import { useRoutes } from 'react-router-dom';
 import Home from '../pages/Home/Home';
 import OwnerOrderAllHistory from '../pages/Order/OwnerOrderPage/OwnerOrderAllHistory';
@@ -39,6 +40,8 @@ const AppRoutes = () => {
     { path: '/ownerOrderHistory', element: <OwnerOrderHistory /> },
     { path: '/customerOrderHistory', element: <CustomerOrderHistory /> },
 
+
+
     { path: '/', element: <OwnerMain /> },
     { path: '/owner-review', element: <OwnerReview /> },
     { path: '/counter', element: <CounterTest /> },
@@ -63,6 +66,7 @@ const AppRoutes = () => {
     { path: '/pay', element: <Payment /> },
     { path: '/pay2', element: <Payment2 /> },
     { path: '/Payment', element: <Pay /> },
+
   ]);
   return routes;
 };

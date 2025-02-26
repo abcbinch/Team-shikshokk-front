@@ -34,7 +34,8 @@ const Pay: React.FC = () => {
     const newOrder = {
       ...lastOrder,
       guests: guests,
-      visitTime: { hour, minute },
+      visitHour: hour,
+      visitMinute: minute,
       visitDate: date,
       orderType: orderType,
     };
