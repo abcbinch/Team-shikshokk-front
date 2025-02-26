@@ -10,26 +10,24 @@ import mexican from '../assets/mexican.jpg';
 import pizza from '../assets/pizza.jpg';
 import pizza2 from '../assets/pizza2.jpg';
 import vietnam from '../assets/vietnam.jpg';
+
 interface FoodItem {
   id: number;
-  shop_menu_id: number; // 외래 키 추가
+  shop_menu_id: number;
   menuName: string;
   price: number;
-  menudesc: string; // 메뉴 설명
-  category: string; // 카테고리
-  originMfile?: string; // 원본 파일 경로 (선택적)
-  saveMfile?: string; // 저장된 파일 경로 (선택적)
+  menudesc: string;
+  category: string;
+  originMfile?: string;
+  saveMfile?: string;
 }
 
 interface StoreItem {
   id: number;
-  owner_id?: number; // 외래 키 (선택적)
+  owner_id?: number;
   shopName: string;
-  businessNumber: string; // 사업자 번호
-  shopAddress: string; // 가게 주소
-  shopPhone?: string; // 전화번호 (선택적)
-  shopType: string; // 가게 유형
-  shopOwner: string; // 가게 주인
+  shopAddress: string;
+  shopType: string;
 }
 
 const UserMain: React.FC = () => {
@@ -42,6 +40,28 @@ const UserMain: React.FC = () => {
 
   // 하드코딩된 슬라이드 이미지
   const images = [burger, mexican, pizza, pizza2, vietnam];
+
+  // 임시 데이터
+  const defaultStoreItems: StoreItem[] = [
+    {
+      id: 1,
+      shopName: '임시 가게 1',
+      shopAddress: '서울시 강남구',
+      shopType: '한식',
+    },
+    {
+      id: 2,
+      shopName: '임시 가게 2',
+      shopAddress: '서울시 마포구',
+      shopType: '중식',
+    },
+    {
+      id: 3,
+      shopName: '임시 가게 3',
+      shopAddress: '서울시 종로구',
+      shopType: '양식',
+    },
+  ];
 
   // API에서 데이터 가져오기
   useEffect(() => {
@@ -58,9 +78,15 @@ const UserMain: React.FC = () => {
             params: { userId: 1 },
           },
         );
-        setStoreItems(shopResponse.data.shops);
+        setStoreItems(
+          shopResponse.data.shops.length
+            ? shopResponse.data.shops
+            : defaultStoreItems,
+        );
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
+        // 오류 발생 시 기본 임시 데이터 사용
+        setStoreItems(defaultStoreItems);
       }
     };
 
@@ -152,44 +178,27 @@ const UserMain: React.FC = () => {
         <div className="store-section">
           <h2 className="store-title">STORE</h2>
           <div className="store-grid">
-            {storeItems.length > 0 ? (
-              storeItems.map(store => (
-                <div
-                  key={store.id}
-                  className="store-item"
-                  onClick={() => handleStoreClick(store.id)} // 클릭 시 상세 페이지로 이동
-                >
-                  <img
-                    src={store.image || 'default_image_url.jpg'}
-                    alt={store.shopName}
-                    className="store-image"
-                  />
-                  <div className="store-info">
-                    <h3 className="store-name">{store.shopName}</h3>
-                    <div className="store-rating">
-                      <span className="rating-circle">4.8</span>{' '}
-                      {/* 실제 평점 데이터로 대체 필요 */}
-                    </div>
-                    <p className="store-description">{store.shopType}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="store-item" onClick={() => handleStoreClick(0)}>
+            {storeItems.map(store => (
+              <div
+                key={store.id}
+                className="store-item"
+                onClick={() => handleStoreClick(store.id)} // 클릭 시 상세 페이지로 이동
+              >
                 <img
                   src="default_image_url.jpg"
-                  alt="가게 이미지"
+                  alt={store.shopName}
                   className="store-image"
                 />
                 <div className="store-info">
-                  <h3 className="store-name">임시 가게 이름</h3>
+                  <h3 className="store-name">{store.shopName}</h3>
                   <div className="store-rating">
-                    <span className="rating-circle">0.0</span>
+                    <span className="rating-circle">4.8</span>{' '}
+                    {/* 실제 평점 데이터로 대체 필요 */}
                   </div>
-                  <p className="store-description">가게 유형</p>
+                  <p className="store-description">{store.shopType}</p>
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
