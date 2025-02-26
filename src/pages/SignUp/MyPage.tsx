@@ -70,7 +70,7 @@ const MyPage: React.FC = () => {
         <p className="bio">회원 유형: {type}</p> {/* 회원 유형 표시 */}
         <p className="bio">
           가게 ID:{" "}
-          {useSelector((state: RootState) => state.login.storeId) ||
+          {useSelector((state: RootState) => state.login.shopId) ||
             "가게 ID 없음"}
         </p>{" "}
         {/* 가게 ID 표시 */}
