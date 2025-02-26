@@ -12,7 +12,7 @@ import { RootState } from "../../store/rootReducer";
 const Pay: React.FC = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hour, setHour] = useState<string>("08");
+  const [hour, setHour] = useState<string>("10");
   const [minute, setMinute] = useState<string>("00");
   const [guests, setGuests] = useState<number>(1);
   const [orderType, setOrderType] = useState<string>("매장");
@@ -33,8 +33,9 @@ const Pay: React.FC = () => {
 
     const newOrder = {
       ...lastOrder,
-
-      storeCapacity: guests,
+      guests: guests,
+      visitTime: { hour, minute },
+      visitDate: date,
       orderType: orderType,
     };
 
