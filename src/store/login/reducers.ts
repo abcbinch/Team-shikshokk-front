@@ -6,6 +6,7 @@ const initialState: T.AuthState = {
   id: 0,
   nickname: null,
   type: null,
+  phoneNumber: null,
 };
 
 export const reducer = (
@@ -37,6 +38,12 @@ export const reducer = (
       return {
         ...state,
         type: action.payload,
+      };
+
+    case "@auth/setPhoneNumber":
+      return {
+        ...state,
+        phoneNumber: action.payload,
       };
 
     case "@auth/setLogout":
