@@ -1,6 +1,5 @@
 // reducers.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import * as S from "./socket";
 import * as C from "./counter";
 import * as Cl from "./clock";
 import * as L from "./login";
@@ -11,7 +10,6 @@ import reviewReducer from "./modules/reviewSlice";
 import { orderReducer } from "./order";
 import { firstOrderReducer } from "./menupick/reducer";
 const rootReducer = combineReducers({
-  socket: S.socketReducer,
   counter: C.reducer,
   reviews: reviewReducer,
   clock: Cl.reducer,
