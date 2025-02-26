@@ -1,95 +1,96 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../../styles/SignUpPage.scss';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../styles/SignUpPage.scss";
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    name: '',
-    birthdate: '',
-    gender: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    companyName: '',
-    businessType: '',
-    storeAddress: '',
-    representativeName: '',
-    businessRegistrationNumber: '',
-    nickname: '',
+    username: "",
+    password: "",
+    name: "",
+    birthdate: "",
+    gender: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    companyName: "",
+    businessType: "",
+    storeAddress: "",
+    representativeName: "",
+    businessRegistrationNumber: "",
+    nickname: "",
   });
+  //가게 등록에 필요
 
-  const [passwordError, setPasswordError] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [emailExists, setEmailExists] = useState(false);
   const [membershipType, setMembershipType] = useState<
-    'individual' | 'business'
-  >('individual');
+    "individual" | "business"
+  >("individual");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === 'password') {
+    if (name === "password") {
       if (value.length < 8 || value.length > 16) {
-        setPasswordError('비밀번호는 8-16자 이내여야 합니다.');
+        setPasswordError("비밀번호는 8-16자 이내여야 합니다.");
       } else if (
         !/[a-z]/.test(value) ||
         !/[0-9]/.test(value) ||
         !/[!@#$%^&*]/.test(value)
       ) {
         setPasswordError(
-          '비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다.',
+          "비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다."
         );
       } else {
-        setPasswordError('');
+        setPasswordError("");
       }
     }
 
-    if (name === 'email') {
+    if (name === "email") {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        setEmailError('유효하지 않은 이메일 형식입니다.');
+        setEmailError("유효하지 않은 이메일 형식입니다.");
       } else {
-        setEmailError('');
+        setEmailError("");
       }
     }
   };
 
-  const handleMembershipChange = (type: 'individual' | 'business') => {
+  const handleMembershipChange = (type: "individual" | "business") => {
     setMembershipType(type);
     setFormData({
-      username: '',
-      password: '',
-      name: '',
-      birthdate: '',
-      gender: '',
-      email: '',
-      phoneNumber: '',
-      address: '',
-      companyName: '',
-      businessType: '',
-      storeAddress: '',
-      representativeName: '',
-      businessRegistrationNumber: '',
-      nickname: '',
+      username: "",
+      password: "",
+      name: "",
+      birthdate: "",
+      gender: "",
+      email: "",
+      phoneNumber: "",
+      address: "",
+      companyName: "",
+      businessType: "",
+      storeAddress: "",
+      representativeName: "",
+      businessRegistrationNumber: "",
+      nickname: "",
     });
   };
 
   const checkEmailExists = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8082/api-server/check-email?email=${formData.email}`,
+        `http://localhost:8082/api-server/check-email?email=${formData.email}`
       );
       setEmailExists(response.data.exists);
     } catch (error) {
-      console.error('이메일 중복 확인 오류:', error);
-      alert('이메일 중복 확인 중 오류가 발생했습니다.');
+      console.error("이메일 중복 확인 오류:", error);
+      alert("이메일 중복 확인 중 오류가 발생했습니다.");
     }
   };
 
@@ -104,13 +105,13 @@ const SignUpPage: React.FC = () => {
       !formData.email ||
       !formData.phoneNumber
     ) {
-      alert('필수 정보를 입력하세요.');
+      alert("필수 정보를 입력하세요.");
       return;
     }
 
     try {
       const response = await axios.post(
-        'http://localhost:8082/api-server/signup',
+        "http://localhost:8082/api-server/signup",
         {
           user_id: formData.username, // 사용자 ID
           password: formData.password, // 비밀번호
@@ -126,15 +127,15 @@ const SignUpPage: React.FC = () => {
           businessRegistrationNumber: formData.businessRegistrationNumber, // 사업자 등록증 번호 (사업자 회원인 경우)
           nickname: formData.nickname, // 닉네임
           membershipType, // 회원 유형 (individual 또는 business)
-        },
+        }
       );
 
-      console.log('회원가입 성공:', response.data);
-      alert('회원가입이 완료되었습니다.');
-      navigate('/login');
+      console.log("회원가입 성공:", response.data);
+      alert("회원가입이 완료되었습니다.");
+      navigate("/login");
     } catch {
       // 오류 발생 시 기본 메시지만 표시
-      alert('회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -145,14 +146,14 @@ const SignUpPage: React.FC = () => {
         <div className="signup-container">
           <div className="membership-type">
             <button
-              onClick={() => handleMembershipChange('individual')}
-              className={membershipType === 'individual' ? 'active' : ''}
+              onClick={() => handleMembershipChange("individual")}
+              className={membershipType === "individual" ? "active" : ""}
             >
               개인회원
             </button>
             <button
-              onClick={() => handleMembershipChange('business')}
-              className={membershipType === 'business' ? 'active' : ''}
+              onClick={() => handleMembershipChange("business")}
+              className={membershipType === "business" ? "active" : ""}
             >
               기업회원
             </button>
@@ -273,7 +274,7 @@ const SignUpPage: React.FC = () => {
                 required
               />
             </div>
-            {membershipType === 'business' && (
+            {membershipType === "business" && (
               <>
                 <div className="form-group-inline">
                   <div className="inline-input">
