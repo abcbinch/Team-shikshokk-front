@@ -4,17 +4,30 @@ import { useEffect, useState } from "react";
 import "..//styles/shopDetail.scss";
 import ShoppingCart from "../components/ShoppingCart";
 import ShopAddForm from "../components/ShopAddForm";
+import { useDispatch } from "react-redux";
+import { addMenu } from "../store/menupick/actions";
 
 interface Menus {
+  id: number;
   menuName: string;
   category: string;
-  price: number;
+  price: string;
   menudesc: string;
+  originMfile: string;
+  saveMfile: string;
 }
 export default function CustomerShopDetail() {
-  let [isShow, setIsShow] = useState(false);
+  let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
+  
+
+  const dispatch = useDispatch();
+  const handleMenuClick = (mel: Menus) => {
+    dispatch(addMenu({ name: mel.menuName, price: Number(mel.price) }));
+  };
+
+  
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -22,34 +35,38 @@ export default function CustomerShopDetail() {
       const response = await axios.get(
         "http://localhost:8082/api-server/menu-list"
       );
-      console.log("response data", response.data);
 
       let result = response.data.map((el: Menus) => {
-        const { menuName, price, menudesc, category } = el;
-        return { menuName, price, menudesc, category };
+        const {
+          id,
+          menuName,
+          price,
+          menudesc,
+          category,
+          originMfile,
+          saveMfile,
+        } = el;
+        return {
+          id,
+          menuName,
+          price,
+          menudesc,
+          category,
+          originMfile,
+          saveMfile,
+        };
       });
 
       console.log("result", result);
 
-      setMenuArr((prevMenuArr) => [
-        // ...prevMenuArr, // 기존 메뉴 항목들
-        ...result,
-        // {
-        //   mname: menuName,
-        //   mprice: price,
-        //   mdesc: menudesc,
-        //   mcategory: category,
-        // }, // 새로운 메뉴 객체 추가
-      ]);
-      //이제 이 state를 map으로 돌리면 된다.
+      setMenuArr(() => [...result]);
     };
 
     menuList();
   }, []);
 
-  //menuArr 확인용.
+  //카테고리 set. 중복 제거.
   useEffect(() => {
-    console.log("menuArr", menuArr); // menuArr가 업데이트 된 후 이 코드가 실행됩니다.
     let categories = [...new Set(menuArr.map((el) => el.category))];
     setCategoryArr(categories);
 
@@ -84,9 +101,17 @@ export default function CustomerShopDetail() {
               {menuArr.map((mel) => {
                 if (comp === mel.category) {
                   return (
-                    <li>
+                    <li onClick={() => handleMenuClick(mel)}>
                       <div className="icon-box"></div>
-                      <div className="img-box"></div>
+                      <div className="img-box">
+                        <img
+                          src={
+                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                            mel.saveMfile
+                          }
+                          alt="aws s3에 저장된 이미지"
+                        />
+                      </div>
                       <p>{mel.menuName}</p>
                       <p>{mel.price}</p>
                       <div className="content-box">{mel.menudesc}</div>
@@ -99,7 +124,7 @@ export default function CustomerShopDetail() {
         );
       })}
       <ShoppingCart />
-      <ShopAddForm />
+      {isShopShow && <ShopAddForm />}
     </main>
   );
 }

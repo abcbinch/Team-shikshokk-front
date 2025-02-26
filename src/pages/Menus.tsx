@@ -53,9 +53,6 @@ export default function Menus() {
           };
         });
 
-        console.log("result", result);
-        console.log("imgS3route: ", imgS3route);
-
         setMenuArr(() => [...result]);
       };
 
@@ -83,70 +80,75 @@ export default function Menus() {
       </ul>
 
       {/* 메뉴 보드들 */}
-      {categoryArr.map((comp) => {
-        return (
-          <div>
-            <hr className="mb-3" />
+      {categoryArr.length > 0 ? (
+        categoryArr.map((comp) => {
+          return (
+            <div>
+              <hr className="mb-3" />
 
-            <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
-              {comp}
-            </span>
+              <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
+                {comp}
+              </span>
 
-            <ul className="menu-board flex list-none overflow-x-scroll">
-              {menuArr.map((mel) => {
-                if (comp === mel.category) {
-                  return (
-                    <li key={mel.id}>
-                      <div className="icon-box">
-                        <FontAwesomeIcon
-                          icon={faGear}
-                          className="setting-icon m-2"
-                          onClick={() => {
-                            setIsChgShow(true);
-                            setSelectMenu({
-                              id: mel.id,
-                              menuName: mel.menuName,
-                              price: mel.price,
-                              menudesc: mel.menudesc,
-                              category: mel.category,
-                              originMfile: mel.originMfile,
-                              saveMfile: mel.saveMfile,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="img-box">
-                        {/* <img src={"../public/assets/" + mel.originMfile} /> */}
-                        {/* <img
-                          src={
-                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
-                            mel.originMfile
-                          }
-                          alt="aws s3에 저장된 이미지"
-                        /> */}
-                        <img
-                          src={
-                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
-                            mel.saveMfile
-                          }
-                          alt="aws s3에 저장된 이미지"
-                        />
-                      </div>
-                      <p>{mel.menuName}</p>
-                      <p>{mel.price}</p>
-                      <div className="content-box">{mel.menudesc}</div>
-                    </li>
-                  );
-                }
-              })}
+              <ul className="menu-board flex list-none overflow-x-scroll">
+                {menuArr.map((mel) => {
+                  if (comp === mel.category) {
+                    return (
+                      <li key={mel.id}>
+                        <div className="icon-box">
+                          <FontAwesomeIcon
+                            icon={faGear}
+                            className="setting-icon m-2"
+                            onClick={() => {
+                              setIsChgShow(true);
+                              setSelectMenu({
+                                id: mel.id,
+                                menuName: mel.menuName,
+                                price: mel.price,
+                                menudesc: mel.menudesc,
+                                category: mel.category,
+                                originMfile: mel.originMfile,
+                                saveMfile: mel.saveMfile,
+                              });
+                            }}
+                          />
+                        </div>
+                        <div className="img-box">
+                          <img
+                            src={
+                              "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                              mel.saveMfile
+                            }
+                            alt="aws s3에 저장된 이미지"
+                          />
+                        </div>
+                        <p>{mel.menuName}</p>
+                        <p>{mel.price}</p>
+                        <div className="content-box">{mel.menudesc}</div>
+                      </li>
+                    );
+                  }
+                })}
 
-              <li onClick={() => setIsShow(true)}>
-                <FontAwesomeIcon icon={faPlus} className="add-icon" />
-              </li>
-            </ul>
-          </div>
-        );
-      })}
+                <li onClick={() => setIsShow(true)}>
+                  <FontAwesomeIcon icon={faPlus} className="add-icon" />
+                </li>
+              </ul>
+            </div>
+          );
+        })
+      ) : (
+        <div>
+          <hr />
+          <ul className="menu-board flex list-none overflow-x-scroll">
+            <li onClick={() => setIsShow(true)}>
+              <FontAwesomeIcon icon={faPlus} className="add-icon" />
+            </li>
+          </ul>
+          <hr />
+        </div>
+      )}
+      {/* categoryArr 끝 */}
 
       {isShow && (
         <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
