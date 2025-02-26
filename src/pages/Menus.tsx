@@ -10,9 +10,10 @@ interface Menus {
   id: number;
   menuName: string;
   category: string;
-  price: number;
+  price: string;
   menudesc: string;
   originMfile: string;
+  saveMfile: string;
 }
 
 export default function Menus() {
@@ -21,6 +22,7 @@ export default function Menus() {
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
+  let [imgS3route, setImgS3route] = useState<string>("");
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -31,11 +33,28 @@ export default function Menus() {
         );
 
         let result = response.data.map((el: Menus) => {
-          const { id, menuName, price, menudesc, category, originMfile } = el;
-          return { id, menuName, price, menudesc, category, originMfile };
+          const {
+            id,
+            menuName,
+            price,
+            menudesc,
+            category,
+            originMfile,
+            saveMfile,
+          } = el;
+          return {
+            id,
+            menuName,
+            price,
+            menudesc,
+            category,
+            originMfile,
+            saveMfile,
+          };
         });
 
         console.log("result", result);
+        console.log("imgS3route: ", imgS3route);
 
         setMenuArr(() => [...result]);
       };
@@ -91,16 +110,24 @@ export default function Menus() {
                               menudesc: mel.menudesc,
                               category: mel.category,
                               originMfile: mel.originMfile,
+                              saveMfile: mel.saveMfile,
                             });
                           }}
                         />
                       </div>
                       <div className="img-box">
                         {/* <img src={"../public/assets/" + mel.originMfile} /> */}
-                        <img
+                        {/* <img
                           src={
                             "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
                             mel.originMfile
+                          }
+                          alt="aws s3에 저장된 이미지"
+                        /> */}
+                        <img
+                          src={
+                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                            mel.saveMfile
                           }
                           alt="aws s3에 저장된 이미지"
                         />
@@ -121,9 +148,15 @@ export default function Menus() {
         );
       })}
 
-      {isShow && <MenuAddForm setIsShow={setIsShow} />}
+      {isShow && (
+        <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
+      )}
       {isChgShow && selectMenu && (
-        <MenuChgForm selectMenu={selectMenu} setIsChgShow={setIsChgShow} />
+        <MenuChgForm
+          selectMenu={selectMenu}
+          setIsChgShow={setIsChgShow}
+          setImgS3route={setImgS3route}
+        />
       )}
       {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>

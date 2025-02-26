@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/ownerMain.scss";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Header from "../components/Header/Header";
 
 //가게 정보 interface
 interface shopIn {
@@ -22,6 +23,8 @@ export default function OwnerMain() {
       //   console.error("No token found");
       //   return;
       // }
+      const token = localStorage.getItem("authToken");
+      console.log("토큰?", token);
 
       const response = await axios.get(
         "http://localhost:8082/api-server/owner",
@@ -39,7 +42,8 @@ export default function OwnerMain() {
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
-      if (shopsList.legnth > 0) {
+      if (shopsList.length > 0) {
+        //shopsList.legnth  수정
         setShopId(shopsList[0].id);
       }
     } catch (error) {
@@ -67,73 +71,74 @@ export default function OwnerMain() {
   };
 
   return (
-    <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
-      <div className="con w-full flex flex-col items-center">
-        {/* 전체 컨테이너 */}
-        <div className="titleBorder border-b border-gray-300  w-4/5 relative">
-          <div className="selctBox w-56 relative left-10 mb-2 ">
-            <select
-              name="shop"
-              className="text-xl w-48 appearance-none 
-              bg-contain bg-no-repeat bg-right 
-              font-bold  cursor-pointer"
-              onChange={handleSelect}
-            >
-              {shops.map((shop, index) => {
-                return (
-                  <option value={shop.id} key={index}>
-                    {shop.shopName}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
+    <>
+      <Header />
+      <main className="box-content mt-10 max-w-[1200px] my-0 mx-auto">
+        <div className="flex flex-col items-center w-full con">
+          {/* 전체 컨테이너 */}
 
-        <div className="folderBox border shadow rounded w-4/5 my-7 flex justify-center">
-          <div className="folder w-11/12 grid grid-cols-2 box-content">
-            <div
-              onClick={() => handleClick("/")}
-              className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
-            >
-              <p className="relative top-12 left-6 text-white text-lg">
-                주문내역
-              </p>
-            </div>
-
-            <div
-              onClick={() => handleClick("/menu")}
-              className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
-            >
-              <p className="relative top-12 left-6 text-white text-lg">
-                메뉴관리
-              </p>
-            </div>
-
-            <div
-              onClick={() => handleClick("/")}
-              className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
-            >
-              <p className="relative top-12 left-6 text-white text-lg">
-                매출관리
-              </p>
-            </div>
-
-            <div
-              onClick={() => handleClick("/owner-review")}
-              className="bg-contain bg-no-repeat w-[19rem] h-72 
-                  relative my-0 mx-auto "
-            >
-              <p className="relative top-12 left-6 text-white text-lg">
-                리뷰관리
-              </p>
+          <div className="relative w-4/5 border-b border-gray-300 titleBorder">
+            <div className="relative w-56 mb-2 selctBox left-10 ">
+              <select
+                name="shop"
+                className="w-48 text-xl font-bold bg-right bg-no-repeat bg-contain appearance-none cursor-pointer"
+                onChange={handleSelect}
+              >
+                {shops.map((shop, index) => {
+                  return (
+                    <option value={shop.id} key={index}>
+                      {shop.shopName}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
           </div>
+
+          <div className="flex justify-center w-4/5 border rounded shadow folderBox my-7">
+            <div className="box-content grid w-11/12 grid-cols-2 folder">
+              <div
+                onClick={() => handleClick("/testorder")}
+                className="bg-contain bg-no-repeat w-[19rem] h-72 
+                  relative my-0 mx-auto "
+              >
+                <p className="relative text-lg text-white top-12 left-6">
+                  주문내역
+                </p>
+              </div>
+
+              <div
+                onClick={() => handleClick("/menu")}
+                className="bg-contain bg-no-repeat w-[19rem] h-72 
+              relative my-0 mx-auto "
+              >
+                <p className="relative text-lg text-white top-12 left-6">
+                  메뉴관리
+                </p>
+              </div>
+
+              <div
+                onClick={() => handleClick("/income")}
+                className="bg-contain bg-no-repeat w-[19rem] h-72 
+              relative my-0 mx-auto "
+              >
+                <p className="relative text-lg text-white top-12 left-6">
+                  매출관리
+                </p>
+              </div>
+              <div
+                onClick={() => handleClick("/owner-review")}
+                className="bg-contain bg-no-repeat w-[19rem] h-72 
+              relative my-0 mx-auto "
+              >
+                <p className="relative text-lg text-white top-12 left-6">
+                  리뷰관리
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
