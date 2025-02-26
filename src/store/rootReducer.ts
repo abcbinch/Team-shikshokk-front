@@ -1,6 +1,5 @@
 // reducers.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import * as S from "./socket";
 import * as C from "./counter";
 import * as Cl from "./clock";
 import * as L from "./login";
@@ -13,7 +12,6 @@ import reviewReducer from "./modules/reviewSlice";
 import { orderReducer } from "./order";
 
 const rootReducer = combineReducers({
-  socket: S.socketReducer,
   counter: C.reducer,
   reviews: reviewReducer,
   clock: Cl.reducer,
@@ -22,7 +20,6 @@ const rootReducer = combineReducers({
   menu: menuReducer,
 
   order: orderReducer,
-
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

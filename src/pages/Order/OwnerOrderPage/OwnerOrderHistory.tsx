@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
-import * as S from "../../../store/socket";
+import * as O from "../../../store/order";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
 
@@ -24,7 +24,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     [key: string]: boolean;
   }>();
 
-  const [orderInfo, setOrderInfo] = useState<S.Order[]>([]);
+  const [orderInfo, setOrderInfo] = useState<O.Order[]>([]);
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 480);
@@ -49,7 +49,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     socket.on("connect", () => {
       console.log("socket connect~~~");
     });
-    socket.on("order", (data: S.Order[]) => {
+    socket.on("order", (data: O.Order[]) => {
       console.log("주문 받은 값 = ", data);
 
       if (Array.isArray(data)) {
@@ -63,7 +63,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     socket.on(
       "ownerOrderSync",
       (
-        data: S.Order[],
+        data: O.Order[],
         ownerApprovedOrders: any,
         ownerCookingStatus: any,
         ownerCookingCompleted: any
@@ -120,7 +120,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
       socket.off("disconnect");
     };
   }, [socket]);
-  const handleOrderApproval = (order: S.Order) => {
+  const handleOrderApproval = (order: O.Order) => {
     console.log("주문 확인 버튼 눌럿다");
     console.log("주문확인버튼=", order);
     socket.emit("orderApproval", order);
@@ -139,7 +139,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     });
   };
 
-  const handleCookingStart = (order: S.Order) => {
+  const handleCookingStart = (order: O.Order) => {
     console.log("조리 시작 버튼 눌럿다");
     socket.emit("cookingStart", order);
 
@@ -155,7 +155,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     });
   };
 
-  const handleCookingEnd = (order: S.Order) => {
+  const handleCookingEnd = (order: O.Order) => {
     console.log("조리 완료 버튼 눌럿다");
     socket.emit("cookingEnd", order);
 
@@ -212,12 +212,22 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
                           hour12: false,
                         })}
                       </li>
+                      <li>방문날짜</li>
+                      <li>
+                        {`${new Date(order.visitDate).getFullYear()}년 ${
+                          new Date(order.visitDate).getMonth() + 1
+                        }월 ${new Date(order.visitDate).getDate()}일`}
+                      </li>
+                      <li>방문시간</li>
+                      <li>
+                        {order.visitHour}시 {order.visitMinute}분
+                      </li>
                       <li>주문고객Id</li>
                       <li>{order.loginId}</li>
                       <li>주문번호</li>
                       <li>{order.orderNumber.slice(-8)}</li>
                       <li>
-                        {order.orderType} {order.storeCapacity}명
+                        {order.orderType} {order.guests}명
                       </li>
                       <li>연락처</li>
                       <li>{order.contactNumber}</li>
