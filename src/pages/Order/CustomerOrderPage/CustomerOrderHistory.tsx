@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../../../components/Header/Header";
 import { AppState } from "../../../store";
 import io from "socket.io-client";
-import * as S from "../../../store/socket";
+import * as O from "../../../store/order";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import * as C from "../../../store/clock";
@@ -28,7 +28,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
     [key: string]: boolean;
   }>();
 
-  const [orderInfo, setOrderInfo] = useState<S.Order[]>([]);
+  const [orderInfo, setOrderInfo] = useState<O.Order[]>([]);
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 480);
@@ -54,7 +54,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
       console.log("socket = ", socket);
     });
 
-    socket.on("order", (data: S.Order) => {
+    socket.on("order", (data: O.Order) => {
       console.log("주문 넣음 = ", data);
       console.log("받은 값 = ", data);
       if (Array.isArray(data)) {
@@ -64,7 +64,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
       }
     });
 
-    socket.on("orderApproval", (data: S.Order) => {
+    socket.on("orderApproval", (data: O.Order) => {
       console.log("주문 승인 알림 받음 = ", data);
       socket.emit("orderCustomerSync", data);
       if (Array.isArray(data)) {
@@ -76,7 +76,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
     socket.on(
       "customerOrderSync",
       (
-        data: S.Order[],
+        data: O.Order[],
         customerApprovedOrders: any,
         customerCookingStatus: any,
         customerCookingCompleted: any
@@ -100,11 +100,11 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
       }
     );
 
-    socket.on("cookingStart", (data: S.Order) => {
+    socket.on("cookingStart", (data: O.Order) => {
       console.log("요리 시작 알림 받음 = ", data);
     });
 
-    socket.on("cookingEnd", (data: S.Order) => {
+    socket.on("cookingEnd", (data: O.Order) => {
       console.log("조리 완료 알림 받음 = ", data);
     });
 
@@ -142,15 +142,15 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
     };
   }, [socket]);
 
-  const handleOrderApproval = (order: S.Order) => {
+  const handleOrderApproval = (order: O.Order) => {
     console.log("주문 확인 버튼 눌럿다");
   };
 
-  const handleCookingStart = (order: S.Order) => {
+  const handleCookingStart = (order: O.Order) => {
     console.log("조리 시작 버튼 눌럿다");
   };
 
-  const handleCookingEnd = (order: S.Order) => {
+  const handleCookingEnd = (order: O.Order) => {
     console.log("조리 완료 버튼 눌럿다");
   };
 
@@ -161,12 +161,30 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
   }, [dispatch]);
 
   function order2() {
+    /**   loginId: string;
+  orderTime: string;
+  orderNumber: string;
+  orderType: string;
+  guests: number; // 방문 인원
+  visitDate: string; //방문 날짜
+  visitHour: string; // 방문 시간
+  visitMinute: string; //방문 분
+  contactNumber: string;
+  shopName: string;
+  shopLoginId: string;
+  total: string;
+  items: string[];
+
+  */
     const order2 = {
       loginId: loginId,
       orderTime: clock,
       orderNumber: uuidv4(),
       orderType: "매장",
-      storeCapacity: "4",
+      guests: "4",
+      visitDate: Date(),
+      visitHour: "16",
+      visitMinute: "30",
       contactNumber: "010-1234-1234",
       shopName: shopName,
       shopLoginId: shopLoginId,
@@ -235,7 +253,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
                       <li>{order.orderNumber.slice(-8)}</li>
                       <li>가게이름 {order.shopName}</li>
                       <li>
-                        {order.orderType} {order.storeCapacity}명
+                        {order.orderType} {order.guests}명
                       </li>
                       <li>연락처</li>
                       <li>{order.contactNumber}</li>

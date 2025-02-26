@@ -3,12 +3,65 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store/rootReducer";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface CustomerOrderAllhistoryProps {}
+//주문목록 interface (수정함)
+interface data {
+  id: number;
+  cus_order_id: number;
+  shop_order_id: number;
+  user_id: string;
+  menuName: string;
+  price: string;
+  totalPrice: string;
+  visitors: number;
+  isTakeout: boolean;
+  orderTime: string;
+  option?: string;
+  progress?: string;
+  visitTime: string;
+}
 
 const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
+  //-- 추가
+  const id = useSelector((state: RootState) => state.login.id);
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+  console.log("---------id?", id);
+  console.log("---------id?", loginId);
+  const navigate = useNavigate();
+
+  //----------------------- 처음 조회
+  const [orders, setOrders] = useState<data[] | null>(null);
+  async function getData() {
+    try {
+      const response = await axios.get(
+        "http://localhost:8082/api-server/customerOrderAllHistory",
+        {
+          params: {
+            cus_id: loginId,
+          },
+        }
+      );
+      console.log("받은", response.data.orderList);
+      const orderList = response.data.orderList;
+      setOrders(orderList);
+    } catch (error) {
+      console.error("Error fetching shop data:", error);
+    }
+  }
+  console.log("주문들", orders);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  //--
+
   return (
     <>
       <Header />
@@ -24,7 +77,64 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
               </div>
             </div>
             <hr className="border-2 opacity-75 black" />
+
             <div className="receipt-card-container-all">
+              {orders &&
+                orders.map((el, index) => {
+                  return (
+                    <>
+                      <div key={index} className="receipt-card-all">
+                        <ul className="receipt-card-list-all">
+                          <li>
+                            <FontAwesomeIcon
+                              icon={faTimes}
+                              className="custom-icon-all"
+                            />
+                          </li>
+                          <li>주문시간</li>
+                          <li>[2025-02-15]</li>
+                          <li>19:30:55</li>
+                          <li>주문번호</li>
+                          <li>123123</li>
+                          <li>매장 인원 4명</li>
+                          <li>연락처</li>
+                          <li>010-1234-1234</li>
+                          <li>메뉴이름</li>
+                          <li>매우매우맛잇는치킨x1</li>
+                          <li>매우매우맛잇는피자x1</li>
+                          <li>매우매우맛잇는햄버거x1</li>
+                          <br />
+                          <li>합계: 85000원</li>
+                          <li>방문시간</li>
+                          <li>19:40:55</li>
+                        </ul>
+                        <div className="mt-2">
+                          {window.innerWidth >= 480 ? (
+                            <div>
+                              <button
+                                className="btn btn-warning"
+                                onClick={() => {
+                                  navigate("/review", {
+                                    state: { orderId: el.id },
+                                  });
+                                }}
+                              >
+                                리뷰{el.id}
+                              </button>
+                            </div>
+                          ) : (
+                            <div>
+                              <button className="btn btn-warning btn-sm">
+                                리뷰
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+
               <div className="receipt-card-all">
                 <ul className="receipt-card-list-all">
                   <li>
@@ -54,61 +164,11 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                 <div className="mt-2">
                   {window.innerWidth >= 480 ? (
                     <div>
-                      <button className="btn btn-warning">조리 시작</button>
-                      <button className="btn btn-success">조리 완료</button>
+                      <button className="btn btn-warning">리뷰</button>
                     </div>
                   ) : (
                     <div>
-                      <button className="btn btn-warning btn-sm">
-                        조리 시작
-                      </button>
-                      <button className="btn btn-success btn-sm">
-                        조리 완료
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="receipt-card-all">
-                <ul className="receipt-card-list-all">
-                  <li>
-                    <FontAwesomeIcon
-                      icon={faTimes}
-                      className="custom-icon-all"
-                    />
-                  </li>
-                  <li>주문시간</li>
-                  <li>[2025-02-15]</li>
-                  <li>19:30:55</li>
-                  <li>주문번호</li>
-                  <li>123123</li>
-                  <li>매장 인원 4명</li>
-                  <li>연락처</li>
-                  <li>010-1234-1234</li>
-                  <li>메뉴이름</li>
-                  <li>매우매우맛잇는치킨x1</li>
-                  <li>매우매우맛잇는피자x1</li>
-                  <li>매우매우맛잇는햄버거x1</li>
-
-                  <br />
-                  <li>합계: 85000원</li>
-                  <li>방문시간</li>
-                  <li>19:40:55</li>
-                </ul>
-                <div className="mt-2">
-                  {window.innerWidth >= 480 ? (
-                    <div>
-                      <button className="btn btn-warning">조리 시작</button>
-                      <button className="btn btn-success">조리 완료</button>
-                    </div>
-                  ) : (
-                    <div>
-                      <button className="btn btn-warning btn-sm">
-                        조리 시작
-                      </button>
-                      <button className="btn btn-success btn-sm">
-                        조리 완료
-                      </button>
+                      <button className="btn btn-warning btn-sm">리뷰</button>
                     </div>
                   )}
                 </div>

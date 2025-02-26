@@ -26,7 +26,7 @@ const DeleteMember: React.FC = () => {
     if (isAgreed) {
       try {
         const response = await axios.delete(
-          `http://localhost:8082/api-server/delete/${nickname}`, // nickname으로 변경
+          `http://localhost:8082/api-server/delete/${nickname}`,
           { withCredentials: true },
         );
 

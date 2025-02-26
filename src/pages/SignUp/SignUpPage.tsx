@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
-import axios from 'axios'; // axios 임포트
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../styles/SignUpPage.scss';
 
 const SignUpPage: React.FC = () => {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -19,7 +19,7 @@ const SignUpPage: React.FC = () => {
     storeAddress: '',
     representativeName: '',
     businessRegistrationNumber: '',
-    nickname: '', // 닉네임 추가
+    nickname: '',
   });
 
   const [passwordError, setPasswordError] = useState('');
@@ -35,7 +35,6 @@ const SignUpPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // 비밀번호 유효성 검사
     if (name === 'password') {
       if (value.length < 8 || value.length > 16) {
         setPasswordError('비밀번호는 8-16자 이내여야 합니다.');
@@ -52,7 +51,6 @@ const SignUpPage: React.FC = () => {
       }
     }
 
-    // 이메일 유효성 검사
     if (name === 'email') {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
@@ -79,7 +77,7 @@ const SignUpPage: React.FC = () => {
       storeAddress: '',
       representativeName: '',
       businessRegistrationNumber: '',
-      nickname: '', // 닉네임 초기화
+      nickname: '',
     });
   };
 
@@ -88,7 +86,6 @@ const SignUpPage: React.FC = () => {
       const response = await axios.get(
         `http://localhost:8082/api-server/check-email?email=${formData.email}`,
       );
-
       setEmailExists(response.data.exists);
     } catch (error) {
       console.error('이메일 중복 확인 오류:', error);
@@ -98,39 +95,46 @@ const SignUpPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordError || emailError || emailExists) {
-      alert('입력한 정보가 유효하지 않습니다.');
+
+    // 필수 입력값 확인
+    if (
+      !formData.nickname ||
+      !formData.username ||
+      !formData.password ||
+      !formData.email ||
+      !formData.phoneNumber
+    ) {
+      alert('필수 정보를 입력하세요.');
       return;
     }
 
-    // 백엔드에 회원가입 요청
     try {
       const response = await axios.post(
         'http://localhost:8082/api-server/signup',
         {
-          user_id: formData.username,
-          password: formData.password,
-          name: formData.name,
-          gender: formData.gender,
-          email: formData.email,
-          phoneNumber: formData.phoneNumber,
-          address: formData.address,
-          companyName: formData.companyName,
-          businessType: formData.businessType,
-          storeAddress: formData.storeAddress,
-          representativeName: formData.representativeName,
-          businessRegistrationNumber: formData.businessRegistrationNumber,
-          nickname: formData.nickname,
-          membershipType,
+          user_id: formData.username, // 사용자 ID
+          password: formData.password, // 비밀번호
+          name: formData.name, // 이름
+          gender: formData.gender, // 성별
+          email: formData.email, // 이메일
+          phoneNumber: formData.phoneNumber, // 전화번호
+          address: formData.address, // 주소 (서버에서 요구하는 경우 추가)
+          companyName: formData.companyName, // 회사명 (사업자 회원인 경우)
+          businessType: formData.businessType, // 업종 (사업자 회원인 경우)
+          storeAddress: formData.storeAddress, // 가게 주소 (사업자 회원인 경우)
+          representativeName: formData.representativeName, // 대표자명 (사업자 회원인 경우)
+          businessRegistrationNumber: formData.businessRegistrationNumber, // 사업자 등록증 번호 (사업자 회원인 경우)
+          nickname: formData.nickname, // 닉네임
+          membershipType, // 회원 유형 (individual 또는 business)
         },
       );
 
       console.log('회원가입 성공:', response.data);
       alert('회원가입이 완료되었습니다.');
       navigate('/login');
-    } catch (error) {
-      console.error('회원가입 오류:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
+    } catch {
+      // 오류 발생 시 기본 메시지만 표시
+      alert('회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   };
 
@@ -247,7 +251,6 @@ const SignUpPage: React.FC = () => {
                 <span className="error">이미 사용 중인 이메일입니다.</span>
               )}
             </div>
-
             <div className="form-group">
               <label>휴대폰 번호</label>
               <input

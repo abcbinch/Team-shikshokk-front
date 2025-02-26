@@ -3,10 +3,10 @@ import "../styles/shoppingCart.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { removeMenu } from "../store/menupick/actions";
+
 import { RootState } from "../store/rootReducer";
 import Header from "./Header/Header";
-
+import { v4 as uuidv4 } from "uuid";
 // interface Pickups {
 //   setItems: React.Dispatch<
 //     React.SetStateAction<{ name: string; price: number }[]>
@@ -29,20 +29,29 @@ export default function ShoppingCart() {
   // let [total, setTotal] = useState<number>(0); //이건 총합 계산
 
   const dispatch = useDispatch();
-  const menuWithPrice = useSelector(
-    (state: RootState) => state.menu.menuWithPrice
-  );
-  console.log("여기 menuWithPrice", menuWithPrice);
-  const handleRemoveMenu = (name: string) => {
-    dispatch(removeMenu(name));
-  };
-  const total = Array.isArray(menuWithPrice)
-    ? menuWithPrice.reduce(
-        (acc: number, el: MenuWithPrice) => acc + Number(el.price),
-        0
-      )
-    : 0;
+  const menuWithPrice = useSelector((state: RootState) => state.menu.items);
 
+  const handleRemoveMenu = (name: string) => {
+    console.log("menuWithPrice", menuWithPrice);
+    dispatch({ type: "order/delOrder", payload: name });
+  };
+
+  const menuData = useSelector((state: RootState) => state.menu.items);
+  const userId = useSelector((state: RootState) => state.login.loginId);
+  const lastOrder = () => {
+    const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
+    const orderMenu = {
+      ...lastMenu,
+      loginId: userId,
+      orderTime: new Date(),
+      orderNumber: uuidv4(),
+      // shopName : ,
+      // shopLoginId :,
+      // total : ,
+      // items : [],
+      // price : [],
+    };
+  };
   // 화면 크기에 따라 isMobile 상태 업데이트
   useEffect(() => {
     const checkIfMobile = () => {
@@ -120,22 +129,27 @@ export default function ShoppingCart() {
         <ul>
           {menuWithPrice &&
             (menuWithPrice.length > 0
-              ? menuWithPrice.map((el: { name: string; price: number }) => {
+              ? menuWithPrice.map((el) => {
                   return (
                     <li>
-                      {el.name} {el.price}원
-                      <FontAwesomeIcon
-                        icon={faXmark}
-                        className="delete-btn"
-                        onClick={() => handleRemoveMenu(el.name)}
-                      />
+                      {el.items.map((item, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            handleRemoveMenu(item.split(",")[0]);
+                          }}
+                        >
+                          {item.split(",")}
+                        </li>
+                      ))}
+                      <FontAwesomeIcon icon={faXmark} className="delete-btn" />
                     </li>
                   );
                 })
               : "주문한 메뉴가 없습니다.")}
         </ul>
         <hr />
-        <button type="submit">결제하기({total}원)</button>
+        <button type="submit">결제하기(원)</button>
       </div>
     </div>
   );
