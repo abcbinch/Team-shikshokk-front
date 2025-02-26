@@ -19,3 +19,8 @@ export const setType = (payload: string): T.SetTypeAction => ({
   type: "@auth/setType",
   payload,
 });
+
+export const setLogout = (): T.SetLogoutAction => ({
+  type: "@auth/setLogout",
+  payload: null,
+});
