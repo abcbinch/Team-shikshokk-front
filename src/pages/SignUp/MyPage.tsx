@@ -1,26 +1,24 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/rootReducer'; // 경로 수정
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/rootReducer"; // 경로 수정
 import {
   setUserId,
   setLoginId,
   setNickname,
   setType,
-  setStoreId,
-  setUserData, // 액션 임포트 추가
-} from '../../store/login/actions'; // 경로 수정
-import Header from '../../components/Header/Header'; // 경로 수정
-import axios from 'axios';
-import '../../styles/MyPage.scss'; // 경로 수정
-import profileImage from '../../assets/dprofile.jpg'; // import 형식으로 수정
+} from "../../store/login/actions"; // 경로 수정
+import Header from "../../components/Header/Header"; // 경로 수정
+import axios from "axios";
+import "../../styles/MyPage.scss"; // 경로 수정
+import profileImage from "../../assets/dprofile.jpg"; // import 형식으로 수정
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch(); // dispatch 훅 사용
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const nicknameFromStore = useSelector(
-    (state: RootState) => state.login.nickname,
+    (state: RootState) => state.login.nickname
   );
   const type = useSelector((state: RootState) => state.login.type);
 
@@ -29,28 +27,17 @@ const MyPage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8082/api-server/me',
+          "http://localhost:8082/api-server/me",
           {
             withCredentials: true,
-          },
+          }
         );
-        console.log('응답 데이터:', response.data);
+        console.log("응답 데이터:", response.data);
         const { id, loginId, nickname, membershipType, storeId } =
           response.data.user;
-
-        // Redux에 사용자 정보 저장
-        dispatch(
-          setUserData({
-            id,
-            loginId,
-            nickname: nickname || nicknameFromStore || '', // 응답에서 닉네임 설정
-            type: membershipType,
-            storeId: storeId || '', // 가게 ID 저장
-          }),
-        );
       } catch (error) {
-        console.error('사용자 정보 로드 오류:', error);
-        alert('사용자 정보를 로드하는 데 오류가 발생했습니다.');
+        console.error("사용자 정보 로드 오류:", error);
+        alert("사용자 정보를 로드하는 데 오류가 발생했습니다.");
       }
     };
 
@@ -58,14 +45,14 @@ const MyPage: React.FC = () => {
   }, [nicknameFromStore, dispatch]);
 
   const handleEditProfile = () => {
-    navigate('/edit-profile');
+    navigate("/edit-profile");
   };
 
   const handleDeleteMember = () => {
     if (nicknameFromStore) {
       navigate(`/delete/${nicknameFromStore}`);
     } else {
-      alert('사용자 닉네임을 찾을 수 없습니다.');
+      alert("사용자 닉네임을 찾을 수 없습니다.");
     }
   };
 
@@ -78,14 +65,14 @@ const MyPage: React.FC = () => {
           alt="Profile"
           className="profile-pic"
         />
-        <h2 className="username">{nicknameFromStore || '사용자 이름'}</h2>
+        <h2 className="username">{nicknameFromStore || "사용자 이름"}</h2>
         <p className="bio">로그인 ID: {loginId}</p> {/* 로그인 ID 표시 */}
         <p className="bio">회원 유형: {type}</p> {/* 회원 유형 표시 */}
         <p className="bio">
-          가게 ID:{' '}
+          가게 ID:{" "}
           {useSelector((state: RootState) => state.login.storeId) ||
-            '가게 ID 없음'}
-        </p>{' '}
+            "가게 ID 없음"}
+        </p>{" "}
         {/* 가게 ID 표시 */}
       </div>
       <div className="menu">
