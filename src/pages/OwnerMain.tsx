@@ -95,7 +95,7 @@ export default function OwnerMain() {
           <div className="flex justify-center w-4/5 border rounded shadow folderBox my-7">
             <div className="box-content grid w-11/12 grid-cols-2 folder">
               <div
-                onClick={() => handleClick("/testorder")}
+                onClick={() => handleClick("/ownerOrderAllHistory")}
                 className="bg-contain bg-no-repeat w-[19rem] h-72 
                   relative my-0 mx-auto "
               >
