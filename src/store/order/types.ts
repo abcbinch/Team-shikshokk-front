@@ -16,7 +16,6 @@ export interface Order {
   //     "매우매우맛있는양념x1",
   //     "매우매우맛있는순살x1",
   //   ],
-
   loginId: string;
   orderTime: string;
   orderNumber: string;
