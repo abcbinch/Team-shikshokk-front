@@ -24,3 +24,8 @@ export const setLogout = (): T.SetLogoutAction => ({
   type: "@auth/setLogout",
   payload: null,
 });
+
+export const setPhoneNumber = (payload: string): T.SetPhoneNumberAction => ({
+  type: "@auth/setPhoneNumber",
+  payload,
+});
