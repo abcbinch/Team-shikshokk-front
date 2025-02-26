@@ -1,12 +1,11 @@
-export const ADD_MENU = "ADD_MENU";
-export const REMOVE_MENU = "REMOVE_MENU";
+import type * as T from "./types";
 
-export const addMenu = (menu: { name: string; price: number }) => ({
-  type: ADD_MENU,
-  payload: menu,
+export const addMenu = (payload: T.MenuState): T.AddMenuAction => ({
+  type: "menu/addMenu",
+  payload,
 });
 
-export const removeMenu = (name: string) => ({
-  type: REMOVE_MENU,
-  payload: { name },
+export const delMenu = (payload: T.MenuState): T.DelMenuAction => ({
+  type: "menu/delMenu",
+  payload,
 });

@@ -289,8 +289,8 @@ export default function Income() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center w-full h-full gap-10 mt-10">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-full md:w-[70%] h-full">
+        <div className="flex flex-col lg:flex-row justify-center w-full h-full gap-10 mt-10">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
             <select
               onChange={(e) => {
                 setSelectedOption(e.target.value);
@@ -314,7 +314,7 @@ export default function Income() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-lg w-full md:w-[30%]">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[30%]">
             <h4 className="font-bold">메뉴별 매출 비율</h4>
             <ResponsiveContainer
               width="100%"
@@ -327,7 +327,7 @@ export default function Income() {
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  outerRadius={window.innerWidth < 900 ? 60 : 100}
+                  outerRadius={100}
                   label={({ name, percent, x, y }) => (
                     <text
                       x={x}
