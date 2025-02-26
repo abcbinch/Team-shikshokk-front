@@ -9,23 +9,24 @@ import { RootState } from "../store/rootReducer";
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
+  crossId: number;
 }
 
 export default function MenuAddForm({
   setIsShow,
   setImgS3route,
+  crossId,
 }: MenuAddFormProps) {
   let [mname, setMname] = useState("");
   let [mcategory, setMcategory] = useState("");
   let [mprice, setMprice] = useState("0");
   let [mdesc, setMcontent] = useState("");
   let [mfile, setMfile] = useState<File | null>(null);
-  //파일 첨부 기능 만들 때 사용
-  let [fileInput, setFileInput] = useState("클릭해서 파일을 첨부해주세요.");
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const customRef = useRef<HTMLDivElement | null>(null);
   const id = useSelector((state: RootState) => state.login.id);
+  console.log("menuAdd 내의 crossId", crossId);
 
   //메뉴 추가 함수
   const menuAdd = async (e: React.FormEvent) => {
@@ -45,6 +46,9 @@ export default function MenuAddForm({
         }
         if (id) {
           formData.append("owner_id", String(id));
+        }
+        if (crossId) {
+          formData.append("shopId", String(crossId));
         }
 
         const response = await axios.post(
