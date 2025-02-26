@@ -13,7 +13,7 @@ interface CustomerOrderHistoryProps {}
 
 const socket = io("http://localhost:8082");
 const loginId = "customer01";
-const shopLoginId = "owner01";
+const shopLoginId = "owner1";
 const shopName = "햄버거집";
 const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
   const clock = new Date(

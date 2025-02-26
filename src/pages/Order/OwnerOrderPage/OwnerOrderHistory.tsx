@@ -11,7 +11,6 @@ import { RootState } from "../../../store/rootReducer";
 
 interface OwnerOrderHistoryProps {}
 const socket = io("http://localhost:8082");
-// const loginId = "owner01";
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const loginId = useSelector((state: RootState) => state.login.loginId);
   console.log("리덕스 스토어 loginId = ", loginId);
