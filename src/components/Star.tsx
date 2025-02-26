@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 
-export default function Star() {
-  const [starClick, setStarClick] = useState<number | null>(0);
-  // const [starClick, setStarClick] = useState<number | null>(0);
+//pors interface 별점 저장할
+interface StarProps {
+  setStarClick: (value: number) => void;
+}
+
+export default function Star({ setStarClick }: StarProps) {
+  const [starClick, setInStarClick] = useState<number | null>(0);
   const [preClicked, setPreClicked] = useState<number | null>(starClick);
-  // const [preClicked, setPreClicked] = useState<number | null>(starClick);
 
   useEffect(() => {
     setPreClicked(starClick);
+    setStarClick(starClick || 0); // 부모에게 전달
   }, [starClick]);
 
   useEffect(() => {
@@ -19,11 +23,11 @@ export default function Star() {
     e.preventDefault();
     const nowClicked = parseInt(e.currentTarget.id); // 현재 클릭한 id
     console.log("Clicked ID:", nowClicked);
-    setStarClick(nowClicked);
+    setInStarClick(nowClicked);
     if (nowClicked !== null) {
       if (nowClicked === preClicked) {
         // 현재 클릭한 별이 이전에 클릭한 별과 같다면 리셋
-        setStarClick(0);
+        setInStarClick(0);
         setPreClicked(0);
         for (let i = 1; i <= 5; i++) {
           const star_id = document.getElementById(
