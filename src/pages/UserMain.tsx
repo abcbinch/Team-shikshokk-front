@@ -32,10 +32,13 @@ interface FoodItem {
 
 interface StoreItem {
   id: number;
-  owner_id?: number;
+  owner_id: number;
   shopName: string;
+  businessNumber: string;
   shopAddress: string;
+  shopPhone: string;
   shopType: string;
+  shopOwner: string;
 }
 
 const UserMain: React.FC = () => {
@@ -45,73 +48,27 @@ const UserMain: React.FC = () => {
   const [selectedArea, setSelectedArea] = useState("서울시 종로구");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
-  const [storeItems, setStoreItems] = useState<StoreItem[]>([]);
 
-  // 하드코딩된 슬라이드 이미지
-  const images = [burger, mexican, pizza, pizza2, vietnam];
-
-  // 임시 데이터
-  const defaultStoreItems: StoreItem[] = [
-    {
-      id: 1,
-      shopName: "임시 가게 1",
-      shopAddress: "서울시 강남구",
-      shopType: "한식",
-    },
-    {
-      id: 2,
-      shopName: "임시 가게 2",
-      shopAddress: "서울시 마포구",
-      shopType: "중식",
-    },
-    {
-      id: 3,
-      shopName: "임시 가게 3",
-      shopAddress: "서울시 종로구",
-      shopType: "양식",
-    },
-  ];
-
-  // API에서 데이터 가져오기
+  const [store, setStore] = useState<StoreItem[]>([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchShopList = async () => {
       try {
-        const menuResponse = await axios.get(
-          "http://localhost:8080/api-server/menu-list"
-        );
-        setFoodItems(menuResponse.data);
-
-        const shopResponse = await axios.get(
-          "http://localhost:8080/api-server/owner",
-          {
-            params: { userId: 1 },
-          }
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_SERVER}/getShop`
         );
 
-        const shops = shopResponse.data.shops.length
-          ? shopResponse.data.shops
-          : defaultStoreItems;
-
-        setStoreItems(shops);
-
-        // 사용자 정보 가져오기
-        const userResponse = await axios.get(
-          "http://localhost:8082/api-server/me",
-          {
-            withCredentials: true,
-          }
-        );
-        const { id, loginId, nickname, membershipType, storeId } =
-          userResponse.data.user;
-      } catch (error) {
-        console.error("데이터 가져오기 오류:", error);
-        // 오류 발생 시 기본 임시 데이터 사용
-        setStoreItems(defaultStoreItems);
+        setStore(res.data.shop);
+        console.log(res.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    fetchShopList();
+  }, []);
+
+  // 하드코딩된 슬라이드 이미지
+  const images = [burger, mexican, pizza, pizza2, vietnam];
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -198,7 +155,7 @@ const UserMain: React.FC = () => {
         <div className="store-section">
           <h2 className="store-title">STORE</h2>
           <div className="store-grid">
-            {storeItems.map((store) => (
+            {store.map((store) => (
               <div
                 key={store.id}
                 className="store-item"
