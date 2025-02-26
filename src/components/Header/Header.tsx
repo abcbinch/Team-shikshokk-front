@@ -45,7 +45,7 @@ const Header: React.FC = () => {
                 <Link to="/login" className="menu-item">
                   <div>로그인</div>
                 </Link>
-                <Link to="/register" className="menu-item">
+                <Link to="/signup" className="menu-item">
                   <div>회원가입</div>
                 </Link>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
