@@ -249,6 +249,16 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
                       </li>
                       <li>주문고객Id</li>
                       <li>{order.loginId}</li>
+                      <li>방문날짜</li>
+                      <li>
+                        {`${new Date(order.visitDate).getFullYear()}년 ${
+                          new Date(order.visitDate).getMonth() + 1
+                        }월 ${new Date(order.visitDate).getDate()}일`}
+                      </li>
+                      <li>방문시간</li>
+                      <li>
+                        {order.visitHour}시 {order.visitMinute}분
+                      </li>
 
                       <li>주문번호</li>
                       <li>{order.orderNumber.slice(-8)}</li>
