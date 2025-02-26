@@ -1,126 +1,116 @@
-import React, { useState } from "react";
-import "../../styles/SignUpPage.scss";
-import Header from "../../components/Header/Header";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 임포트
+import axios from 'axios'; // axios 임포트
+import '../../styles/SignUpPage.scss';
 
 const SignUpPage: React.FC = () => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    name: "",
-    birthdate: "",
-    gender: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-    companyName: "",
-    businessType: "",
-    storeAddress: "",
-    representativeName: "",
-    businessRegistrationNumber: "",
+    username: '',
+    password: '',
+    name: '',
+    birthdate: '',
+    gender: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    companyName: '',
+    businessType: '',
+    storeAddress: '',
+    representativeName: '',
+    businessRegistrationNumber: '',
+    nickname: '', // 닉네임 추가
   });
 
-  const [passwordError, setPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [emailExists, setEmailExists] = useState(false);
   const [membershipType, setMembershipType] = useState<
-    "individual" | "business"
-  >("individual");
+    'individual' | 'business'
+  >('individual');
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     // 비밀번호 유효성 검사
-    if (name === "password") {
+    if (name === 'password') {
       if (value.length < 8 || value.length > 16) {
-        setPasswordError("비밀번호는 8-16자 이내여야 합니다.");
+        setPasswordError('비밀번호는 8-16자 이내여야 합니다.');
       } else if (
         !/[a-z]/.test(value) ||
         !/[0-9]/.test(value) ||
         !/[!@#$%^&*]/.test(value)
       ) {
         setPasswordError(
-          "비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다."
+          '비밀번호는 소문자, 숫자, 특수문자를 포함해야 합니다.',
         );
       } else {
-        setPasswordError("");
+        setPasswordError('');
       }
     }
 
     // 이메일 유효성 검사
-    if (name === "email") {
+    if (name === 'email') {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(value)) {
-        setEmailError("유효하지 않은 이메일 형식입니다.");
+        setEmailError('유효하지 않은 이메일 형식입니다.');
       } else {
-        setEmailError("");
+        setEmailError('');
       }
     }
   };
 
-  const handleMembershipChange = (type: "individual" | "business") => {
+  const handleMembershipChange = (type: 'individual' | 'business') => {
     setMembershipType(type);
     setFormData({
-      username: "",
-      password: "",
-      name: "",
-      birthdate: "",
-      gender: "",
-      email: "",
-      phoneNumber: "",
-      address: "",
-      companyName: "",
-      businessType: "",
-      storeAddress: "",
-      representativeName: "",
-      businessRegistrationNumber: "",
+      username: '',
+      password: '',
+      name: '',
+      birthdate: '',
+      gender: '',
+      email: '',
+      phoneNumber: '',
+      address: '',
+      companyName: '',
+      businessType: '',
+      storeAddress: '',
+      representativeName: '',
+      businessRegistrationNumber: '',
+      nickname: '', // 닉네임 초기화
     });
   };
 
   const checkEmailExists = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `http://localhost:8082/api-server/check-email?email=${formData.email}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
       );
 
-      if (!response.ok) {
-        throw new Error("이메일 중복 확인에 실패했습니다.");
-      }
-      const data = await response.json();
-      setEmailExists(data.exists);
+      setEmailExists(response.data.exists);
     } catch (error) {
-      console.error("이메일 중복 확인 오류:", error);
-      alert("이메일 중복 확인 중 오류가 발생했습니다.");
+      console.error('이메일 중복 확인 오류:', error);
+      alert('이메일 중복 확인 중 오류가 발생했습니다.');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordError || emailError || emailExists) {
-      alert("입력한 정보가 유효하지 않습니다.");
+      alert('입력한 정보가 유효하지 않습니다.');
       return;
     }
 
     // 백엔드에 회원가입 요청
     try {
-      const response = await fetch("http://localhost:8082/api-server/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
+      const response = await axios.post(
+        'http://localhost:8082/api-server/signup',
+        {
+          user_id: formData.username,
           password: formData.password,
           name: formData.name,
-          birthdate: formData.birthdate,
           gender: formData.gender,
           email: formData.email,
           phoneNumber: formData.phoneNumber,
@@ -130,39 +120,35 @@ const SignUpPage: React.FC = () => {
           storeAddress: formData.storeAddress,
           representativeName: formData.representativeName,
           businessRegistrationNumber: formData.businessRegistrationNumber,
+          nickname: formData.nickname,
           membershipType,
-        }),
-      });
+        },
+      );
 
-      if (!response.ok) {
-        throw new Error("회원가입 실패");
-      }
-
-      const data = await response.json();
-      console.log("회원가입 성공:", data);
-      alert("회원가입이 완료되었습니다.");
+      console.log('회원가입 성공:', response.data);
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
     } catch (error) {
-      console.error("회원가입 오류:", error);
-      alert("회원가입 중 오류가 발생했습니다.");
+      console.error('회원가입 오류:', error);
+      alert('회원가입 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <>
-      <Header /> {/* 헤더 추가 */}
       <div className="signup-page">
         <h1>회원가입</h1>
         <div className="signup-container">
           <div className="membership-type">
             <button
-              onClick={() => handleMembershipChange("individual")}
-              className={membershipType === "individual" ? "active" : ""}
+              onClick={() => handleMembershipChange('individual')}
+              className={membershipType === 'individual' ? 'active' : ''}
             >
               개인회원
             </button>
             <button
-              onClick={() => handleMembershipChange("business")}
-              className={membershipType === "business" ? "active" : ""}
+              onClick={() => handleMembershipChange('business')}
+              className={membershipType === 'business' ? 'active' : ''}
             >
               기업회원
             </button>
@@ -176,6 +162,17 @@ const SignUpPage: React.FC = () => {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="아이디를 입력해주세요"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>닉네임</label>
+              <input
+                type="text"
+                name="nickname"
+                value={formData.nickname}
+                onChange={handleChange}
+                placeholder="닉네임을 입력해주세요"
                 required
               />
             </div>
@@ -273,8 +270,7 @@ const SignUpPage: React.FC = () => {
                 required
               />
             </div>
-
-            {membershipType === "business" && (
+            {membershipType === 'business' && (
               <>
                 <div className="form-group-inline">
                   <div className="inline-input">

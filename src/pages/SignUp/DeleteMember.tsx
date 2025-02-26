@@ -1,25 +1,43 @@
-import React, { useState } from "react";
-import "../../styles/DeleteMember.scss";
-import Header from "../../components/Header/Header";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../../styles/DeleteMember.scss';
+import Header from '../../components/Header/Header';
+import axios from 'axios';
 
-interface DeleteMemberProps {
-  nickname?: string; // nickname을 선택적으로 변경
-}
-
-const DeleteMember: React.FC<DeleteMemberProps> = ({
-  nickname = "사용자 이름",
-}) => {
+const DeleteMember: React.FC = () => {
+  const { nickname } = useParams<{ nickname: string }>(); // nickname 받기
   const [isAgreed, setIsAgreed] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('닉네임:', nickname);
+  }, [nickname]);
 
   const handleCheckboxChange = () => {
     setIsAgreed(!isAgreed);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (!nickname) {
+      alert('탈퇴할 수 있는 사용자 정보가 없습니다.');
+      return; // 리다이렉트 대신 경고 메시지 출력
+    }
+
     if (isAgreed) {
-      alert("회원 탈퇴가 진행되었습니다.");
+      try {
+        const response = await axios.delete(
+          `http://localhost:8082/api-server/delete/${nickname}`, // nickname으로 변경
+          { withCredentials: true },
+        );
+
+        alert(response.data.message);
+        navigate('/login'); // 회원 탈퇴 후 로그인 페이지로 리다이렉트
+      } catch (error) {
+        console.error('회원 탈퇴 오류:', error);
+        alert('회원 탈퇴 중 오류가 발생했습니다.');
+      }
     } else {
-      alert("이용 약관에 동의해주세요.");
+      alert('이용 약관에 동의해주세요.');
     }
   };
 
@@ -27,8 +45,6 @@ const DeleteMember: React.FC<DeleteMemberProps> = ({
     <div className="delete-member-container">
       <Header />
       <div className="content-wrapper">
-        {" "}
-        {/* 새로 추가된 div 그룹 */}
         <div className="content-container">
           <h1 className="title">
             회원 탈퇴를 신청하기 전, 다음 내용을 꼭 확인해 주세요.

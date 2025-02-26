@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import "../../styles/header.scss"; // Sass 파일 불러오기
-import { Link } from "react-router-dom";
-import { RootState } from "../../store/rootReducer";
-import { useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import '../../styles/header.scss'; // Sass 파일 불러오기
+import { Link, useNavigate } from 'react-router-dom'; // useNavigate 추가
+import { RootState } from '../../store/rootReducer';
+import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { setLogout } from '../../store/login'; // 액션 임포트 추가
+import axios from 'axios'; // axios 추가
 
 const Header: React.FC = () => {
   const id = useSelector((state: RootState) => state.login.id);
@@ -14,16 +16,35 @@ const Header: React.FC = () => {
   const type = useSelector((state: RootState) => state.login.type);
 
   const [sideMenuVisible, setSideMenuVisible] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 가져오기
 
   useEffect(() => {
-    console.log("id 나와라(기본키 나중에 db쿼리에서 사용) =", id);
-    console.log("loginId 나와라 =", loginId);
-    console.log("nickname 나와라 =", nickname);
-    console.log("type 나와라 = ", type);
+    console.log('id 나와라(기본키 나중에 db쿼리에서 사용) =', id);
+    console.log('loginId 나와라 =', loginId);
+    console.log('nickname 나와라 =', nickname);
+    console.log('type 나와라 = ', type);
   }, [id, loginId, nickname, type]);
 
   const toggleSideMenu = () => {
     setSideMenuVisible(!sideMenuVisible);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete('http://localhost:8082/api-server/logout', {
+        withCredentials: true, // 세션을 사용하므로 필요
+      });
+      alert('로그아웃 성공!'); // 예시로 알림 추가
+
+      // 리덕스 상태 초기화
+      dispatch(setLogout()); // setLogout 액션 호출
+
+      navigate('/login'); // 로그인 페이지로 리다이렉트
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+      alert('로그아웃 중 오류가 발생했습니다.'); // 오류 메시지 표시
+    }
   };
 
   return (
@@ -45,7 +66,7 @@ const Header: React.FC = () => {
                 <Link to="/login" className="menu-item">
                   <div>로그인</div>
                 </Link>
-                <Link to="/register" className="menu-item">
+                <Link to="/signup" className="menu-item">
                   <div>회원가입</div>
                 </Link>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
@@ -55,7 +76,7 @@ const Header: React.FC = () => {
             )}
 
             {/* 점주회원 헤더  */}
-            {type === "business" && (
+            {type === 'business' && (
               <>
                 <div className="menu-item">{nickname}님 환영합니다</div>
                 <Link to="/mypage" className="menu-item">
@@ -64,17 +85,17 @@ const Header: React.FC = () => {
                 <Link to="/ownerOrderHistory" className="menu-item">
                   <div>주문내역</div>
                 </Link>
-                <Link to="/logout" className="menu-item">
+                <div className="menu-item" onClick={handleLogout}>
                   <div>로그아웃</div>
-                </Link>
+                </div>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
                   <FontAwesomeIcon icon={faBars} size="4x" />
                 </div>
               </>
             )}
 
-            {/* 일반회원원 헤더 */}
-            {type === "individual" && (
+            {/* 일반회원 헤더 */}
+            {type === 'individual' && (
               <>
                 <div className="menu-item">{nickname}님 환영합니다</div>
                 <Link to="/mypage" className="menu-item">
@@ -83,9 +104,9 @@ const Header: React.FC = () => {
                 <Link to="/customerOrderHistory" className="menu-item">
                   <div>주문내역</div>
                 </Link>
-                <Link to="/logout" className="menu-item">
+                <div className="menu-item" onClick={handleLogout}>
                   <div>로그아웃</div>
-                </Link>
+                </div>
                 <div className="menu-sidebar" onClick={toggleSideMenu}>
                   <FontAwesomeIcon icon={faBars} size="4x" />
                 </div>
@@ -94,7 +115,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* 점주회원 헤더 */}
-          {sideMenuVisible && type === "business" && (
+          {sideMenuVisible && type === 'business' && (
             <div className="side-menu-container">
               <Link to="/mypage">
                 <div className="side-menu">마이페이지</div>
@@ -102,14 +123,14 @@ const Header: React.FC = () => {
               <Link to="/ownerOrderHistory">
                 <div className="side-menu">주문내역</div>
               </Link>
-              <Link to="/logout">
-                <div className="side-menu">로그아웃</div>
-              </Link>
+              <div className="side-menu" onClick={handleLogout}>
+                로그아웃
+              </div>
             </div>
           )}
 
           {/* 일반회원 헤더 */}
-          {sideMenuVisible && type === "individual" && (
+          {sideMenuVisible && type === 'individual' && (
             <div className="side-menu-container">
               <Link to="/mypage">
                 <div className="side-menu">마이페이지</div>
@@ -117,9 +138,9 @@ const Header: React.FC = () => {
               <Link to="/customerOrderHistory">
                 <div className="side-menu">주문내역</div>
               </Link>
-              <Link to="/logout">
-                <div className="side-menu">로그아웃</div>
-              </Link>
+              <div className="side-menu" onClick={handleLogout}>
+                로그아웃
+              </div>
             </div>
           )}
 

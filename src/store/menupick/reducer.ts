@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Items {
   name: string;
@@ -11,11 +11,12 @@ export interface MenuState {
 }
 
 const initialState: MenuState = {
+  menuWithPrice: [],
   items: [],
 };
 
 const menuSlice = createSlice({
-  name: "menu",
+  name: 'menu',
   initialState: initialState,
   reducers: {
     addMenu: (state, action: PayloadAction<Items>) => {
@@ -23,7 +24,7 @@ const menuSlice = createSlice({
     },
     removeMenu: (state, action: PayloadAction<{ name: string }>) => {
       state.items = state.items.filter(
-        (item) => item.name !== action.payload.name
+        item => item.name !== action.payload.name,
       );
     },
   },
