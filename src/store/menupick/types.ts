@@ -1,15 +1,15 @@
 import { Action } from "redux";
 
 export interface firstOrder {
-  loginId: string;
-  orderTime: string;
+  orderType: string;
+  loginId: string | null;
+  orderTime: Date;
   orderNumber: string;
-  contactNumber: string;
-  shopName: string;
-  shopLoginId: string;
-  price: string[];
-  total: string;
+  contactNumber: string | null;
+  shopName: any;
+  shopLoginId: any;
   items: string[];
+  price: string[];
 }
 export interface MenuState {
   items: firstOrder[];

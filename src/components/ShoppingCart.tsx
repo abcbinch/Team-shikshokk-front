@@ -34,11 +34,13 @@ export default function ShoppingCart({ total }: Props) {
   // let [total, setTotal] = useState<number>(0); //이건 총합 계산
 
   const dispatch = useDispatch();
-  const menuWithPrice = useSelector((state: RootState) => state.menu.items);
+  const menuData = useSelector((state: RootState) => state.menu.items);
+  const menuWithPrice =
+    menuData.length > 0 ? menuData[menuData.length - 1] : null;
 
   const handleRemoveMenu = (orderIndex: number, itemIndex: number) => {
     console.log("🛑 삭제 요청됨:", { orderIndex, itemIndex });
-    dispatch({ type: "menu/resetMenu" });
+
     dispatch({
       type: "menu/delMenu",
       payload: { orderIndex, itemIndex },
@@ -48,11 +50,11 @@ export default function ShoppingCart({ total }: Props) {
   const navigate = useNavigate();
   const handleSubmit = () => {
     navigate("/payment", { state: { total } });
+    console.log(menuWithPrice);
   };
 
   // 화면 크기에 따라 isMobile 상태 업데이트
   useEffect(() => {
-    console.log(menuWithPrice);
     const checkIfMobile = () => {
       if (window.innerWidth <= 480) {
         setIsMobile(true); // 모바일 화면이면 true
@@ -119,14 +121,36 @@ export default function ShoppingCart({ total }: Props) {
     <div className="cart-container" ref={cartRef}>
       <div className="fold-btn" ref={btnRef} onClick={cartFold}>
         <div className="menu-length">
-          {menuWithPrice &&
-            (menuWithPrice.length > 0 ? menuWithPrice.length : 0)}{" "}
+          {/* {menuWithPrice &&
+            (menuWithPrice.length > 0 ? menuWithPrice.length : 0)}{" "} */}
         </div>
         <FontAwesomeIcon icon={faCartShopping} className="cart" />
       </div>
       <div className="pay-info">
         <ul>
-          {menuWithPrice && menuWithPrice.length > 0 ? (
+          {/* menuWithPrice가 null이 아니고, items와 price가 존재하는지 확인 */}
+          {menuWithPrice?.items && menuWithPrice?.price ? (
+            menuWithPrice.items.map((item: string, idx: number) => (
+              <li
+                key={idx}
+                onClick={() => handleRemoveMenu(menuData.length - 1, idx)}
+              >
+                {item} : {menuWithPrice.price[idx]} 원
+                <FontAwesomeIcon icon={faXmark} className="delete-btn" />
+              </li>
+            ))
+          ) : (
+            <li>주문한 메뉴가 없습니다.</li>
+          )}
+        </ul>
+        {/* {menuWithPrice.map((el, idx) => {
+            return (
+              <li key={idx}>
+                {el.items} : {el.price} 원
+              </li>
+            );
+          })} */}
+        {/* {menuWithPrice && menuWithPrice.length > 0 ? (
             menuWithPrice.flatMap((order, orderIndex) => {
               if (!order.items || !Array.isArray(order.items)) {
                 console.error(` order.items가 배열이 아닙니다!`, order.items);
@@ -138,18 +162,17 @@ export default function ShoppingCart({ total }: Props) {
                 return (
                   <li
                     key={`${orderIndex}-${itemIndex}`}
-                    onClick={() => handleRemoveMenu(orderIndex, itemIndex)}
+                    
                   >
                     {item} : {price}원
-                    <FontAwesomeIcon icon={faXmark} className="delete-btn" />
+                  
                   </li>
                 );
               });
             })
           ) : (
             <li>주문한 메뉴가 없습니다.</li>
-          )}
-        </ul>
+          )} */}
 
         <hr />
         <button type="submit" onClick={handleSubmit}>

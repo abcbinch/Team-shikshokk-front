@@ -8,8 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
 import Header from "../components/Header/Header";
 import { RootState } from "../store/rootReducer";
-import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+
+import { useLocation } from "react-router-dom";
+import { firstOrder } from "../store/menupick";
+
 
 interface Menus {
   id: number;
@@ -37,26 +40,37 @@ export default function CustomerShopDetail(props: object) {
   const contactNumber = useSelector(
     (state: RootState) => state.login.phoneNumber
   );
+  const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : null;
   const handlerOrder = (menu: string[], price: string[]) => {
-    const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
+    const lastMenu: firstOrder =
+      menuData.length > 0
+        ? menuData[menuData.length - 1]
+        : {
+            orderType: "default",
+            loginId: userId,
+            orderTime: new Date(),
+            orderNumber: uuidv4(),
+            contactNumber,
+            shopName,
+            shopLoginId: shopId,
+            items: [],
+            price: [],
+          };
+
     const newMenu = {
       ...lastMenu,
-      loginId: userId,
-      orderTime: new Date(),
-      orderNumber: uuidv4(),
-      contactNumber,
-      shopName: shopName,
-      shopLoginId: shopId,
-      items: Array.isArray(menu) ? menu : [menu],
-      price: Array.isArray(price) ? price : [price],
+      items: [...lastMenu.items, ...menu],
+      price: [...lastMenu.price, ...price],
     };
     dispatch({ type: "menu/addMenu", payload: newMenu });
+    // dispatch({ type: "menu/resetMenu", payload: newMenu });
   };
   useEffect(() => {
-    const sum = menuData
-      .flatMap((item) => item.price)
-      .reduce((acc, val) => acc + Number(val), 0);
+    const sum =
+      lastMenu?.price?.reduce((acc, val) => acc + Number(val), 0) || 0;
+
     setTotal(sum);
+    console.log(menuData);
   }, [menuData]);
 
   //메뉴 전체 조회 axios

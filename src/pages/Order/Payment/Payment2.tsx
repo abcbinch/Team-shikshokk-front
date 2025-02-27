@@ -12,6 +12,8 @@ const Payment2: React.FC<Payment2Props> = () => {
   const [amount, setAmount] = useState("");
 
   const handleDepositClick = () => {
+    console.log(orderData);
+    dispatch({ type: "order/delOrder" });
     setShowInput(!showInput);
   };
 
@@ -24,14 +26,9 @@ const Payment2: React.FC<Payment2Props> = () => {
   const location = useLocation();
   const total = location.state?.total || 0; // 실제 합계
   const sum = (location.state?.total ?? 0).toLocaleString(); // 실제 합계 , 표시시
-  const menuData: Order[] = useSelector(
-    (state: RootState) => state.order.orders
-  );
-
+  const orderData = useSelector((state: RootState) => state.order.orders);
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(menuData[0]);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <>
       <Header />
