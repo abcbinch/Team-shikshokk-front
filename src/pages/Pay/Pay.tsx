@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Order, OrderState } from "../../store/order";
 import { RootState } from "../../store/rootReducer";
 import Header from "../../components/Header/Header";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Pay: React.FC = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -27,10 +28,14 @@ const Pay: React.FC = () => {
   const decreaseGuests = () => setGuests((prev) => (prev > 1 ? prev - 1 : 1));
   const orderData = useSelector((state: RootState) => state.order.orders);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const sum = (location.state?.total ?? 0).toLocaleString();
+  const total = location.state?.total || 0;
+  const menuData = useSelector((state: RootState) => state.menu.items);
 
   const handleOrder = () => {
-    const lastOrder =
-      orderData.length > 0 ? orderData[orderData.length - 1] : {};
+    const lastOrder = menuData.length > 0 ? menuData[menuData.length - 1] : {};
 
     const newOrder = {
       ...lastOrder,
@@ -40,8 +45,10 @@ const Pay: React.FC = () => {
       visitDate: date,
       orderType: orderType,
     };
-
-    dispatch({ type: "order/addOrder", payload: newOrder });
+    dispatch({ type: "menu/resetMenu" });
+    dispatch({ type: "menu/addMenu", payload: newOrder });
+    dispatch({ type: "order/addOrder", payload: menuData });
+    navigate("/pay2", { state: { total } });
     console.log(orderData);
   };
 
@@ -166,23 +173,22 @@ const Pay: React.FC = () => {
       <div className="mt-6 w-96 bg-white shadow-lg rounded-lg p-4 border border-amber-400 text-amber-600">
         <div className="text-lg font-bold">장바구니</div>
         <hr className="my-2" />
-        <div className="flex justify-between text-lg">
-          <span>호랑이 치킨 x1</span>
-          <span>20,000원</span>
-        </div>
-        <div className="flex justify-between text-lg">
-          <span>사자 치킨 x1</span>
-          <span>30,000원</span>
-        </div>
+        {menuData.map((menu, index) => (
+          <div key={index} className="flex justify-between text-lg">
+            <span>{menu.items.join(", ")} x1</span>
+            <span>{Number(menu.price).toLocaleString()}원</span>
+          </div>
+        ))}
+
         <hr className="my-2" />
         <div className="flex justify-between text-lg font-bold">
           <span>합계:</span>
-          <span>50,000원</span>
+          <span>{sum} 원</span>
         </div>
       </div>
       <div className="mt-2 ">
         <Button onClick={handleOrder} className="">
-          결제하기 : 50,000원
+          결제하기 : {sum} 원
         </Button>
       </div>
       <Footer />

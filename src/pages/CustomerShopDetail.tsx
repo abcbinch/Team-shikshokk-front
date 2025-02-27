@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
 import Header from "../components/Header/Header";
 import { RootState } from "../store/rootReducer";
-
+import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation } from "react-router-dom";
 
@@ -21,7 +21,7 @@ interface Menus {
   originMfile: string;
   saveMfile: string;
 }
-export default function CustomerShopDetail() {
+export default function CustomerShopDetail(props: object) {
   const location = useLocation();
   const { shopId, owner_id, shopName } = location.state || {};
   console.log("shopId = ", shopId);
@@ -31,10 +31,13 @@ export default function CustomerShopDetail() {
   let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
-
+  const [total, setTotal] = useState(0);
   const menuData = useSelector((state: RootState) => state.menu.items);
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.login.loginId);
+  const contactNumber = useSelector(
+    (state: RootState) => state.login.phoneNumber
+  );
   const handlerOrder = (menu: string[], price: string[]) => {
     const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
     const newMenu = {
@@ -42,15 +45,20 @@ export default function CustomerShopDetail() {
       loginId: userId,
       orderTime: new Date(),
       orderNumber: uuidv4(),
-      // shopName : ,
-      // shopLoginId :,
+      contactNumber,
+      shopName: shopName,
+      shopLoginId: shopId,
       items: Array.isArray(menu) ? menu : [menu],
       price: Array.isArray(price) ? price : [price],
-      total: price.reduce((acc, p) => acc + Number(p), 0).toString(),
     };
     dispatch({ type: "menu/addMenu", payload: newMenu });
-    console.log(newMenu);
   };
+  useEffect(() => {
+    const sum = menuData
+      .flatMap((item) => item.price)
+      .reduce((acc, val) => acc + Number(val), 0);
+    setTotal(sum);
+  }, [menuData]);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -149,7 +157,7 @@ export default function CustomerShopDetail() {
           </div>
         );
       })}
-      <ShoppingCart />
+      <ShoppingCart total={total} />
     </main>
   );
 }
