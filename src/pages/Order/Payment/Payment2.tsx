@@ -7,11 +7,14 @@ import { RootState } from "../../../store/rootReducer";
 import "../../../styles/payment2.scss";
 import io from "socket.io-client";
 import * as O from "../../../store/order";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 interface Payment2Props {}
 
 const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
 const Payment2: React.FC<Payment2Props> = () => {
   const loginId2 = useSelector((state: RootState) => state.login.loginId);
+  const loginId3 = useSelector((state: RootState) => state.login.id);
+  const shopId = useSelector((state: RootState) => state.login.shopId);
 
   const [showInput, setShowInput] = useState(false);
   const [amount, setAmount] = useState("");
@@ -137,6 +140,46 @@ const Payment2: React.FC<Payment2Props> = () => {
         };
 
         setOrder(newOrder); // ✅ order2 상태 업데이트
+        let isTakeout2;
+        if (OrderType === "매장") {
+          isTakeout2 = true;
+        } else {
+          isTakeout2 = false;
+        }
+
+        for (let i = 0; i < combined.length; i++) {
+          const items = combined[i].menuName;
+          const price = combined[i].price;
+          //  cus_order_id;
+          //  shop_order_id;
+          //  menuName;
+          //  price;
+          //  totalPrice;
+          //  visitors;
+          //  isTakeout;
+          //  orderTime;
+          //  option;
+          //  progress;
+          //  visitTime;
+          const createOrder = {
+            cus_order_id: loginId3,
+            shop_order_id: shopId,
+            menuName: items,
+            price: price,
+            totalPrice: total,
+            visitors: Guests,
+            isTakeout: isTakeout2,
+            orderTime: orderTime,
+            option: "맛잇게해줘",
+            progress: "수락",
+            visitTime: orderTime,
+          };
+          const res2 = await axios.post(
+            `${process.env.REACT_APP_API_SERVER}/addOrder`,
+            createOrder
+          );
+          console.log("주문 추가 결과 = ", res2);
+        }
       }
     } catch (error) {
       console.error("Payment error:", error);
