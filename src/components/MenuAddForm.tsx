@@ -9,13 +9,11 @@ import { RootState } from "../store/rootReducer";
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
-  crossId: number;
 }
 
 export default function MenuAddForm({
   setIsShow,
   setImgS3route,
-  crossId,
 }: MenuAddFormProps) {
   let [mname, setMname] = useState("");
   let [mcategory, setMcategory] = useState("");
@@ -26,7 +24,8 @@ export default function MenuAddForm({
   const formRef = useRef<HTMLFormElement | null>(null);
   const customRef = useRef<HTMLDivElement | null>(null);
   const id = useSelector((state: RootState) => state.login.id);
-  console.log("menuAdd 내의 crossId", crossId);
+  const shop_id = useSelector((state: RootState) => state.login.shopId);
+  console.log("menu add 내의 shop_id", shop_id);
 
   //메뉴 추가 함수
   const menuAdd = async (e: React.FormEvent) => {
@@ -47,8 +46,8 @@ export default function MenuAddForm({
         if (id) {
           formData.append("owner_id", String(id));
         }
-        if (crossId) {
-          formData.append("shopId", String(crossId));
+        if (shop_id) {
+          formData.append("shopId", String(shop_id));
         }
 
         const response = await axios.post(
@@ -61,14 +60,20 @@ export default function MenuAddForm({
           }
         );
 
+        const { isUpdate, msg } = response.data;
+
+        if (isUpdate) {
+          alert(msg);
+        } else {
+          alert(msg);
+        }
+
         console.log(response.data.s3Url);
 
         //s3에 업로드하고 나서, 그 결과값으로 나온 경로를 state에 넣기
         const { s3Url } = response.data;
         console.log("이것은 fileUrl이다: ", s3Url);
         setImgS3route(s3Url);
-
-        if (response) alert("등록이 완료됐습니다.");
       }
       setIsShow(false);
     } catch (err) {

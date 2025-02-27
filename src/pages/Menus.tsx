@@ -29,10 +29,11 @@ export default function Menus() {
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
   const owner_id = useSelector((state: RootState) => state.login.id);
-  const location = useLocation();
-  const crossId = location.state?.shopId;
+  const shop_id = useSelector((state: RootState) => state.login.shopId);
+  // const location = useLocation();
+  // const crossId = location.state?.shopId;
 
-  console.log("이것은 crossId다", crossId);
+  console.log("이것은 shop_id다", shop_id);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function Menus() {
           {
             params: {
               owner_id: owner_id,
-              shopId: crossId,
+              shopId: shop_id,
             },
           }
         );
@@ -174,15 +175,10 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
-        <MenuAddForm
-          crossId={crossId}
-          setIsShow={setIsShow}
-          setImgS3route={setImgS3route}
-        />
+        <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
-          crossId={crossId}
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}

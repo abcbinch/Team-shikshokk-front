@@ -28,6 +28,8 @@ export default function OwnerMain() {
   const [shops, setShops] = useState<shopIn[]>([]);
   const navigate = useNavigate();
 
+  console.log("shops: ", shops);
+
   async function getData() {
     try {
       const response = await axios.get(
@@ -38,8 +40,9 @@ export default function OwnerMain() {
           },
         }
       );
-      console.log("응답 샵id", response.data.shops);
+      console.log("응답 샵id", response.data.shops); //객체 배열[{id: 1, name: 'starbucks'}...]
       const shopsList = response.data.shops.map((shop: shopIn) => shop);
+      console.log("shopsList: ", shopsList[0]);
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
@@ -59,10 +62,12 @@ export default function OwnerMain() {
   // 셀렉트박스 확인용
   useEffect(() => {
     console.log("Selected shopId:", shopId);
+    console.log("useSelector shop_id:", ownerShopId);
   }, [shopId]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShopId(parseInt(e.target.value, 10)); //문자열 value값을 10진수 변환
+    console.log("handleSelect-setShopId 결과: ", shopId);
   };
 
   const handleClick = (path: string) => {

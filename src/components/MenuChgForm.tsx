@@ -3,6 +3,8 @@ import "../styles/menu-form.scss";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 
 interface Menus {
   id: number;
@@ -16,12 +18,10 @@ interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
-  crossId: number;
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.
 export default function MenuChgForm({
-  crossId,
   selectMenu,
   setIsChgShow,
   setImgS3route,
@@ -33,6 +33,8 @@ export default function MenuChgForm({
   let [chgfile, setChgfile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  const shop_id = useSelector((state: RootState) => state.login.shopId);
 
   //메뉴 수정정
   const menuChg = async (e: React.FormEvent) => {
@@ -47,8 +49,8 @@ export default function MenuChgForm({
           formData.append("image", chgfile);
           formData.append("chgfile", chgfile.name);
         }
-        if (crossId) {
-          formData.append("shopId", String(crossId));
+        if (shop_id) {
+          formData.append("shopId", String(shop_id));
         }
         const response = await axios.patch(
           "http://localhost:8082/api-server/menu-change",
