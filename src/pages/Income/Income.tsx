@@ -42,7 +42,6 @@ export default function Income() {
   };
 
   type VisitData = {
-    // 🔥 `VisitData` 타입 추가
     reVisit: number;
     firstVisit: number;
     visitPercent: number;
@@ -67,7 +66,7 @@ export default function Income() {
   const [menuData, setMenuData] = useState<MenuItem[]>([]);
 
   const [orderVisitor, setOrderVisitor] = useState<number[]>([]);
-
+  const [isDataEmpty, setIsDataEmpty] = useState(false);
   const [menuSum, setMenuSum] = useState(0);
   const [reVisit, setReVisit] = useState<ReVisitData>({
     reVisit: 0,
@@ -93,6 +92,7 @@ export default function Income() {
     const result = await axios.post(
       `${process.env.REACT_APP_API_SERVER}/income/orderMenu`,
       {
+        shopId,
         startDate: dateRange[0],
         endDate: dateRange[1],
       }
@@ -140,6 +140,7 @@ export default function Income() {
       const result = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/income/orderVisitor`,
         {
+          shopId,
           startDate: dateRange[0],
           endDate: dateRange[1],
         }
@@ -171,6 +172,7 @@ export default function Income() {
     const result = await axios.post(
       `${process.env.REACT_APP_API_SERVER}/income/reVisitor`,
       {
+        shopId,
         startDate: dateRange[0],
         endDate: dateRange[1],
       }
@@ -238,7 +240,13 @@ export default function Income() {
             달력 보기
           </button>
           {isCalendarVisible && (
-            <div className="relative z-10 p-2 mt-2 bg-white rounded-lg shadow-lg md:absolute">
+            <div
+              className="absolute z-10 p-2 mt-2 bg-white rounded-lg shadow-lg "
+              style={{
+                top: "calc(29%)",
+                left: "calc(53.5%)",
+              }}
+            >
               <DatePicker
                 selectsRange
                 startDate={dateRange[0]}
@@ -297,62 +305,66 @@ export default function Income() {
 
         <div className="flex flex-col justify-center w-full h-full gap-10 mt-10 lg:flex-row">
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
-            <select
-              onChange={(e) => {
-                setSelectedOption(e.target.value);
-              }}
-              className="p-2 mb-4 border rounded-lg"
-            >
-              <option value="income">매출</option>
-              <option value="visitors">고객 수</option>
-            </select>
-            <ResponsiveContainer width="100%" height={500}>
-              <BarChart data={data[selectedOption]}>
-                <XAxis dataKey="날짜" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="매출" fill="rgb(233, 52, 52)" />
-                <Bar dataKey="포장" fill="rgb(233, 52, 52)" />
-                <Bar
-                  dataKey="매장"
-                  fill="hsl(0, 59.42028985507246%, 27.058823529411768%)"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            {isDataEmpty || data.income.length === 0 ? (
+              <p className="text-center text-lg font-bold text-red-500">
+                검색 결과가 존재하지 않습니다. 날짜를 변경해주세요.
+              </p>
+            ) : (
+              <ResponsiveContainer width="100%" height={500}>
+                <BarChart data={data.income}>
+                  <XAxis dataKey="날짜" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="매출" fill="rgb(233, 52, 52)" />
+                  <Bar dataKey="포장" fill="rgb(233, 52, 52)" />
+                  <Bar
+                    dataKey="매장"
+                    fill="hsl(0, 59.42028985507246%, 27.058823529411768%)"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </div>
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[30%]">
             <h4 className="font-bold">메뉴별 매출 비율</h4>
-            <ResponsiveContainer
-              width="100%"
-              height={window.innerWidth < 900 ? 300 : 400}
-            >
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={menu}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ name, percent, x, y }) => (
-                    <text
-                      x={x}
-                      y={y}
-                      fill="black"
-                      textAnchor="middle"
-                      fontSize={12}
-                    >
-                      {`${name} (${(percent * 100).toFixed(2)}%)`}
-                    </text>
-                  )}
-                  labelLine={false}
-                >
-                  {menu.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+            {isDataEmpty || menu.length === 0 ? (
+              <p className="text-center text-lg font-bold text-red-500">
+                검색 결과가 존재하지 않습니다.
+                <br /> 날짜를 변경해주세요.
+              </p>
+            ) : (
+              <ResponsiveContainer
+                width="100%"
+                height={window.innerWidth < 900 ? 300 : 400}
+              >
+                <PieChart width={400} height={400}>
+                  <Pie
+                    data={menu}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ name, percent, x, y }) => (
+                      <text
+                        x={x}
+                        y={y}
+                        fill="black"
+                        textAnchor="middle"
+                        fontSize={12}
+                      >
+                        {`${name} (${(percent * 100).toFixed(2)}%)`}
+                      </text>
+                    )}
+                    labelLine={false}
+                  >
+                    {menu.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            )}
             <table className="w-full mt-4 border border-gray-300 ">
               <thead>
                 <tr className="bg-gray-200">
