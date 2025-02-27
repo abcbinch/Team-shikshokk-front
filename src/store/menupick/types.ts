@@ -7,12 +7,13 @@ export interface firstOrder {
   contactNumber: string;
   shopName: string;
   shopLoginId: string;
-  price: string;
+  price: string[];
   total: string;
   items: string[];
 }
 export interface MenuState {
   items: firstOrder[];
+  price: firstOrder[];
 }
 
 export type AddMenuAction = Action<"menu/addMenu"> & {

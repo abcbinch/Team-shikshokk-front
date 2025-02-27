@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMenu } from "../store/menupick/actions";
 import Header from "../components/Header/Header";
 import { RootState } from "../store/rootReducer";
-import { useLocation, useParams } from "react-router-dom";
+
+import { v4 as uuidv4 } from "uuid";
 
 interface Menus {
   id: number;
@@ -32,17 +33,24 @@ export default function CustomerShopDetail() {
 
   const menuData = useSelector((state: RootState) => state.menu.items);
   const dispatch = useDispatch();
-
-  const handlerOrder = (menu: string[]) => {
+  const userId = useSelector((state: RootState) => state.login.loginId);
+  const handlerOrder = (menu: string[], price: string[]) => {
     const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
     const newMenu = {
       ...lastMenu,
-
-      items: menu,
+      loginId: userId,
+      orderTime: new Date(),
+      orderNumber: uuidv4(),
+      // shopName : ,
+      // shopLoginId :,
+      items: Array.isArray(menu) ? menu : [menu],
+      price: Array.isArray(price) ? price : [price],
+      total: price.reduce((acc, p) => acc + Number(p), 0).toString(),
     };
     dispatch({ type: "menu/addMenu", payload: newMenu });
     console.log(newMenu);
   };
+
   //메뉴 전체 조회 axios
   useEffect(() => {
     const menuList = async () => {
@@ -116,7 +124,7 @@ export default function CustomerShopDetail() {
                   return (
                     <li
                       onClick={() => {
-                        handlerOrder([`${mel.menuName}, ${mel.price}`]);
+                        handlerOrder([mel.menuName], [mel.price]);
                       }}
                     >
                       <div className="icon-box"></div>
