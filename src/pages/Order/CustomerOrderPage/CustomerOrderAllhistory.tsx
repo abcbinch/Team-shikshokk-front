@@ -80,10 +80,10 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
 
             <div className="receipt-card-container-all">
               {orders &&
-                orders.map((el, index) => {
+                orders.map((el) => {
                   return (
                     <>
-                      <div key={index} className="receipt-card-all">
+                      <div key={el.id} className="receipt-card-all">
                         <ul className="receipt-card-list-all">
                           <li>
                             <FontAwesomeIcon
@@ -92,21 +92,21 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                             />
                           </li>
                           <li>주문시간</li>
-                          <li>[2025-02-15]</li>
+                          <li>{el.orderTime}</li>
                           <li>19:30:55</li>
                           <li>주문번호</li>
                           <li>123123</li>
-                          <li>매장 인원 4명</li>
+                          <li>{el.option}</li>
                           <li>연락처</li>
-                          <li>010-1234-1234</li>
+                          <li></li>
                           <li>메뉴이름</li>
-                          <li>매우매우맛잇는치킨x1</li>
+                          <li>{el.menuName}x2</li>
                           <li>매우매우맛잇는피자x1</li>
                           <li>매우매우맛잇는햄버거x1</li>
                           <br />
-                          <li>합계: 85000원</li>
+                          <li>합계: {el.totalPrice}</li>
                           <li>방문시간</li>
-                          <li>19:40:55</li>
+                          <li>{el.visitTime}</li>
                         </ul>
                         <div className="mt-2">
                           {window.innerWidth >= 480 ? (
@@ -119,12 +119,19 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                                   });
                                 }}
                               >
-                                리뷰{el.id}
+                                리뷰
                               </button>
                             </div>
                           ) : (
                             <div>
-                              <button className="btn btn-warning btn-sm">
+                              <button
+                                className="btn btn-warning btn-sm"
+                                onClick={() => {
+                                  navigate("/review", {
+                                    state: { orderId: el.id },
+                                  });
+                                }}
+                              >
                                 리뷰
                               </button>
                             </div>
@@ -134,45 +141,6 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
                     </>
                   );
                 })}
-
-              <div className="receipt-card-all">
-                <ul className="receipt-card-list-all">
-                  <li>
-                    <FontAwesomeIcon
-                      icon={faTimes}
-                      className="custom-icon-all"
-                    />
-                  </li>
-                  <li>주문시간</li>
-                  <li>[2025-02-15]</li>
-                  <li>19:30:55</li>
-                  <li>주문번호</li>
-                  <li>123123</li>
-                  <li>매장 인원 4명</li>
-                  <li>연락처</li>
-                  <li>010-1234-1234</li>
-                  <li>메뉴이름</li>
-                  <li>매우매우맛잇는치킨x1</li>
-                  <li>매우매우맛잇는피자x1</li>
-                  <li>매우매우맛잇는햄버거x1</li>
-
-                  <br />
-                  <li>합계: 85000원</li>
-                  <li>방문시간</li>
-                  <li>19:40:55</li>
-                </ul>
-                <div className="mt-2">
-                  {window.innerWidth >= 480 ? (
-                    <div>
-                      <button className="btn btn-warning">리뷰</button>
-                    </div>
-                  ) : (
-                    <div>
-                      <button className="btn btn-warning btn-sm">리뷰</button>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           </section>
           <nav className="pagination-container-all">

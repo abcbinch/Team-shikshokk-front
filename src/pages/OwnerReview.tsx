@@ -48,7 +48,7 @@ export default function OwnerReview() {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api-server/owner-review",
+        `${process.env.REACT_APP_API_SERVER}/owner-review`,
         {
           params: {
             shopId: shopId, // 가게 아이디 test

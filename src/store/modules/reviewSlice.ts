@@ -30,7 +30,7 @@ export const fetchReviews = createAsyncThunk(
   "reviews/fetchReviews",
   async (shopId: number) => {
     const response = await axios.get(
-      "http://localhost:8082/api-server/owner-review",
+      `${process.env.REACT_APP_API_SERVER}/owner-review`,
       {
         params: { shopId },
       }
@@ -44,7 +44,7 @@ export const updateReview = createAsyncThunk(
   async ({ id, owner_review }: { id: number; owner_review: string }) => {
     console.log("리듀서", id);
     const response = await axios.patch(
-      `http://localhost:8082/api-server/owner-review/${id}`,
+      `${process.env.REACT_APP_API_SERVER}/owner-review/${id}`,
       {
         owner_review,
       }
@@ -58,7 +58,7 @@ export const deleteReview = createAsyncThunk(
   "reviews/deleteReview",
   async (id: number) => {
     const response = await axios.delete(
-      `http://localhost:8082/api-server/owner-review/${id}`
+      `${process.env.REACT_APP_API_SERVER}/owner-review/${id}`
     );
     return response.data.review;
   }
@@ -69,7 +69,7 @@ export const cus_delete = createAsyncThunk(
   "review/cus_delete",
   async (id: number) => {
     const response = await axios.patch(
-      `http://localhost:8082/api-server/owner-review`,
+      `${process.env.REACT_APP_API_SERVER}/owner-review`,
       {
         id,
       }

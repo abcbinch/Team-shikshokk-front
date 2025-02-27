@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/cusReview.scss";
 import axios from "axios";
+import Header from "../components/Header/Header";
+import Footer from "./Footer";
 
 //주문목록 interface (수정함)
 interface data {
@@ -47,7 +49,7 @@ export default function CusReview() {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api-server/review",
+        `${process.env.REACT_APP_API_SERVER}/review`,
         {
           params: {
             orderId: orderId, //---- 여기 주문id 받아야 한다.
@@ -119,9 +121,6 @@ export default function CusReview() {
       console.error("Review data is not loaded yet.");
       return;
     }
-    // formData.append("orderId", review.cus_order_id.toString()); // 주문 ID
-    // formData.append("shopId", review.shop_order_id.toString()); // 샵? 아이디?
-    // review가 배열이고 첫 번째 객체가 있는지 확인한 후 첫 번째 객체의 shop_order_id를 폼 데이터에 추가
     if (Array.isArray(review) && review.length > 0) {
       formData.append("shopId", review[0].shop_order_id.toString());
     } else {
@@ -130,7 +129,7 @@ export default function CusReview() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8082/api-server/review",
+        `${process.env.REACT_APP_API_SERVER}/review`,
         formData,
         {
           headers: {
@@ -150,6 +149,7 @@ export default function CusReview() {
 
   return (
     <>
+      <Header />
       <main className="max-w-[1200px] flex justify-center my-0 mx-auto">
         <form
           className="con my-10 border rounded w-3/5 
@@ -241,7 +241,6 @@ export default function CusReview() {
             >
               등록
             </button>
-            {/* 주문목록으로 돌아가기 navigate? */}
             <Link to={"/"}>
               <button
                 type="button"
@@ -254,6 +253,7 @@ export default function CusReview() {
           </div>
         </form>
       </main>
+      <Footer />
     </>
   );
 }
