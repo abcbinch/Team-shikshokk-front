@@ -9,7 +9,7 @@ import { RootState } from "../store/rootReducer";
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
-  crossId: number;
+  crossId: number | null;
 }
 
 export default function MenuAddForm({

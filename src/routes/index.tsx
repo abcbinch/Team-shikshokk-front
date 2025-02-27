@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
@@ -61,7 +61,12 @@ const AppRoutes = () => {
 
     {
       path: "/",
-      element: userType === "individual" ? <UserMain /> : <OwnerMain />,
+      element:
+        userType === "individual" || userType === null ? (
+          <UserMain />
+        ) : (
+          <OwnerMain />
+        ),
     },
     { path: "/", element: <OwnerMain /> },
 
