@@ -88,8 +88,12 @@ const UserMain: React.FC = () => {
     );
   };
 
-  const handleStoreClick = (shopId: number, owner_id: number) => {
-    navigate("/shopdetail", { state: { shopId, owner_id } });
+  const handleStoreClick = (
+    shopId: number,
+    owner_id: number,
+    shopName: string
+  ) => {
+    navigate("/shopdetail", { state: { shopId, owner_id, shopName } });
   };
 
   return (
@@ -159,7 +163,9 @@ const UserMain: React.FC = () => {
               <div
                 key={store.id}
                 className="store-item"
-                onClick={() => handleStoreClick(store.id, store.owner_id)} // 클릭 시 상세 페이지로 이동
+                onClick={() =>
+                  handleStoreClick(store.id, store.owner_id, store.shopName)
+                } // 클릭 시 상세 페이지로 이동
               >
                 <img
                   src="default_image_url.jpg" // 하드코딩된 기본 이미지

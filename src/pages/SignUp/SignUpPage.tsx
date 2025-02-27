@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/SignUpPage.scss";
+import Header from "../../components/Header/Header";
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
@@ -141,6 +142,7 @@ const SignUpPage: React.FC = () => {
 
   return (
     <>
+      <Header />
       <div className="signup-page">
         <h1>회원가입</h1>
         <div className="signup-container">

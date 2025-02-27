@@ -9,6 +9,13 @@
   }
 }
 
+.wrap-container-header {
+  div {
+    outline: none; /* 아웃라인 제거 */
+    caret-color: transparent; /* 커서 색상 투명 */
+  }
+}
+
 .header-container {
   position: relative;
   min-height: 9vh;

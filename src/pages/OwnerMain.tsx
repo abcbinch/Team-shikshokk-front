@@ -43,6 +43,7 @@ export default function OwnerMain() {
       console.log("응답 샵id", response.data.shops); //객체 배열[{id: 1, name: 'starbucks'}...]
       const shopsList = response.data.shops.map((shop: shopIn) => shop);
       console.log("shopsList: ", shopsList[0]);
+
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
@@ -73,7 +74,10 @@ export default function OwnerMain() {
   const handleClick = (path: string) => {
     // navigate(path, { state: { shopId } });
     const selectedShopId = shopId !== null ? shopId : shops[0]?.id; // shopId가 없을 때 첫 번째 가게의 ID를 기본 값으로 사용
-    navigate(path, { state: { shopId: selectedShopId } });
+
+    navigate(path, {
+      state: { shopId: selectedShopId, shopName: shops[0]?.shopName },
+    });
   };
 
   return (

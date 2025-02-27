@@ -17,7 +17,13 @@ import {
   Cell,
 } from "recharts";
 import { ko } from "date-fns/locale";
+import { useLocation } from "react-router-dom";
 export default function Income() {
+  const location = useLocation();
+  const { shopId, shopName } = location.state || {};
+  console.log("shopId 인컴 = ", shopId);
+  console.log("shopName 인컴 = ", shopName);
+
   type MenuItem = {
     name: string;
     value: number;
@@ -215,7 +221,7 @@ export default function Income() {
     <>
       <Header />
       <div className="max-w-[1200px] mx-auto bg-amber-400 p-6 rounded-lg shadow-lg">
-        <h1 className="text-2xl md:text-3xl font-bold text-center text-white">
+        <h1 className="text-2xl font-bold text-center text-white md:text-3xl">
           매출관리
         </h1>
         <hr className="my-4 border-white" />
@@ -232,7 +238,7 @@ export default function Income() {
             달력 보기
           </button>
           {isCalendarVisible && (
-            <div className="relative md:absolute z-10 p-2 mt-2 bg-white rounded-lg shadow-lg">
+            <div className="relative z-10 p-2 mt-2 bg-white rounded-lg shadow-lg md:absolute">
               <DatePicker
                 selectsRange
                 startDate={dateRange[0]}
@@ -246,7 +252,7 @@ export default function Income() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-white">
+        <div className="grid grid-cols-1 gap-4 text-white md:grid-cols-2 lg:grid-cols-3">
           <div className="p-4 rounded-lg shadow bg-amber-500">
             <h4 className="font-bold">매출액</h4>
             <hr className="my-2 border-white" />
@@ -289,7 +295,7 @@ export default function Income() {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row justify-center w-full h-full gap-10 mt-10">
+        <div className="flex flex-col justify-center w-full h-full gap-10 mt-10 lg:flex-row">
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
             <select
               onChange={(e) => {
