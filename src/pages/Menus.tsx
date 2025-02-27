@@ -29,11 +29,15 @@ export default function Menus() {
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
   const owner_id = useSelector((state: RootState) => state.login.id);
-  const shop_id = useSelector((state: RootState) => state.login.shopId);
+
   // const location = useLocation();
   // const crossId = location.state?.shopId;
 
-  console.log("이것은 shop_id다", shop_id);
+  // console.log("이것은 crossId다", crossId);
+
+  const shopId = useSelector((state: RootState) => state.login.shopId);
+  console.log("이것은 shopId다", shopId);
+
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -45,7 +49,9 @@ export default function Menus() {
           {
             params: {
               owner_id: owner_id,
-              shopId: shop_id,
+
+              shopId: shopId,
+
             },
           }
         );
@@ -91,29 +97,29 @@ export default function Menus() {
   }, [menuArr]);
 
   return (
-    <main className="max-w-7xl m-auto">
+    <main className="m-auto max-w-7xl">
       <Header />
-      <h3 className="text-3xl font-bold m-5">메뉴 관리</h3>
+      <h3 className="m-5 text-3xl font-bold">메뉴 관리</h3>
       {/* 메뉴 탭 */}
-      <ul className="menu-tab flex list-none">
+      <ul className="flex list-none menu-tab">
         <li className="choose">전체 메뉴</li>
-        {categoryArr.map((el) => {
-          return <li>{el}</li>;
+        {categoryArr.map((el, index) => {
+          return <li key={index}>{el}</li>;
         })}
       </ul>
 
       {/* 메뉴 보드들 */}
       {categoryArr.length > 0 ? (
-        categoryArr.map((comp) => {
+        categoryArr.map((comp, index) => {
           return (
-            <div>
+            <div key={index}>
               <hr className="mb-3" />
 
               <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
                 {comp}
               </span>
 
-              <ul className="menu-board flex list-none overflow-x-scroll">
+              <ul className="flex overflow-x-scroll list-none menu-board">
                 {menuArr.map((mel) => {
                   if (comp === mel.category) {
                     return (
@@ -121,7 +127,7 @@ export default function Menus() {
                         <div className="icon-box">
                           <FontAwesomeIcon
                             icon={faGear}
-                            className="setting-icon m-2"
+                            className="m-2 setting-icon"
                             onClick={() => {
                               setIsChgShow(true);
                               setSelectMenu({
@@ -164,7 +170,7 @@ export default function Menus() {
       ) : (
         <div>
           <hr />
-          <ul className="menu-board flex list-none overflow-x-scroll">
+          <ul className="flex overflow-x-scroll list-none menu-board">
             <li onClick={() => setIsShow(true)}>
               <FontAwesomeIcon icon={faPlus} className="add-icon" />
             </li>
@@ -175,10 +181,12 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
+
         <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
+
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}
