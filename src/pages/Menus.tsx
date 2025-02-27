@@ -27,7 +27,9 @@ export default function Menus() {
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
-  let [imgS3route, setImgS3route] = useState<string>("");
+  let [imgS3route, setImgS3route] = useState<string>(
+    "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/"
+  );
   const owner_id = useSelector((state: RootState) => state.login.id);
 
   // const location = useLocation();
@@ -37,7 +39,6 @@ export default function Menus() {
 
   const shopId = useSelector((state: RootState) => state.login.shopId);
   console.log("이것은 shopId다", shopId);
-
 
   //메뉴 전체 조회 axios
   useEffect(() => {
@@ -51,7 +52,6 @@ export default function Menus() {
               owner_id: owner_id,
 
               shopId: shopId,
-
             },
           }
         );
@@ -146,8 +146,9 @@ export default function Menus() {
                         <div className="img-box">
                           <img
                             src={
-                              "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
                               mel.saveMfile
+                                ? imgS3route + mel.saveMfile
+                                : process.env.PUBLIC_URL + "/assets/fork-E.svg"
                             }
                             alt="aws s3에 저장된 이미지"
                           />
@@ -181,12 +182,10 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
-
         <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
-
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}

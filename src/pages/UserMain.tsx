@@ -162,7 +162,7 @@ const UserMain: React.FC = () => {
                 onClick={() => handleStoreClick(store.id, store.owner_id)} // 클릭 시 상세 페이지로 이동
               >
                 <img
-                  src="default_image_url.jpg" // 하드코딩된 기본 이미지
+                  src={process.env.PUBLIC_URL + "/assets/fork-E.svg"} // 하드코딩된 기본 이미지
                   alt={store.shopName}
                   className="store-image"
                 />

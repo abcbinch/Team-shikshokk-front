@@ -76,11 +76,7 @@ span {
 }
 
 @media (max-width: 480px) {
-  h3 {
-    color: blue;
-  }
   .menu-board {
-    height: 200px;
     flex-wrap: wrap;
     overflow-x: auto;
   }
