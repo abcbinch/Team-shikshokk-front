@@ -8,7 +8,6 @@ import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOr
 import Menus from "../pages/Menus";
 import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
-import CounterTest from "../pages/CounterTest";
 
 import CustomerShopDetail from "../pages/CustomerShopDetail";
 import ShoppingCart from "../components/ShoppingCart";
@@ -45,7 +44,6 @@ const AppRoutes = () => {
     { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
     { path: "/customerOrderAllHistory", element: <CustomerOrderAllHistory /> },
     { path: "/owner-review", element: <OwnerReview /> },
-    { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
 
     { path: "/shopdetail", element: <CustomerShopDetail /> },
