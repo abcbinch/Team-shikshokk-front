@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
     // 로그인 요청을 위한 API 호출
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SOCKET_SERVER}/login`,
+        `${process.env.REACT_APP_API_SERVER}/login`,
         formData, // formData에 membershipType 포함
         {
           withCredentials: true, // 세션을 사용하므로 필요
