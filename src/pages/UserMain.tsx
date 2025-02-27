@@ -11,7 +11,7 @@ import {
 import "../styles/UserMain.scss";
 import Header from "../components/Header/Header";
 import axios from "axios";
-
+import io from "socket.io-client";
 // 이미지 파일 import
 import burger from "../assets/burger.jpg";
 import mexican from "../assets/mexican.jpg";
@@ -40,6 +40,7 @@ interface StoreItem {
   shopType: string;
   shopOwner: string;
 }
+// const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
 
 const UserMain: React.FC = () => {
   const navigate = useNavigate();
@@ -48,8 +49,18 @@ const UserMain: React.FC = () => {
   const [selectedArea, setSelectedArea] = useState("서울시 종로구");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
-
+  const loginId = useSelector((state: RootState) => state.login.loginId);
   const [store, setStore] = useState<StoreItem[]>([]);
+
+  // useEffect(() => {
+  //   const data = { loginId: loginId, socketId: socket.id };
+  //   socket.emit("connectCustomer", data);
+
+  //   socket.on("connect", () => {
+  //     console.log("소켓 연결 성공");
+  //   });
+  // }, [socket]);
+
   useEffect(() => {
     const fetchShopList = async () => {
       try {

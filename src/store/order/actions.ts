@@ -5,7 +5,7 @@ export const addOrder = (payload: T.OrderState): T.AddOrderAction => ({
   payload,
 });
 
-export const delOrder = (payload: T.OrderState): T.DelOrderAction => ({
+export const delOrder = (payload: any): T.DelOrderAction => ({
   type: "order/delOrder",
   payload,
 });
