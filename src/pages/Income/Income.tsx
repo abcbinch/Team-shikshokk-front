@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import { ko } from "date-fns/locale";
 import { useLocation } from "react-router-dom";
+import Footer from "../Footer";
 export default function Income() {
   const location = useLocation();
   const { shopId, shopName } = location.state || {};
@@ -75,11 +76,7 @@ export default function Income() {
     visitPercent: 0,
   });
 
-  const [menu, setMenu] = useState([
-    { name: "치킨", value: 102, color: "#ff9999" },
-    { name: "피자", value: 202, color: "#66b3ff" },
-    { name: "햄버거", value: 302, color: "#99ff99" },
-  ]);
+  const [menu, setMenu] = useState<MenuItem[]>([]);
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     setDateRange(dates);
     if (dates[0] && dates[1]) {
@@ -88,11 +85,16 @@ export default function Income() {
       );
     }
   };
-
+  const [isDataEmpty, setIsDataEmpty] = useState(false);
   const price = async () => {
+    if (!shopId) {
+      return alert("shopId가 없습니다.");
+    }
+    console.log(shopId);
     const result = await axios.post(
       `${process.env.REACT_APP_API_SERVER}/income/orderMenu`,
       {
+        shopId,
         startDate: dateRange[0],
         endDate: dateRange[1],
       }
@@ -125,6 +127,8 @@ export default function Income() {
               name: String(menuItem.name),
               value: Number(menuItem.value),
               color: String(menuItem.color),
+              menuName: String(menuItem.menuName),
+              totalPrice: Number(menuItem.totalPrice),
             };
           })
         : [];
@@ -137,12 +141,12 @@ export default function Income() {
 
   const visitor = async () => {
     try {
+      if (!shopId) {
+        return alert("shopId가 없습니다.");
+      }
       const result = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/income/orderVisitor`,
-        {
-          startDate: dateRange[0],
-          endDate: dateRange[1],
-        }
+        { shopId, startDate: dateRange[0], endDate: dateRange[1] }
       );
 
       if (result.data) {
@@ -168,12 +172,13 @@ export default function Income() {
   };
 
   const reVisitor = async () => {
+    if (!shopId) {
+      return alert("shopId가 없습니다.");
+    }
+
     const result = await axios.post(
       `${process.env.REACT_APP_API_SERVER}/income/reVisitor`,
-      {
-        startDate: dateRange[0],
-        endDate: dateRange[1],
-      }
+      { shopId, startDate: dateRange[0], endDate: dateRange[1] }
     );
 
     const reVisitData = Object.values(
@@ -238,7 +243,13 @@ export default function Income() {
             달력 보기
           </button>
           {isCalendarVisible && (
-            <div className="relative z-10 p-2 mt-2 bg-white rounded-lg shadow-lg md:absolute">
+            <div
+              className="absolute z-10 p-2 mt-2 bg-white rounded-lg shadow-lg "
+              style={{
+                top: "calc(29%)",
+                left: "calc(53.5%)",
+              }}
+            >
               <DatePicker
                 selectsRange
                 startDate={dateRange[0]}
@@ -297,62 +308,66 @@ export default function Income() {
 
         <div className="flex flex-col justify-center w-full h-full gap-10 mt-10 lg:flex-row">
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
-            <select
-              onChange={(e) => {
-                setSelectedOption(e.target.value);
-              }}
-              className="p-2 mb-4 border rounded-lg"
-            >
-              <option value="income">매출</option>
-              <option value="visitors">고객 수</option>
-            </select>
-            <ResponsiveContainer width="100%" height={500}>
-              <BarChart data={data[selectedOption]}>
-                <XAxis dataKey="날짜" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="매출" fill="rgb(233, 52, 52)" />
-                <Bar dataKey="포장" fill="rgb(233, 52, 52)" />
-                <Bar
-                  dataKey="매장"
-                  fill="hsl(0, 59.42028985507246%, 27.058823529411768%)"
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            {isDataEmpty || data.income.length === 0 ? (
+              <p className="text-center text-lg font-bold text-red-500">
+                검색 결과가 존재하지 않습니다. 날짜를 변경해주세요.
+              </p>
+            ) : (
+              <ResponsiveContainer width="100%" height={500}>
+                <BarChart data={data.income}>
+                  <XAxis dataKey="날짜" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="매출" fill="rgb(233, 52, 52)" />
+                  <Bar dataKey="포장" fill="rgb(233, 52, 52)" />
+                  <Bar
+                    dataKey="매장"
+                    fill="hsl(0, 59.42028985507246%, 27.058823529411768%)"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </div>
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[30%]">
             <h4 className="font-bold">메뉴별 매출 비율</h4>
-            <ResponsiveContainer
-              width="100%"
-              height={window.innerWidth < 900 ? 300 : 400}
-            >
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={menu}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ name, percent, x, y }) => (
-                    <text
-                      x={x}
-                      y={y}
-                      fill="black"
-                      textAnchor="middle"
-                      fontSize={12}
-                    >
-                      {`${name} (${(percent * 100).toFixed(2)}%)`}
-                    </text>
-                  )}
-                  labelLine={false}
-                >
-                  {menu.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+            {isDataEmpty || menu.length === 0 ? (
+              <p className="text-center text-lg font-bold text-red-500">
+                검색 결과가 존재하지 않습니다.
+                <br /> 날짜를 변경해주세요.
+              </p>
+            ) : (
+              <ResponsiveContainer
+                width="100%"
+                height={window.innerWidth < 900 ? 300 : 400}
+              >
+                <PieChart width={400} height={400}>
+                  <Pie
+                    data={menu}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ name, percent, x, y }) => (
+                      <text
+                        x={x}
+                        y={y}
+                        fill="black"
+                        textAnchor="middle"
+                        fontSize={12}
+                      >
+                        {`${name} (${(percent * 100).toFixed(2)}%)`}
+                      </text>
+                    )}
+                    labelLine={false}
+                  >
+                    {menu.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            )}
             <table className="w-full mt-4 border border-gray-300 ">
               <thead>
                 <tr className="bg-gray-200">
@@ -372,6 +387,7 @@ export default function Income() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
