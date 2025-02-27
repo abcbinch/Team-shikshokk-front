@@ -6,6 +6,7 @@ import Header from "../components/Header/Header";
 import Footer from "./Footer";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
+import io from "socket.io-client";
 
 //가게 정보 interface
 interface shopIn {

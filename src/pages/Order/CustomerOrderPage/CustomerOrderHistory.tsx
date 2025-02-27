@@ -10,6 +10,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RootState } from "../../../store/rootReducer";
 import "../../../styles/customerOrderHistory.scss";
+import { useLocation } from "react-router-dom";
 
 interface CustomerOrderHistoryProps {}
 
@@ -19,7 +20,21 @@ const shopLoginId = "owner1";
 const shopName = "햄버거집";
 
 const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
-  const loginId = useSelector((state: RootState) => state.login.id);
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+  console.log("로그인아이디 = ", loginId);
+
+  // const location = useLocation();
+  // const { order } = location.state || {};
+  // const [sent, setSent] = useState(false); // 이미 emit을 보냈는지 확인하는 상태
+  // console.log("order = ", order);
+  // console.log("sent = ", sent);
+
+  // if (!sent) {
+  //   socket.emit("order", order);
+  //   setSent(true);
+  // }
+  const [orderInfo, setOrderInfo] = useState<O.Order[]>([]);
+
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
   );
@@ -31,8 +46,6 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
   const [orderApproved, setOrderApproved] = useState<{
     [key: string]: boolean;
   }>();
-
-  const [orderInfo, setOrderInfo] = useState<O.Order[]>([]);
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 480);
@@ -59,7 +72,6 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
     });
 
     socket.on("order", (data: O.Order) => {
-      console.log("주문 넣음 = ", data);
       console.log("받은 값 = ", data);
       if (Array.isArray(data)) {
         setOrderInfo((prevOrderInfo) => [...prevOrderInfo, ...data]);
@@ -209,14 +221,14 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
       <div className="wrap-container">
         <div>
           <div>
-            <button
+            {/* <button
               onClick={() => {
                 order2();
               }}
               className="btn btn-primary btn-lg"
             >
               주문하기
-            </button>
+            </button> */}
           </div>
           <section className="order-history-container">
             <div className="menu-tab-container">
@@ -273,7 +285,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
                       <li>{order.contactNumber}</li>
                       <li>메뉴이름</li>
                       {Array.isArray(order.items) && order.items.length > 0 ? (
-                        order.items.map((item, index) => (
+                        order.items.map((item: any, index) => (
                           <li key={index}>
                             {item.menuName} {item.price}원
                           </li>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "../../components/ui/button";
@@ -10,8 +10,13 @@ import { Order, OrderState } from "../../store/order";
 import { RootState } from "../../store/rootReducer";
 import Header from "../../components/Header/Header";
 import { useLocation, useNavigate } from "react-router-dom";
+import * as T from "../../store/order";
+import io from "socket.io-client";
 
+// const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
 const Pay: React.FC = () => {
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+
   const [date, setDate] = useState<Date>(new Date());
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hour, setHour] = useState<string>("10");
@@ -19,6 +24,14 @@ const Pay: React.FC = () => {
   const [guests, setGuests] = useState<number>(1);
   const [orderType, setOrderType] = useState<string>("매장");
 
+  // useEffect(() => {
+  //   const data = { loginId: loginId, socketId: socket.id };
+  //   socket.emit("connectCustomer", data);
+
+  //   socket.on("connect", () => {
+  //     console.log("소켓 연결 성공");
+  //   });
+  // }, [socket]);
   const hours: string[] = Array.from({ length: 13 }, (_, i) =>
     (i + 10).toString().padStart(2, "0")
   );
@@ -46,18 +59,22 @@ const Pay: React.FC = () => {
       visitDate: date,
       orderType: orderType,
     };
+
     dispatch({ type: "menu/addMenu", payload: newOrder });
+    console.log("newOrder = ", newOrder);
 
     navigate("/pay2", { state: { total } });
+
+    dispatch(T.delOrder(orderData));
     dispatch({ type: "order/addOrder", payload: newOrder });
 
     dispatch({ type: "menu/resetMenu" });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white">
       <Header />
-      <Card className="mt-5 p-6 w-96 bg-white shadow-lg rounded-lg border border-amber-400">
+      <Card className="p-6 mt-5 bg-white border rounded-lg shadow-lg w-96 border-amber-400">
         <CardContent className="flex flex-col gap-6">
           <div className="flex justify-center gap-6 text-lg font-semibold text-amber-600">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -99,7 +116,7 @@ const Pay: React.FC = () => {
           </div>
 
           <Button
-            className="bg-amber-400 hover:bg-amber-500 text-white"
+            className="text-white bg-amber-400 hover:bg-amber-500"
             onClick={() => setIsOpen(true)}
           >
             날짜 선택
@@ -116,13 +133,13 @@ const Pay: React.FC = () => {
               inline
             />
             <Button
-              className="mt-4 bg-amber-400 hover:bg-amber-500 text-white"
+              className="mt-4 text-white bg-amber-400 hover:bg-amber-500"
               onClick={() => setIsOpen(false)}
             >
               확인
             </Button>
           </Modal>
-          <div className="text-center text-lg font-bold text-amber-600">
+          <div className="text-lg font-bold text-center text-amber-600">
             선택한 날짜: {date.toLocaleDateString("ko-KR")}
           </div>
 
@@ -130,7 +147,7 @@ const Pay: React.FC = () => {
             <div className="text-lg font-bold text-amber-600">방문 시간</div>
             <div className="flex gap-2">
               <select
-                className="border p-2 rounded-md text-lg bg-white border-amber-400 text-amber-600"
+                className="p-2 text-lg bg-white border rounded-md border-amber-400 text-amber-600"
                 value={hour}
                 onChange={(e) => setHour(e.target.value)}
               >
@@ -141,7 +158,7 @@ const Pay: React.FC = () => {
                 ))}
               </select>
               <select
-                className="border p-2 rounded-md text-lg bg-white border-amber-400 text-amber-600"
+                className="p-2 text-lg bg-white border rounded-md border-amber-400 text-amber-600"
                 value={minute}
                 onChange={(e) => setMinute(e.target.value)}
               >
@@ -154,16 +171,16 @@ const Pay: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 justify-center">
+          <div className="flex items-center justify-center gap-4">
             <Button
-              className="bg-amber-400 hover:bg-amber-500 text-white"
+              className="text-white bg-amber-400 hover:bg-amber-500"
               onClick={decreaseGuests}
             >
               -
             </Button>
             <span className="text-lg font-bold text-amber-600">{guests}명</span>
             <Button
-              className="bg-amber-400 text-lg hover:bg-amber-500 text-white"
+              className="text-lg text-white bg-amber-400 hover:bg-amber-500"
               onClick={increaseGuests}
             >
               +
@@ -172,7 +189,7 @@ const Pay: React.FC = () => {
         </CardContent>
       </Card>
 
-      <div className="mt-6 w-96 bg-white shadow-lg rounded-lg p-4 border border-amber-400 text-amber-600">
+      <div className="p-4 mt-6 bg-white border rounded-lg shadow-lg w-96 border-amber-400 text-amber-600">
         <div className="text-lg font-bold">장바구니</div>
         <hr className="my-2" />
         {lastOrder?.items && lastOrder?.price ? (
@@ -189,7 +206,7 @@ const Pay: React.FC = () => {
         <div className="flex justify-center mt-4">
           <Button
             onClick={handleOrder}
-            className="bg-amber-400 hover:bg-amber-500 text-white"
+            className="text-white bg-amber-400 hover:bg-amber-500"
           >
             결제하기 : {sum} 원
           </Button>

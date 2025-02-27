@@ -10,9 +10,9 @@ import Header from "../components/Header/Header";
 import { RootState } from "../store/rootReducer";
 import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-
 import { firstOrder } from "../store/menupick";
-
+import io from "socket.io-client";
+import * as L from "../store/login";
 interface Menus {
   id: number;
   menuName: string;
@@ -25,6 +25,8 @@ interface Menus {
 export default function CustomerShopDetail(props: object) {
   const location = useLocation();
   const { shopId, owner_id, shopName } = location.state || {};
+  const loginId = useSelector((state: RootState) => state.login.loginId);
+
   console.log("shopId = ", shopId);
   console.log("owner_id = ", owner_id);
   console.log("shopName = ", shopName);
@@ -39,6 +41,8 @@ export default function CustomerShopDetail(props: object) {
   const contactNumber = useSelector(
     (state: RootState) => state.login.phoneNumber
   );
+
+  dispatch(L.setShopId(shopId));
   const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : null;
   const handlerOrder = (menu: string[], price: string[]) => {
     const lastMenu: firstOrder =

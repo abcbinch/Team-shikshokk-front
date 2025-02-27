@@ -7,7 +7,7 @@ const initialState: T.OrderState = {
 export const orderReducer = (
   state = initialState,
   action: T.Actions | any
-): T.OrderState => {
+): T.OrderState | any => {
   switch (action.type) {
     case "order/addOrder":
       return {
