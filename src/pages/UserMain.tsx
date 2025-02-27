@@ -52,15 +52,6 @@ const UserMain: React.FC = () => {
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const [store, setStore] = useState<StoreItem[]>([]);
 
-  // useEffect(() => {
-  //   const data = { loginId: loginId, socketId: socket.id };
-  //   socket.emit("connectCustomer", data);
-
-  //   socket.on("connect", () => {
-  //     console.log("소켓 연결 성공");
-  //   });
-  // }, [socket]);
-
   useEffect(() => {
     const fetchShopList = async () => {
       try {
