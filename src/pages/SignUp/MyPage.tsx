@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/rootReducer'; // 경로 수정
 import Header from '../../components/Header/Header'; // 경로 수정
 import '../../styles/MyPage.scss'; // 경로 수정
@@ -9,7 +9,6 @@ import axios from 'axios';
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // dispatch 훅 사용
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const nicknameFromStore = useSelector(
     (state: RootState) => state.login.nickname,
@@ -47,16 +46,16 @@ const MyPage: React.FC = () => {
       return;
     }
 
-    // 여기서 서버에 금액 충전 요청을 보낼 수 있습니다.
     try {
-      // 예시: 충전 요청 보내기
+      // 서버에 충전 요청 보내기
       const response = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/charge`,
         {
-          amount,
+          amount: Number(amount), // 금액을 숫자로 변환
+          userId: loginId, // 사용자 ID 추가
         },
         {
-          withCredentials: true,
+          withCredentials: true, // 쿠키 포함
         },
       );
 
@@ -81,8 +80,6 @@ const MyPage: React.FC = () => {
         <h2 className="username">{nicknameFromStore || '사용자 이름'}</h2>
         <p className="bio">로그인 ID: {loginId}</p> {/* 로그인 ID 표시 */}
         <p className="bio">회원 유형: {type}</p> {/* 회원 유형 표시 */}
-        {/* <p className="bio">가게 ID: {shopId || '가게 ID 없음'}</p>{' '} */}
-        {/* 가게 ID 표시 */}
       </div>
       <div className="menu">
         <div className="menu-item">
