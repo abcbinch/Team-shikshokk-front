@@ -33,7 +33,7 @@ const EditProfilePage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8082/api-server/me",
+          `${process.env.REACT_APP_SOCKET_SERVER}/api-server/me`,
           {
             withCredentials: true,
           }
@@ -147,7 +147,7 @@ const EditProfilePage: React.FC = () => {
     try {
       // axios PUT 요청
       const response = await axios.put(
-        "http://localhost:8082/api-server/update",
+        `${process.env.REACT_APP_SOCKET_SERVER}/update`,
         formDataToSend,
         {
           withCredentials: true,
