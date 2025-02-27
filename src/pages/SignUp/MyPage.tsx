@@ -8,6 +8,7 @@ import profileImage from '../../assets/dprofile.jpg'; // import 형식으로 수
 import axios from 'axios';
 
 const MyPage: React.FC = () => {
+  const memberType = useSelector((state: RootState) => state.login.type);
   const navigate = useNavigate();
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const nicknameFromStore = useSelector(
@@ -51,8 +52,9 @@ const MyPage: React.FC = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_SERVER}/charge`,
         {
-          amount: Number(amount), // 금액을 숫자로 변환
-          userId: loginId, // 사용자 ID 추가
+          type: memberType,
+          amount: Number(amount),
+          userId: loginId,
         },
         {
           withCredentials: true, // 쿠키 포함
