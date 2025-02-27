@@ -26,7 +26,7 @@ const DeleteMember: React.FC = () => {
     if (isAgreed) {
       try {
         const response = await axios.delete(
-          `${process.env.REACT_APP_SOCKET_SERVER}/delete/${nickname}`,
+          `${process.env.REACT_APP_API_SERVER}/delete/${nickname}`,
           { withCredentials: true }
         );
 

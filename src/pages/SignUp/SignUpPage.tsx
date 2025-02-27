@@ -86,7 +86,7 @@ const SignUpPage: React.FC = () => {
   const checkEmailExists = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SOCKET_SERVER}/check-email?email=${formData.email}`
+        `${process.env.REACT_APP_API_SERVER}/check-email?email=${formData.email}`
       );
       setEmailExists(response.data.exists);
     } catch (error) {
@@ -112,7 +112,7 @@ const SignUpPage: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SOCKET_SERVER}/signup`,
+        `${process.env.REACT_APP_API_SERVER}/signup`,
 
         {
           user_id: formData.username, // 사용자 ID
