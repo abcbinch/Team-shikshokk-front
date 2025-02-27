@@ -12,7 +12,8 @@ import { RootState } from "../../../store/rootReducer";
 
 interface CustomerOrderHistoryProps {}
 
-const socket = io("http://localhost:8082");
+// const socket = io("http://localhost:8082");
+const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
 
 const shopLoginId = "owner1";
 const shopName = "햄버거집";
