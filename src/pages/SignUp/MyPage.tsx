@@ -27,7 +27,7 @@ const MyPage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8082/api-server/me",
+          `${process.env.REACT_APP_SOCKET_SERVER}/me`,
           {
             withCredentials: true,
           }
