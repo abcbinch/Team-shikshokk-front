@@ -21,9 +21,10 @@ interface Menus {
 }
 export default function CustomerShopDetail() {
   const location = useLocation();
-  const { shopId, owner_id } = location.state || {};
+  const { shopId, owner_id, shopName } = location.state || {};
   console.log("shopId = ", shopId);
   console.log("owner_id = ", owner_id);
+  console.log("shopName = ", shopName);
 
   let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
