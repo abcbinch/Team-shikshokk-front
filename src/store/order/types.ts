@@ -31,8 +31,7 @@ export interface Order {
   contactNumber: string;
   shopName: string;
   shopLoginId: string;
-  items: string[];
-  price: string[];
+  items: { menuName: string; price: number }[];
   total: string;
 }
 
