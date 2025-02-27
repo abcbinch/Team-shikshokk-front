@@ -18,9 +18,6 @@ interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
-
-
-
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.
@@ -29,6 +26,7 @@ export default function MenuChgForm({
   setIsChgShow,
   setImgS3route,
 }: MenuAddFormProps) {
+  let [menuid, setMenuid] = useState(selectMenu.id);
   let [chgname, setChgname] = useState(selectMenu.menuName);
   let [chgcategory, setChgcategory] = useState(selectMenu.category);
   let [chgprice, setChgprice] = useState(selectMenu.price);
@@ -36,7 +34,7 @@ export default function MenuChgForm({
   let [chgfile, setChgfile] = useState<File | null>(null);
 
   const formRef = useRef<HTMLFormElement | null>(null);
-
+  const owner_id = useSelector((state: RootState) => state.login.id);
   const shop_id = useSelector((state: RootState) => state.login.shopId);
 
   //메뉴 수정정
@@ -44,6 +42,8 @@ export default function MenuChgForm({
     try {
       if (formRef.current && formRef.current.checkValidity()) {
         const formData = new FormData();
+        formData.append("menuid", String(menuid));
+        formData.append("owner_id", String(owner_id));
         formData.append("chgname", chgname);
         formData.append("chgcategory", chgcategory);
         formData.append("chgprice", chgprice);

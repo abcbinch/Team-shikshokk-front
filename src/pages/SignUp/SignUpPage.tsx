@@ -22,7 +22,6 @@ const SignUpPage: React.FC = () => {
     businessRegistrationNumber: "",
     nickname: "",
   });
-  //가게 등록에 필요
 
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
