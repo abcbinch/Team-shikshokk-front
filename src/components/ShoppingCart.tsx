@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../store/rootReducer";
 import Header from "./Header/Header";
-import { v4 as uuidv4 } from "uuid";
+
 // interface Pickups {
 //   setItems: React.Dispatch<
 //     React.SetStateAction<{ name: string; price: number }[]>
@@ -31,29 +31,22 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
   const menuWithPrice = useSelector((state: RootState) => state.menu.items);
 
-  const handleRemoveMenu = (name: string) => {
-    console.log("menuWithPrice", menuWithPrice);
-    dispatch({ type: "order/delOrder", payload: name });
+  const handleRemoveMenu = (orderIndex: number, itemIndex: number) => {
+    console.log("🛑 삭제 요청됨:", { orderIndex, itemIndex });
+
+    dispatch({
+      type: "menu/delMenu",
+      payload: { orderIndex, itemIndex },
+    });
   };
 
-  const menuData = useSelector((state: RootState) => state.menu.items);
-  const userId = useSelector((state: RootState) => state.login.loginId);
-  const lastOrder = () => {
-    const lastMenu = menuData.length > 0 ? menuData[menuData.length - 1] : {};
-    const orderMenu = {
-      ...lastMenu,
-      loginId: userId,
-      orderTime: new Date(),
-      orderNumber: uuidv4(),
-      // shopName : ,
-      // shopLoginId :,
-      // total : ,
-      // items : [],
-      // price : [],
-    };
+  const handleSubmit = () => {
+    dispatch({ type: "menu/reset" });
   };
+
   // 화면 크기에 따라 isMobile 상태 업데이트
   useEffect(() => {
+    console.log(menuWithPrice);
     const checkIfMobile = () => {
       if (window.innerWidth <= 480) {
         setIsMobile(true); // 모바일 화면이면 true
@@ -127,29 +120,35 @@ export default function ShoppingCart() {
       </div>
       <div className="pay-info">
         <ul>
-          {menuWithPrice &&
-            (menuWithPrice.length > 0
-              ? menuWithPrice.map((el) => {
-                  return (
-                    <li>
-                      {el.items.map((item, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            handleRemoveMenu(item.split(",")[0]);
-                          }}
-                        >
-                          {item.split(",")}
-                        </li>
-                      ))}
-                      <FontAwesomeIcon icon={faXmark} className="delete-btn" />
-                    </li>
-                  );
-                })
-              : "주문한 메뉴가 없습니다.")}
+          {menuWithPrice && menuWithPrice.length > 0 ? (
+            menuWithPrice.flatMap((order, orderIndex) => {
+              if (!order.items || !Array.isArray(order.items)) {
+                console.error(` order.items가 배열이 아닙니다!`, order.items);
+                return [];
+              }
+
+              return order.items.map((item, itemIndex) => {
+                const price = order.price?.[itemIndex];
+                return (
+                  <li
+                    key={`${orderIndex}-${itemIndex}`}
+                    onClick={() => handleRemoveMenu(orderIndex, itemIndex)}
+                  >
+                    {item} : {price}원
+                    <FontAwesomeIcon icon={faXmark} className="delete-btn" />
+                  </li>
+                );
+              });
+            })
+          ) : (
+            <li>주문한 메뉴가 없습니다.</li>
+          )}
         </ul>
+
         <hr />
-        <button type="submit">결제하기(원)</button>
+        <button type="submit" onClick={handleSubmit}>
+          결제하기(원)
+        </button>
       </div>
     </div>
   );
