@@ -33,7 +33,7 @@ export default function OwnerMain() {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api-server/owner",
+        `${process.env.REACT_APP_API_SERVER}/owner`,
         {
           params: {
             userId: id, // redux state로

@@ -26,17 +26,18 @@ const Pay: React.FC = () => {
 
   const increaseGuests = () => setGuests((prev) => prev + 1);
   const decreaseGuests = () => setGuests((prev) => (prev > 1 ? prev - 1 : 1));
-  const orderData = useSelector((state: RootState) => state.order.orders);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const sum = (location.state?.total ?? 0).toLocaleString();
   const total = location.state?.total || 0;
+
   const menuData = useSelector((state: RootState) => state.menu.items);
+  const lastOrder = menuData.length > 0 ? menuData[menuData.length - 1] : null;
+  const orderData = useSelector((state: RootState) => state.order.orders);
 
   const handleOrder = () => {
-    const lastOrder = menuData.length > 0 ? menuData[menuData.length - 1] : {};
-
     const newOrder = {
       ...lastOrder,
       guests: guests,
@@ -45,11 +46,12 @@ const Pay: React.FC = () => {
       visitDate: date,
       orderType: orderType,
     };
-    dispatch({ type: "menu/resetMenu" });
     dispatch({ type: "menu/addMenu", payload: newOrder });
-    dispatch({ type: "order/addOrder", payload: menuData });
+
     navigate("/pay2", { state: { total } });
-    console.log(orderData);
+    dispatch({ type: "order/addOrder", payload: newOrder });
+
+    dispatch({ type: "menu/resetMenu" });
   };
 
   return (
@@ -173,24 +175,27 @@ const Pay: React.FC = () => {
       <div className="mt-6 w-96 bg-white shadow-lg rounded-lg p-4 border border-amber-400 text-amber-600">
         <div className="text-lg font-bold">장바구니</div>
         <hr className="my-2" />
-        {menuData.map((menu, index) => (
-          <div key={index} className="flex justify-between text-lg">
-            <span>{menu.items.join(", ")} x1</span>
-            <span>{Number(menu.price).toLocaleString()}원</span>
-          </div>
-        ))}
-
+        {lastOrder?.items && lastOrder?.price ? (
+          lastOrder.items.map((item: string, idx: number) => (
+            <div key={idx} className="flex justify-between text-lg font-bold">
+              <span>{item}</span>
+              <span>{lastOrder.price[idx]}원</span>
+            </div>
+          ))
+        ) : (
+          <div>주문이 없습니다.</div> // 조건에 맞지 않는 경우를 처리
+        )}
         <hr className="my-2" />
-        <div className="flex justify-between text-lg font-bold">
-          <span>합계:</span>
-          <span>{sum} 원</span>
+        <div className="flex justify-center mt-4">
+          <Button
+            onClick={handleOrder}
+            className="bg-amber-400 hover:bg-amber-500 text-white"
+          >
+            결제하기 : {sum} 원
+          </Button>
         </div>
       </div>
-      <div className="mt-2 ">
-        <Button onClick={handleOrder} className="">
-          결제하기 : {sum} 원
-        </Button>
-      </div>
+
       <Footer />
     </div>
   );

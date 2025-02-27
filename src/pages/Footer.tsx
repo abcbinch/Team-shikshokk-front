@@ -1,10 +1,10 @@
 export default function Footer() {
   return (
-    <div className="mt-5 mb-3 ">
-      <div className="text-center text-xs text-gray-600">
-        Copylight 2025 Team Copulagi All Right reserved.{" "}
+    <div className="mt-5 mb-3 text-center">
+      <div className="text-xs text-gray-600">
+        Copylight 2025 Team Copulagi All Right reserved.
       </div>
-      <div className="flex mt-2 justify-between w-[350px] text-xs text-gray-600">
+      <div className="flex mt-2 justify-center gap-4 w-full text-xs text-gray-600">
         <p>
           <a href="https://github.com/kopuragi">Kopuragi</a>
         </p>
