@@ -21,13 +21,13 @@ export const firstOrderReducer = (
       return {
         ...state,
         items: state.items.map((order, idx) => {
-          if (idx !== action.payload.orderIndex) return order; // 삭제할 주문이 아니라면 그대로 반환
+          if (idx !== action.payload.orderIndex) return order;
 
           const newItems = [...order.items];
-          newItems.splice(action.payload.itemIndex, 1); // ✅ 해당 인덱스의 메뉴만 삭제
+          newItems.splice(action.payload.itemIndex, 1);
 
           const newPrice = [...order.price];
-          newPrice.splice(action.payload.itemIndex, 1); // ✅ 가격도 함께 삭제
+          newPrice.splice(action.payload.itemIndex, 1);
 
           return {
             ...order,
@@ -37,7 +37,7 @@ export const firstOrderReducer = (
         }),
       };
 
-    case "menu/reset":
+    case "menu/resetMenu":
       return {
         ...state,
         items: [],

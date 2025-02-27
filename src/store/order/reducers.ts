@@ -12,7 +12,12 @@ export const orderReducer = (
     case "order/addOrder":
       return {
         ...state,
-        orders: [...state.orders, action.payload],
+        orders: [
+          ...state.orders,
+          ...(Array.isArray(action.payload)
+            ? action.payload
+            : [action.payload]),
+        ],
       };
     case "order/delOrder":
       return {

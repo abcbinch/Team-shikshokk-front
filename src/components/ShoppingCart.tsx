@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../store/rootReducer";
 import Header from "./Header/Header";
+import { useNavigate } from "react-router-dom";
 
 // interface Pickups {
 //   setItems: React.Dispatch<
@@ -20,7 +21,11 @@ interface MenuWithPrice {
   price: number;
 }
 
-export default function ShoppingCart() {
+type Props = {
+  total: number;
+};
+
+export default function ShoppingCart({ total }: Props) {
   const btnRef = useRef<HTMLDivElement>(null);
   const cartRef = useRef<HTMLDivElement>(null);
 
@@ -33,15 +38,16 @@ export default function ShoppingCart() {
 
   const handleRemoveMenu = (orderIndex: number, itemIndex: number) => {
     console.log("🛑 삭제 요청됨:", { orderIndex, itemIndex });
-
+    dispatch({ type: "menu/resetMenu" });
     dispatch({
       type: "menu/delMenu",
       payload: { orderIndex, itemIndex },
     });
   };
 
+  const navigate = useNavigate();
   const handleSubmit = () => {
-    dispatch({ type: "menu/reset" });
+    navigate("/payment", { state: { total } });
   };
 
   // 화면 크기에 따라 isMobile 상태 업데이트
@@ -147,7 +153,7 @@ export default function ShoppingCart() {
 
         <hr />
         <button type="submit" onClick={handleSubmit}>
-          결제하기(원)
+          결제하기{total}원
         </button>
       </div>
     </div>

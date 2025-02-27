@@ -14,8 +14,12 @@ export interface Order {
   //   items: [
   //     "매우매우맛있는후라x1",
   //     "매우매우맛있는양념x1",
-  //     "매우매우맛있는순살x1",
+  //     "매우매우맛있는순살x1,",
   //   ],
+  // price : [
+  //"19000", "20000", "22000",
+  //]
+
   loginId: string;
   orderTime: string;
   orderNumber: string;
@@ -27,8 +31,9 @@ export interface Order {
   contactNumber: string;
   shopName: string;
   shopLoginId: string;
-  total: string;
   items: string[];
+  price: string[];
+  total: string;
 }
 
 export interface OrderState {

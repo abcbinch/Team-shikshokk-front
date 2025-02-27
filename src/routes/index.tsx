@@ -24,7 +24,7 @@ import Payment2 from "../pages/Order/Payment/Payment2";
 import Income from "../pages/Income/Income";
 import DeleteMember from "../pages/SignUp/DeleteMember";
 
-import Pay from "../pages/Payment/Pay";
+import Pay from "../pages/Pay/Pay";
 
 import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
 import { useSelector } from "react-redux";
@@ -48,7 +48,7 @@ const AppRoutes = () => {
 
     { path: "/shopdetail", element: <CustomerShopDetail /> },
 
-    { path: "/cart", element: <ShoppingCart /> },
+    { path: "/cart", element: <ShoppingCart total={0} /> },
 
     { path: "/review", element: <CusReview /> },
 
