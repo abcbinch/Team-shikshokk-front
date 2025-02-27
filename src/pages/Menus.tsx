@@ -6,10 +6,13 @@ import MenuAddForm from "../components/MenuAddForm";
 import axios from "axios";
 import MenuChgForm from "../components/MenuChgForm";
 import Header from "../components/Header/Header";
-import ShopAddForm from "../components/ShopAddForm";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
+import { useLocation } from "react-router-dom";
 
 interface Menus {
   id: number;
+  shop_menu_id: number;
   menuName: string;
   category: string;
   price: string;
@@ -25,19 +28,40 @@ export default function Menus() {
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   let [selectMenu, setSelectMenu] = useState<Menus | null>(null);
   let [imgS3route, setImgS3route] = useState<string>("");
-  let [isShopShow, setIsShopShow] = useState<boolean>(false);
+  const owner_id = useSelector((state: RootState) => state.login.id);
+
+  // const location = useLocation();
+  // const crossId = location.state?.shopId;
+
+  // console.log("이것은 crossId다", crossId);
+
+  const shopId = useSelector((state: RootState) => state.login.shopId);
+  console.log("이것은 shopId다", shopId);
+
 
   //메뉴 전체 조회 axios
   useEffect(() => {
     try {
+      //점주 하나, 가게 하나의 메뉴를 가져와야 한다.
       const menuList = async () => {
         const response = await axios.get(
-          "http://localhost:8082/api-server/menu-list"
+          `http://localhost:8082/api-server/menu-list`,
+          {
+            params: {
+              owner_id: owner_id,
+
+              shopId: shopId,
+
+            },
+          }
         );
+
+        console.log(owner_id);
 
         let result = response.data.map((el: Menus) => {
           const {
             id,
+            shop_menu_id,
             menuName,
             price,
             menudesc,
@@ -47,6 +71,7 @@ export default function Menus() {
           } = el;
           return {
             id,
+            shop_menu_id,
             menuName,
             price,
             menudesc,
@@ -72,30 +97,29 @@ export default function Menus() {
   }, [menuArr]);
 
   return (
-    <main className="max-w-7xl m-auto">
+    <main className="m-auto max-w-7xl">
       <Header />
-      <h3 className="text-3xl font-bold m-5">메뉴 관리</h3>
+      <h3 className="m-5 text-3xl font-bold">메뉴 관리</h3>
       {/* 메뉴 탭 */}
-      <ul className="menu-tab flex list-none">
+      <ul className="flex list-none menu-tab">
         <li className="choose">전체 메뉴</li>
-        {categoryArr.map((el) => {
-          return <li>{el}</li>;
+        {categoryArr.map((el, index) => {
+          return <li key={index}>{el}</li>;
         })}
-        <li onClick={() => setIsShopShow(true)}>가게 등록</li>
       </ul>
 
       {/* 메뉴 보드들 */}
       {categoryArr.length > 0 ? (
-        categoryArr.map((comp) => {
+        categoryArr.map((comp, index) => {
           return (
-            <div>
+            <div key={index}>
               <hr className="mb-3" />
 
               <span className="bg-gray-100 text-gray-800 text-xl font-semibold me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300">
                 {comp}
               </span>
 
-              <ul className="menu-board flex list-none overflow-x-scroll">
+              <ul className="flex overflow-x-scroll list-none menu-board">
                 {menuArr.map((mel) => {
                   if (comp === mel.category) {
                     return (
@@ -103,11 +127,12 @@ export default function Menus() {
                         <div className="icon-box">
                           <FontAwesomeIcon
                             icon={faGear}
-                            className="setting-icon m-2"
+                            className="m-2 setting-icon"
                             onClick={() => {
                               setIsChgShow(true);
                               setSelectMenu({
                                 id: mel.id,
+                                shop_menu_id: mel.shop_menu_id,
                                 menuName: mel.menuName,
                                 price: mel.price,
                                 menudesc: mel.menudesc,
@@ -145,7 +170,7 @@ export default function Menus() {
       ) : (
         <div>
           <hr />
-          <ul className="menu-board flex list-none overflow-x-scroll">
+          <ul className="flex overflow-x-scroll list-none menu-board">
             <li onClick={() => setIsShow(true)}>
               <FontAwesomeIcon icon={faPlus} className="add-icon" />
             </li>
@@ -156,17 +181,17 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
+
         <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
+
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}
         />
       )}
-      {isShopShow && <ShopAddForm setIsShopShow={setIsShopShow} />}
-      {/* selectMenu가 null이 아닐 때만 실행 */}
     </main>
   );
 }

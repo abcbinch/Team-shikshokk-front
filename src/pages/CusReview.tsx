@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Star from "../components/Star";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/cusReview.scss";
 import axios from "axios";
 
@@ -26,6 +26,10 @@ interface data {
 export default function CusReview() {
   // 주문id로 메뉴,가격,총가격 가져오기(get),
   // 등록버튼 클릭=>rieview에 추가 + 사진도 reviewfile에
+  //----- 오더아이디 받기
+  const location = useLocation();
+  const { orderId } = location.state || { orderId: null }; // 기본 값을 null로 설정
+  console.log("주문아이디", orderId);
 
   //===== 이미지
   const [imgFile, setImgFile] = useState<string | ArrayBuffer | null>("");
@@ -46,7 +50,7 @@ export default function CusReview() {
         "http://localhost:8082/api-server/review",
         {
           params: {
-            orderId: "1", //---- 여기 주문id 받아야 한다.
+            orderId: orderId, //---- 여기 주문id 받아야 한다.
           },
         }
       );

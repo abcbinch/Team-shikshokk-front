@@ -17,12 +17,18 @@ export default function OwnerMain() {
   // 로그인 확인
   const id = useSelector((state: RootState) => state.login.id);
   const loginId = useSelector((state: RootState) => state.login.loginId);
-  console.log("---------id?", id);
-  console.log("---------id?", loginId);
+  const ownerShopId = useSelector((state: RootState) => state.login.shopId);
+  const owneRShopLoginId = useSelector(
+    (state: RootState) => state.login.shopOwnerLoginId
+  );
+  console.log("가게 기본키 = ", ownerShopId);
+  console.log("가게 주인 로그인 아이디 = ", owneRShopLoginId);
 
   const [shopId, setShopId] = useState<number | null>(null); //선택된 shop id
   const [shops, setShops] = useState<shopIn[]>([]);
   const navigate = useNavigate();
+
+  console.log("shops: ", shops);
 
   async function getData() {
     try {
@@ -34,8 +40,10 @@ export default function OwnerMain() {
           },
         }
       );
-      console.log("응답 샵id", response.data.shops);
+      console.log("응답 샵id", response.data.shops); //객체 배열[{id: 1, name: 'starbucks'}...]
       const shopsList = response.data.shops.map((shop: shopIn) => shop);
+      console.log("shopsList: ", shopsList[0]);
+
       setShops(shopsList);
 
       // 불러온 데이터에서 첫 번째 가게의 ID를 shopId로 설정
@@ -55,16 +63,21 @@ export default function OwnerMain() {
   // 셀렉트박스 확인용
   useEffect(() => {
     console.log("Selected shopId:", shopId);
+    console.log("useSelector shop_id:", ownerShopId);
   }, [shopId]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setShopId(parseInt(e.target.value, 10)); //문자열 value값을 10진수 변환
+    console.log("handleSelect-setShopId 결과: ", shopId);
   };
 
   const handleClick = (path: string) => {
     // navigate(path, { state: { shopId } });
     const selectedShopId = shopId !== null ? shopId : shops[0]?.id; // shopId가 없을 때 첫 번째 가게의 ID를 기본 값으로 사용
-    navigate(path, { state: { shopId: selectedShopId } });
+
+    navigate(path, {
+      state: { shopId: selectedShopId, shopName: shops[0]?.shopName },
+    });
   };
 
   return (
@@ -95,7 +108,7 @@ export default function OwnerMain() {
           <div className="flex justify-center w-4/5 border rounded shadow folderBox my-7">
             <div className="box-content grid w-11/12 grid-cols-2 folder">
               <div
-                onClick={() => handleClick("/testorder")}
+                onClick={() => handleClick("/ownerOrderHistory")}
                 className="bg-contain bg-no-repeat w-[19rem] h-72 
                   relative my-0 mx-auto "
               >

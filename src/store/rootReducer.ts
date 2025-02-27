@@ -1,6 +1,5 @@
 // reducers.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import * as C from "./counter";
 import * as Cl from "./clock";
 import * as L from "./login";
 
@@ -10,13 +9,10 @@ import reviewReducer from "./modules/reviewSlice";
 import { orderReducer } from "./order";
 import { firstOrderReducer } from "./menupick/reducer";
 const rootReducer = combineReducers({
-  counter: C.reducer,
   reviews: reviewReducer,
   clock: Cl.reducer,
   login: L.reducer,
-
   menu: firstOrderReducer,
-
   order: orderReducer,
 });
 

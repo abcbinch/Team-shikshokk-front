@@ -6,6 +6,9 @@ export type AuthState = {
   id: number | null;
   nickname: string | null;
   type: string | null;
+  phoneNumber: string | null;
+  shopId: number | null;
+  shopOwnerLoginId: string | null;
 };
 
 // Action 타입 정의
@@ -29,10 +32,25 @@ export type SetLogoutAction = Action<"@auth/setLogout"> & {
   payload: null;
 };
 
+export type SetPhoneNumberAction = Action<"@auth/setPhoneNumber"> & {
+  payload: string;
+};
+
+export type setShopIdAction = Action<"@auth/setShopId"> & {
+  payload: number;
+};
+
+export type setShopOwnerLoginIdAction = Action<"@auth/setShopOwnerLoginId"> & {
+  payload: string;
+};
+
 // 전체 액션 타입 정의
 export type Actions =
   | SetLoginIdAction
   | SetIdAction
   | SetNicknameAction
   | SetTypeAction
-  | SetLogoutAction;
+  | SetLogoutAction
+  | SetPhoneNumberAction
+  | setShopIdAction
+  | setShopOwnerLoginIdAction;

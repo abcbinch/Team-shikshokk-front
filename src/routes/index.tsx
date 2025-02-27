@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import OwnerOrderAllHistory from "../pages/Order/OwnerOrderPage/OwnerOrderAllHistory";
 import OwnerOrderHistory from "../pages/Order/OwnerOrderPage/OwnerOrderHistory";
@@ -8,7 +8,6 @@ import CustomerOrderAllHistory from "../pages/Order/CustomerOrderPage/CustomerOr
 import Menus from "../pages/Menus";
 import OwnerMain from "../pages/OwnerMain";
 import OwnerReview from "../pages/OwnerReview";
-import CounterTest from "../pages/CounterTest";
 
 import CustomerShopDetail from "../pages/CustomerShopDetail";
 import ShoppingCart from "../components/ShoppingCart";
@@ -28,8 +27,11 @@ import DeleteMember from "../pages/SignUp/DeleteMember";
 import Pay from "../pages/Payment/Pay";
 
 import CustomerOrderHistory from "../pages/Order/CustomerOrderPage/CustomerOrderHistory";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 const AppRoutes = () => {
+  const userType = useSelector((state: RootState) => state.login.type);
+
   let routes = useRoutes([
     { path: "/Home", element: <Home /> },
 
@@ -41,10 +43,7 @@ const AppRoutes = () => {
     { path: "/ownerOrderAllHistory", element: <OwnerOrderAllHistory /> },
     { path: "/customerOrderHistory", element: <CustomerOrderHistory /> },
     { path: "/customerOrderAllHistory", element: <CustomerOrderAllHistory /> },
-
-    { path: "/", element: <OwnerMain /> },
     { path: "/owner-review", element: <OwnerReview /> },
-    { path: "/counter", element: <CounterTest /> },
     { path: "/income", element: <Income /> },
 
     { path: "/shopdetail", element: <CustomerShopDetail /> },
@@ -58,7 +57,16 @@ const AppRoutes = () => {
     { path: "/signup", element: <SignUpPage /> },
     { path: "/mypage", element: <MyPage /> },
 
-    { path: "/", element: <UserMain /> },
+    {
+      path: "/",
+      element:
+        userType === "individual" || userType === null ? (
+          <UserMain />
+        ) : (
+          <OwnerMain />
+        ),
+    },
+    { path: "/", element: <OwnerMain /> },
 
     { path: "/delete/:nickname", element: <DeleteMember /> },
 

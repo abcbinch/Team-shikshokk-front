@@ -1,16 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/rootReducer"; // 경로 수정
+import {
+  setUserId,
+  setLoginId,
+  setNickname,
+  setType,
+} from "../store/login/actions"; // 경로 수정
 import "../styles/UserMain.scss";
+import Header from "../components/Header/Header";
+import axios from "axios";
+
+// 이미지 파일 import
+import burger from "../assets/burger.jpg";
+import mexican from "../assets/mexican.jpg";
 import pizza from "../assets/pizza.jpg";
 import pizza2 from "../assets/pizza2.jpg";
 import vietnam from "../assets/vietnam.jpg";
-import mexican from "../assets/mexican.jpg";
-import burger from "../assets/burger.jpg";
-import Header from "../components/Header/Header";
+
+interface FoodItem {
+  id: number;
+  shop_menu_id: number;
+  menuName: string;
+  price: number;
+  menudesc: string;
+  category: string;
+  originMfile?: string;
+  saveMfile?: string;
+}
+
+interface StoreItem {
+  id: number;
+  owner_id: number;
+  shopName: string;
+  businessNumber: string;
+  shopAddress: string;
+  shopPhone: string;
+  shopType: string;
+  shopOwner: string;
+}
 
 const UserMain: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch(); // dispatch 훅 사용
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArea, setSelectedArea] = useState("서울시 종로구");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+
+  const [store, setStore] = useState<StoreItem[]>([]);
+  useEffect(() => {
+    const fetchShopList = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_SERVER}/getShop`
+        );
+
+        setStore(res.data.shop);
+        console.log(res.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchShopList();
+  }, []);
+
+  // 하드코딩된 슬라이드 이미지
+  const images = [burger, mexican, pizza, pizza2, vietnam];
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -20,9 +78,6 @@ const UserMain: React.FC = () => {
     setSelectedArea(event.target.value);
   };
 
-  const foodItems = Array(8).fill("패스트푸드");
-  const images = [pizza, pizza2, vietnam, mexican];
-
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
@@ -31,6 +86,14 @@ const UserMain: React.FC = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
+  };
+
+  const handleStoreClick = (
+    shopId: number,
+    owner_id: number,
+    shopName: string
+  ) => {
+    navigate("/shopdetail", { state: { shopId, owner_id, shopName } });
   };
 
   return (
@@ -65,11 +128,13 @@ const UserMain: React.FC = () => {
             <button className="slider-button prev" onClick={prevSlide}>
               &#10094; {/* 이전 버튼 */}
             </button>
-            <img
-              src={images[currentIndex]}
-              alt="피자"
-              className="banner-image"
-            />
+            {images.length > 0 && (
+              <img
+                src={images[currentIndex]}
+                alt="슬라이드 이미지"
+                className="banner-image"
+              />
+            )}
             <button className="slider-button next" onClick={nextSlide}>
               &#10095; {/* 다음 버튼 */}
             </button>
@@ -79,17 +144,14 @@ const UserMain: React.FC = () => {
           </h1>
         </div>
         <div className="food-grid">
-          {foodItems.map((item, index) => (
-            <div
-              key={index}
-              className={`food-item ${index === 0 ? "active" : ""}`}
-            >
+          {foodItems.map((item) => (
+            <div key={item.id} className="food-item">
               <img
-                src={burger} // burger 이미지로 대체
-                alt="음식"
+                src={item.saveMfile} // 메뉴 이미지
+                alt={item.menuName}
                 className="food-image"
               />
-              <p className="food-name">{item}</p>
+              <p className="food-name">{item.menuName}</p>
             </div>
           ))}
         </div>
@@ -97,20 +159,29 @@ const UserMain: React.FC = () => {
         <div className="store-section">
           <h2 className="store-title">STORE</h2>
           <div className="store-grid">
-            {Array(8)
-              .fill(null)
-              .map((_, index) => (
-                <div key={index} className="store-item">
-                  <img src={pizza} alt="피자" className="store-image" />
-                  <div className="store-info">
-                    <h3 className="store-name">PIZZA DOMINO</h3>
-                    <div className="store-rating">
-                      <span className="rating-circle">4.8</span>
-                    </div>
-                    <p className="store-description">PIZZA</p>
+            {store.map((store) => (
+              <div
+                key={store.id}
+                className="store-item"
+                onClick={() =>
+                  handleStoreClick(store.id, store.owner_id, store.shopName)
+                } // 클릭 시 상세 페이지로 이동
+              >
+                <img
+                  src="default_image_url.jpg" // 하드코딩된 기본 이미지
+                  alt={store.shopName}
+                  className="store-image"
+                />
+                <div className="store-info">
+                  <h3 className="store-name">{store.shopName}</h3>
+                  <div className="store-rating">
+                    <span className="rating-circle">4.8</span>{" "}
+                    {/* 실제 평점 데이터로 대체 필요 */}
                   </div>
+                  <p className="store-description">{store.shopType}</p>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>

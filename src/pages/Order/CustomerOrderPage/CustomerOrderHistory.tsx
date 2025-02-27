@@ -8,14 +8,18 @@ import { v4 as uuidv4 } from "uuid";
 import * as C from "../../../store/clock";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RootState } from "../../../store/rootReducer";
+import "../../../styles/customerOrderHistory.scss";
 
 interface CustomerOrderHistoryProps {}
 
-const socket = io("http://localhost:8082");
-const loginId = "customer01";
-const shopLoginId = "owner01";
+const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
+
+const shopLoginId = "owner1";
 const shopName = "햄버거집";
+
 const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
+  const loginId = useSelector((state: RootState) => state.login.id);
   const clock = new Date(
     useSelector<AppState, C.State>((state) => state.clock)
   );
@@ -248,6 +252,16 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
                       </li>
                       <li>주문고객Id</li>
                       <li>{order.loginId}</li>
+                      <li>방문날짜</li>
+                      <li>
+                        {`${new Date(order.visitDate).getFullYear()}년 ${
+                          new Date(order.visitDate).getMonth() + 1
+                        }월 ${new Date(order.visitDate).getDate()}일`}
+                      </li>
+                      <li>방문시간</li>
+                      <li>
+                        {order.visitHour}시 {order.visitMinute}분
+                      </li>
 
                       <li>주문번호</li>
                       <li>{order.orderNumber.slice(-8)}</li>
