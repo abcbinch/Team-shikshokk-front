@@ -274,7 +274,9 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
                       <li>메뉴이름</li>
                       {Array.isArray(order.items) && order.items.length > 0 ? (
                         order.items.map((item, index) => (
-                          <li key={index}>{item}</li>
+                          <li key={index}>
+                            {item.menuName} {item.price}원
+                          </li>
                         ))
                       ) : (
                         <li>-</li>
