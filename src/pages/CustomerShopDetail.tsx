@@ -31,11 +31,11 @@ export default function CustomerShopDetail(props: object) {
   console.log("owner_id = ", owner_id);
   console.log("shopName = ", shopName);
 
-  let [isShopShow, setIsShopShow] = useState(false);
   let [menuArr, setMenuArr] = useState<Menus[]>([]);
   let [categoryArr, setCategoryArr] = useState<string[]>([]);
   const [total, setTotal] = useState(0);
   const menuData = useSelector((state: RootState) => state.menu.items);
+  const shop_id = useSelector((state: RootState) => state.login.shopId);
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.login.loginId);
   const contactNumber = useSelector(
@@ -55,7 +55,7 @@ export default function CustomerShopDetail(props: object) {
             orderNumber: uuidv4(),
             contactNumber,
             shopName,
-            shopLoginId: shopId,
+            shopLoginId: shopId || shop_id,
             items: [],
             price: [],
           };
@@ -78,36 +78,20 @@ export default function CustomerShopDetail(props: object) {
 
   //메뉴 전체 조회 axios
   useEffect(() => {
-    const menuList = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/menu-list`,
-        { params: { shopId: shopId, owner_id: owner_id } }
-      );
-      let result = response.data.map((el: Menus) => {
-        const {
-          id,
-          menuName,
-          price,
-          menudesc,
-          category,
-          originMfile,
-          saveMfile,
-        } = el;
-        return {
-          id,
-          menuName,
-          price,
-          menudesc,
-          category,
-          originMfile,
-          saveMfile,
-        };
-      });
+    try {
+      const menuList = async () => {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_SERVER}/menu-list`,
+          { shopId: shopId || shop_id, owner_id: owner_id }
+        );
 
-      setMenuArr(() => [...result]);
-    };
+        setMenuArr(() => [...response.data]);
+      };
 
-    menuList();
+      menuList();
+    } catch (err) {
+      console.log("err", err);
+    }
   }, []);
 
   //카테고리 set. 중복 제거.
@@ -122,7 +106,9 @@ export default function CustomerShopDetail(props: object) {
     <main className="m-auto max-w-7xl">
       <Header />
       <div className="shop-image-container">
-        <div className="img-sample"></div>
+        <div className="img-sample">
+          <img src={process.env.PUBLIC_URL + "/assets/pizza.jpg"} />
+        </div>
       </div>
       <hr />
       {/* 메뉴 탭 */}
@@ -156,8 +142,10 @@ export default function CustomerShopDetail(props: object) {
                       <div className="img-box">
                         <img
                           src={
-                            "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
                             mel.saveMfile
+                              ? "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
+                                mel.saveMfile
+                              : process.env.PUBLIC_URL + "/assets/fork-E.svg"
                           }
                           alt="aws s3에 저장된 이미지"
                         />

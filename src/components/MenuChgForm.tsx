@@ -13,11 +13,13 @@ interface Menus {
   price: string;
   menudesc: string;
   originMfile: string;
+  saveMfile: string;
 }
 interface MenuAddFormProps {
   selectMenu: Menus;
   setIsChgShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
+  setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 //props로 Menus에서 메뉴 정보를 여기로 전달한다.
 //value에 메뉴 정보를 넣는다.
@@ -25,6 +27,7 @@ export default function MenuChgForm({
   selectMenu,
   setIsChgShow,
   setImgS3route,
+  setIsUpdated,
 }: MenuAddFormProps) {
   let [menuid, setMenuid] = useState(selectMenu.id);
   let [chgname, setChgname] = useState(selectMenu.menuName);
@@ -37,7 +40,7 @@ export default function MenuChgForm({
   const owner_id = useSelector((state: RootState) => state.login.id);
   const shop_id = useSelector((state: RootState) => state.login.shopId);
 
-  //메뉴 수정정
+  //메뉴 수정
   const menuChg = async (e: React.FormEvent) => {
     try {
       if (formRef.current && formRef.current.checkValidity()) {
@@ -56,8 +59,7 @@ export default function MenuChgForm({
           formData.append("shopId", String(shop_id));
         }
         const response = await axios.patch(
-          "http://localhost:8082/api-server/menu-change",
-          // { id: selectMenu.id, chgname, chgcategory, chgprice, chgdesc }
+          `${process.env.REACT_APP_API_SERVER}/menu-change`,
           formData,
           {
             headers: {
@@ -68,6 +70,12 @@ export default function MenuChgForm({
 
         if (response) alert("수정이 완료되었습니다.");
       }
+      setIsUpdated(true);
+
+      setTimeout(() => {
+        // 상태가 false로 변경되는 시점을 지연시켜 useEffect가 반영되도록 함
+        setIsUpdated(false);
+      }, 100); // 100ms 정도 지연 (혹은 필요에 따라 시간 조절)
       setIsChgShow(false);
     } catch (err) {
       console.log(err);
@@ -88,6 +96,12 @@ export default function MenuChgForm({
       console.log(result.data.isDelete);
       if (result.data.isDelete) {
         alert("삭제되었습니다");
+        setIsUpdated(true); // 상태 변경하여 useEffect 실행
+
+        setTimeout(() => {
+          // 상태가 false로 변경되는 시점을 지연시켜 useEffect가 반영되도록 함
+          setIsUpdated(false);
+        }, 100); // 100ms 정도 지연 (혹은 필요에 따라 시간 조절)
 
         setIsChgShow(false);
       }
@@ -154,7 +168,8 @@ export default function MenuChgForm({
         <div className="custom-container">
           사진
           <br />
-          <div className="custom-input">
+          <label className="custom-input">
+            <p>{chgfile ? chgfile.name : selectMenu.originMfile}</p>
             <input
               type="file"
               name="chgfile"
@@ -165,7 +180,7 @@ export default function MenuChgForm({
                 }
               }}
             />
-          </div>
+          </label>
         </div>
         <br />
         <div className="btn-container">
