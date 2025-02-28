@@ -72,10 +72,7 @@ export default function MenuChgForm({
       }
       setIsUpdated(true);
 
-      setTimeout(() => {
-        // 상태가 false로 변경되는 시점을 지연시켜 useEffect가 반영되도록 함
-        setIsUpdated(false);
-      }, 100); // 100ms 정도 지연 (혹은 필요에 따라 시간 조절)
+      setIsUpdated(false);
       setIsChgShow(false);
     } catch (err) {
       console.log(err);
