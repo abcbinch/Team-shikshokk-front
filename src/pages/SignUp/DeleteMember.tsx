@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLogout } from '../../store/login'; // 로그아웃 액션 임포트
 import '../../styles/DeleteMember.scss';
 import Header from '../../components/Header/Header';
 import axios from 'axios';
@@ -9,6 +11,7 @@ const DeleteMember: React.FC = () => {
   const { nickname } = useParams<{ nickname: string }>(); // nickname 받기
   const [isAgreed, setIsAgreed] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // dispatch 가져오기
 
   useEffect(() => {
     console.log('닉네임:', nickname);
@@ -32,6 +35,7 @@ const DeleteMember: React.FC = () => {
         );
 
         alert(response.data.message);
+        dispatch(setLogout()); // 탈퇴 시 리덕스 상태 초기화
         navigate('/login'); // 회원 탈퇴 후 로그인 페이지로 리다이렉트
       } catch (error) {
         console.error('회원 탈퇴 오류:', error);
