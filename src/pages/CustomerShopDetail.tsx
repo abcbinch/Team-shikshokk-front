@@ -51,7 +51,7 @@ export default function CustomerShopDetail(props: object) {
         : {
             orderType: "default",
             loginId: userId,
-            orderTime: new Date(),
+            orderTime: new Date(new Date().getTime() + 9 * 60 * 60 * 1000),
             orderNumber: uuidv4(),
             contactNumber,
             shopName,
