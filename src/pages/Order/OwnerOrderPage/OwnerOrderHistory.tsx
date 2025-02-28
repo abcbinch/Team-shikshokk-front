@@ -8,10 +8,10 @@ import io from "socket.io-client";
 import * as O from "../../../store/order";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
+import { useNavigate } from "react-router-dom";
 
 interface OwnerOrderHistoryProps {}
-
-const socket = io(`${process.env.REACT_APP_SOCKET_SERVER}`);
+const socket = io("http://localhost:8082");
 const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
   const loginId = useSelector((state: RootState) => state.login.loginId);
   console.log("리덕스 스토어 loginId = ", loginId);
@@ -24,6 +24,7 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     [key: string]: boolean;
   }>();
 
+  const navigate = useNavigate();
   const [orderInfo, setOrderInfo] = useState<O.Order[]>([]);
   useEffect(() => {
     const handleResize = () => {
@@ -175,6 +176,10 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
     });
   };
 
+  // const allOrder = () => {
+  //   navigate("/ownerOrderAllHistory");
+  // };
+
   return (
     <>
       <Header />
@@ -185,7 +190,10 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
               <div className="menu-tab-1">
                 <p>현재 주문</p>
               </div>
-              <div className="menu-tab-2">
+              <div
+                className="menu-tab-2"
+                onClick={() => navigate("/ownerOrderAllHistory")}
+              >
                 <p>전체 주문</p>
               </div>
             </div>
@@ -233,10 +241,8 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
                       <li>{order.contactNumber}</li>
                       <li>메뉴이름</li>
                       {Array.isArray(order.items) && order.items.length > 0 ? (
-                        order.items.map((item: any, index) => (
-                          <li key={index}>
-                            {item.menuName} {item.price}원
-                          </li>
+                        order.items.map((item, index) => (
+                          <li key={index}>{item}</li>
                         ))
                       ) : (
                         <li>-</li>

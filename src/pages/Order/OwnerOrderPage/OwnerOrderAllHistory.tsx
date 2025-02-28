@@ -5,10 +5,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../../components/Header/Header";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface OwnerOrderAllHistoryProps {}
 
 const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Header />
@@ -16,7 +18,12 @@ const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
         <div>
           <section className="order-history-container-all">
             <div className="menu-tab-container-all">
-              <div className="menu-tab-1-all">
+              <div
+                className="menu-tab-1-all"
+                onClick={() => {
+                  navigate("/ownerOrderHistory");
+                }}
+              >
                 <p>현제 주문</p>
               </div>
               <div className="menu-tab-2-all">
@@ -89,7 +96,6 @@ const OwnerOrderAllHistory: React.FC<OwnerOrderAllHistoryProps> = () => {
                   <li>매우매우맛잇는치킨x1</li>
                   <li>매우매우맛잇는피자x1</li>
                   <li>매우매우맛잇는햄버거x1</li>
-
                   <br />
                   <li>합계: 85000원</li>
                   <li>방문시간</li>

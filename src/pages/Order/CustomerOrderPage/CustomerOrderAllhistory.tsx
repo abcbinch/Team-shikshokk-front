@@ -43,7 +43,7 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
         `${process.env.REACT_APP_API_SERVER}/customerOrderAllHistory`,
         {
           params: {
-            cus_id: loginId,
+            id: id,
           },
         }
       );
@@ -62,6 +62,9 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
 
   //--
 
+  const nowOrder = () => {
+    navigate("/customerOrderHistory");
+  };
   return (
     <>
       <Header />
@@ -69,7 +72,7 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
         <div>
           <section className="order-history-container-all">
             <div className="menu-tab-container-all">
-              <div className="menu-tab-1-all">
+              <div className="menu-tab-1-all" onClick={nowOrder}>
                 <p>현제 주문</p>
               </div>
               <div className="menu-tab-2-all">
