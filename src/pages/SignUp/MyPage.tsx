@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/rootReducer'; // 경로 수정
-import Header from '../../components/Header/Header'; // 경로 수정
+import Header from '../../components/Header/Header'; // 헤더 임포트
 import '../../styles/MyPage.scss'; // 경로 수정
 import profileImage from '../../assets/dprofile.jpg'; // import 형식으로 수정
 import axios from 'axios';
