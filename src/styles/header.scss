@@ -20,7 +20,8 @@
   position: relative;
   min-height: 9vh;
   width: 1200px;
-  border: 1px solid pink;
+  // border: 1px solid pink;
+  border: none !important;
   display: flex;
   justify-content: space-between;
   align-items: center;
