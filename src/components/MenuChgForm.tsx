@@ -86,7 +86,7 @@ export default function MenuChgForm({
   const menuDel = async () => {
     try {
       const result = await axios.delete(
-        "http://localhost:8082/api-server/menu-delete",
+        `${process.env.REACT_APP_API_SERVER}/menu-delete`,
         {
           data: {
             id: selectMenu.id,
