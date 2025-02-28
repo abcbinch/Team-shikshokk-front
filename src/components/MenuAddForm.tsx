@@ -9,11 +9,13 @@ import { RootState } from "../store/rootReducer";
 interface MenuAddFormProps {
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
   setImgS3route: React.Dispatch<React.SetStateAction<string>>;
+  setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function MenuAddForm({
   setIsShow,
   setImgS3route,
+  setIsUpdated,
 }: MenuAddFormProps) {
   let [mname, setMname] = useState("");
   let [mcategory, setMcategory] = useState("");
@@ -51,7 +53,7 @@ export default function MenuAddForm({
         }
 
         const response = await axios.post(
-          "http://localhost:8082/api-server/menu-register",
+          `${process.env.REACT_APP_API_SERVER}/menu-register`,
           formData,
           {
             headers: {
@@ -61,6 +63,9 @@ export default function MenuAddForm({
         );
 
         const { isUpdate, msg } = response.data;
+        setIsUpdated(true);
+
+        setIsUpdated(false);
 
         if (isUpdate) {
           alert(msg);
@@ -149,14 +154,14 @@ export default function MenuAddForm({
         </label>
         <br />
 
-        <div className="custom-container">
+        <label className="custom-container">
           사진
           <br />
           <div className="custom-input" ref={customRef}>
             <p>{mfile ? mfile.name : "파일을 입력해 주세요."}</p>
             <input type="file" name="mfile" onChange={handleFileChange} />
           </div>
-        </div>
+        </label>
         <br />
         <button type="submit">등록하기</button>
       </form>

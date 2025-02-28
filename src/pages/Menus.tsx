@@ -30,65 +30,34 @@ export default function Menus() {
   let [imgS3route, setImgS3route] = useState<string>(
     "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/"
   );
+  const [isUpdated, setIsUpdated] = useState(false);
   const owner_id = useSelector((state: RootState) => state.login.id);
-
-  // const location = useLocation();
-  // const crossId = location.state?.shopId;
-
-  // console.log("이것은 crossId다", crossId);
-
   const shopId = useSelector((state: RootState) => state.login.shopId);
-  console.log("이것은 shopId다", shopId);
 
   //메뉴 전체 조회 axios
   useEffect(() => {
     try {
       //점주 하나, 가게 하나의 메뉴를 가져와야 한다.
       const menuList = async () => {
-        const response = await axios.get(
-          `http://localhost:8082/api-server/menu-list`,
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_SERVER}/menu-list`,
           {
-            params: {
-              owner_id: owner_id,
-
-              shopId: shopId,
-            },
+            owner_id: owner_id,
+            shopId: shopId,
           }
         );
 
-        console.log(owner_id);
-
-        let result = response.data.map((el: Menus) => {
-          const {
-            id,
-            shop_menu_id,
-            menuName,
-            price,
-            menudesc,
-            category,
-            originMfile,
-            saveMfile,
-          } = el;
-          return {
-            id,
-            shop_menu_id,
-            menuName,
-            price,
-            menudesc,
-            category,
-            originMfile,
-            saveMfile,
-          };
-        });
-
-        setMenuArr(() => [...result]);
+        setMenuArr(() => [...response.data]);
       };
-
-      menuList();
+      if (!isUpdated) {
+        menuList();
+      }
     } catch (err) {
       console.log("err", err);
     }
-  }, []);
+  }, [isUpdated]);
+
+  console.log(menuArr);
 
   //카테고리 set. 중복 제거.
   useEffect(() => {
@@ -182,13 +151,18 @@ export default function Menus() {
       {/* categoryArr 끝 */}
 
       {isShow && (
-        <MenuAddForm setIsShow={setIsShow} setImgS3route={setImgS3route} />
+        <MenuAddForm
+          setIsShow={setIsShow}
+          setImgS3route={setImgS3route}
+          setIsUpdated={setIsUpdated}
+        />
       )}
       {isChgShow && selectMenu && (
         <MenuChgForm
           selectMenu={selectMenu}
           setIsChgShow={setIsChgShow}
           setImgS3route={setImgS3route}
+          setIsUpdated={setIsUpdated}
         />
       )}
     </main>

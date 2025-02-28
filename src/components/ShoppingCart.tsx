@@ -8,14 +8,6 @@ import { RootState } from "../store/rootReducer";
 import Header from "./Header/Header";
 import { useNavigate } from "react-router-dom";
 
-// interface Pickups {
-//   setItems: React.Dispatch<
-//     React.SetStateAction<{ name: string; price: number }[]>
-//   >;
-//   // items: { name: string; price: number }[];
-// }
-// { setItems }: Pickups
-
 interface MenuWithPrice {
   name: string;
   price: number;
@@ -30,8 +22,6 @@ export default function ShoppingCart({ total }: Props) {
   const cartRef = useRef<HTMLDivElement>(null);
 
   const [isMobile, setIsMobile] = useState(false);
-
-  // let [total, setTotal] = useState<number>(0); //이건 총합 계산
 
   const dispatch = useDispatch();
   const menuData = useSelector((state: RootState) => state.menu.items);
@@ -73,16 +63,6 @@ export default function ShoppingCart({ total }: Props) {
     };
   }, []);
 
-  // //메뉴 삭제
-  // const removeMenu = (name: string) => {
-  //   if (menuWithPrice.length > 0) {
-  //     const updatedMenuWithPrice = menuWithPrice.filter(
-  //       (el: { name: string; price: number }) => el.name !== name
-  //     );
-  //     setMenuWithPrice(updatedMenuWithPrice); // 새로운 배열로 상태 업데이트
-  //   }
-  // };
-
   const cartFold = () => {
     if (!isMobile) {
       //데스크톱
@@ -111,18 +91,16 @@ export default function ShoppingCart({ total }: Props) {
     }
   };
 
-  //리스트가 바뀔 때마다 토탈이 계산된다
-  // useEffect(() => {
-  //   const newTotal = menuWithPrice.reduce((acc, el) => acc + el.price, 0);
-  //   // setTotal(newTotal);
-  // }, [menuWithPrice]);
+  console.log("이게 menuWIthPrice: ", menuWithPrice);
 
   return (
     <div className="cart-container" ref={cartRef}>
       <div className="fold-btn" ref={btnRef} onClick={cartFold}>
         <div className="menu-length">
-          {/* {menuWithPrice &&
-            (menuWithPrice.length > 0 ? menuWithPrice.length : 0)}{" "} */}
+          {menuWithPrice &&
+            (menuWithPrice.items.length > 0
+              ? menuWithPrice.items.length
+              : 0)}{" "}
         </div>
         <FontAwesomeIcon icon={faCartShopping} className="cart" />
       </div>
