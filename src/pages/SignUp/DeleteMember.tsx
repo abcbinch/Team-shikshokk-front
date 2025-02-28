@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLogout } from '../../store/login'; // 로그아웃 액션 임포트
+import { setLogout } from '../../store/login';
 import '../../styles/DeleteMember.scss';
 import Header from '../../components/Header/Header';
 import axios from 'axios';
 import Footer from '../Footer';
 
 const DeleteMember: React.FC = () => {
-  const { nickname } = useParams<{ nickname: string }>(); // nickname 받기
+  const { nickname } = useParams<{ nickname: string }>();
   const [isAgreed, setIsAgreed] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // dispatch 가져오기
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('닉네임:', nickname);
@@ -24,7 +24,6 @@ const DeleteMember: React.FC = () => {
   const handleDelete = async () => {
     if (!nickname) {
       alert('탈퇴할 수 있는 사용자 정보가 없습니다.');
-      return; // 리다이렉트 대신 경고 메시지 출력
     }
 
     if (isAgreed) {
