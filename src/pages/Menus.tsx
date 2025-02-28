@@ -116,8 +116,7 @@ export default function Menus() {
                           <img
                             src={
                               mel.saveMfile
-                                ? "https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/" +
-                                  mel.saveMfile
+                                ? `https://lhm-bucket.s3.ap-northeast-2.amazonaws.com/${mel.saveMfile}`
                                 : process.env.PUBLIC_URL + "/assets/fork-E.svg"
                             }
                             alt="aws s3에 저장된 이미지"
