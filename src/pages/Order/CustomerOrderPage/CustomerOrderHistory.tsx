@@ -10,6 +10,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RootState } from "../../../store/rootReducer";
 import "../../../styles/customerOrderHistory.scss";
+
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface CustomerOrderHistoryProps {}
@@ -240,6 +241,7 @@ const CustomerOrderHistory: React.FC<CustomerOrderHistoryProps> = () => {
               <div className="menu-tab-1">
                 <p>현재 주문</p>
               </div>
+              <div className="menu-tab-2">
               <div className="menu-tab-2" onClick={allOrder}>
                 <p>전체 주문</p>
               </div>
