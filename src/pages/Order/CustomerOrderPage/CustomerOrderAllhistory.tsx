@@ -40,7 +40,7 @@ const CustomerOrderAllhistory: React.FC<CustomerOrderAllhistoryProps> = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://localhost:8082/api-server/customerOrderAllHistory",
+        `${process.env.REACT_APP_API_SERVER}/customerOrderAllHistory`,
         {
           params: {
             id: id,
