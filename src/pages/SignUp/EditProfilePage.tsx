@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header'; // 헤더 임포트
 import axios from 'axios'; // Axios 임포트
 import '../../styles/EditProfilePage.scss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/rootReducer'; // 경로 수정
+import { setNickname } from '../../store/login'; // 액션 임포트
 import Footer from '../Footer';
 
 const EditProfilePage: React.FC = () => {
+  const dispatch = useDispatch(); // useDispatch 훅 사용
   const loginId = useSelector((state: RootState) => state.login.loginId);
   const memberType = useSelector((state: RootState) => state.login.type);
   const navigate = useNavigate(); // useNavigate 훅 사용
@@ -119,56 +121,35 @@ const EditProfilePage: React.FC = () => {
       }
     }
 
-    const formDataToSend = new FormData();
-    formDataToSend.append('nickname', formData.nickname);
-    formDataToSend.append('email', formData.email);
-    formDataToSend.append('currentPassword', currentPassword);
-    formDataToSend.append('newPassword', newPassword);
-    formDataToSend.append('phoneNumber', formData.phoneNumber);
-    formDataToSend.append('address', formData.address);
-    formDataToSend.append('membershipType', membershipType);
-
-    // 기업회원 추가 데이터
-    if (membershipType === 'business') {
-      formDataToSend.append('companyName', formData.companyName);
-      formDataToSend.append('businessType', formData.businessType);
-      formDataToSend.append('storeAddress', formData.storeAddress);
-      formDataToSend.append('representativeName', formData.representativeName);
-      formDataToSend.append(
-        'businessRegistrationNumber',
-        formData.businessRegistrationNumber,
-      );
-    }
+    const body =
+      membershipType === 'business'
+        ? {
+            userid: loginId,
+            nickname: formData.nickname,
+            email: formData.email,
+            currentPassword: currentPassword,
+            newPassword: newPassword,
+            phoneNumber: formData.phoneNumber,
+            address: formData.address,
+            membershipType: membershipType,
+            companyName: formData.companyName,
+            businessType: formData.businessType,
+            storeAddress: formData.storeAddress,
+            representativeName: formData.representativeName,
+            businessRegistrationNumber: formData.businessRegistrationNumber,
+          }
+        : {
+            userid: loginId,
+            nickname: formData.nickname,
+            email: formData.email,
+            currentPassword: currentPassword,
+            newPassword: newPassword,
+            phoneNumber: formData.phoneNumber,
+            address: formData.address,
+            membershipType: membershipType,
+          };
 
     try {
-      // axios PUT 요청
-      const body =
-        membershipType === 'business'
-          ? {
-              userid: loginId,
-              nickname: formData.nickname,
-              email: formData.email,
-              currentPassword: currentPassword,
-              newPassword: newPassword,
-              phoneNumber: formData.phoneNumber,
-              address: formData.address,
-              membershipType: membershipType,
-              companyName: formData.companyName,
-              businessType: formData.businessType,
-              storeAddress: formData.storeAddress,
-              representativeName: formData.representativeName,
-              businessRegistrationNumber: formData.businessRegistrationNumber,
-            }
-          : {
-              userid: loginId,
-              nickname: formData.nickname,
-              email: formData.email,
-              currentPassword: currentPassword,
-              newPassword: newPassword,
-              phoneNumber: formData.phoneNumber,
-              address: formData.address,
-              membershipType: membershipType,
-            };
       const response = await axios.put(
         `${process.env.REACT_APP_API_SERVER}/update`,
         body,
@@ -176,7 +157,11 @@ const EditProfilePage: React.FC = () => {
 
       console.log('회원 정보 수정 성공:', response.data);
       alert('회원 정보가 수정되었습니다.');
-      navigate('/mypage');
+
+      // Redux 상태 업데이트
+      dispatch(setNickname(formData.nickname)); // 닉네임 업데이트 추가
+
+      navigate('/mypage'); // 마이페이지로 리다이렉트
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('회원 정보 수정 오류:', error.response?.data);
