@@ -5,6 +5,7 @@ import axios from 'axios'; // Axios 임포트
 import '../../styles/EditProfilePage.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/rootReducer'; // 경로 수정
+import Footer from '../Footer';
 
 const EditProfilePage: React.FC = () => {
   const loginId = useSelector((state: RootState) => state.login.loginId);
@@ -361,6 +362,7 @@ const EditProfilePage: React.FC = () => {
           <button type="submit">수정하기</button>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Header from '../../components/Header/Header'; // 경로 수정
 import '../../styles/MyPage.scss'; // 경로 수정
 import profileImage from '../../assets/dprofile.jpg'; // import 형식으로 수정
 import axios from 'axios';
+import Footer from '../Footer';
 
 const MyPage: React.FC = () => {
   const memberType = useSelector((state: RootState) => state.login.type);
@@ -112,6 +113,7 @@ const MyPage: React.FC = () => {
           <button onClick={handleSubmitCharge}>충전하기</button>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
