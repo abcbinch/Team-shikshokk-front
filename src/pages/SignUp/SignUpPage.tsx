@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/SignUpPage.scss';
 import Header from '../../components/Header/Header';
+import Footer from '../Footer';
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
@@ -325,6 +326,7 @@ const SignUpPage: React.FC = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/DeleteMember.scss';
 import Header from '../../components/Header/Header';
 import axios from 'axios';
+import Footer from '../Footer';
 
 const DeleteMember: React.FC = () => {
   const { nickname } = useParams<{ nickname: string }>(); // nickname 받기
@@ -78,6 +79,7 @@ const DeleteMember: React.FC = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
