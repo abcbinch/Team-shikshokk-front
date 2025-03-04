@@ -115,7 +115,7 @@ export default function CusReview() {
     }
 
     formData.append("star", starClick.toString());
-    formData.append("orderId", "1"); // 주문번호? 아이디?
+    formData.append("orderId", orderId); // 주문아이디
     if (!review) {
       // review가 초기값 null이라서
       console.error("Review data is not loaded yet.");
@@ -140,7 +140,7 @@ export default function CusReview() {
       console.log("서버에서 받은", response.data);
       if (response.data.message === "ok") {
         alert("리뷰가 등록됐습니다.");
-        navigate("/"); /// 여기 ------------ 어디로 갈지?
+        navigate("/"); //성공시 홈으로
       }
     } catch (error) {
       console.error("Error uploading data: ", error);
