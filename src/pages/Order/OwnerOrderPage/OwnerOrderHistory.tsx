@@ -241,8 +241,10 @@ const OwnerOrderHistory: React.FC<OwnerOrderHistoryProps> = () => {
                       <li>{order.contactNumber}</li>
                       <li>메뉴이름</li>
                       {Array.isArray(order.items) && order.items.length > 0 ? (
-                        order.items.map((item, index) => (
-                          <li key={index}>{item}</li>
+                        order.items.map((item: any, index) => (
+                          <li key={index}>
+                            {item.menuName} {item.price}원
+                          </li>
                         ))
                       ) : (
                         <li>-</li>
