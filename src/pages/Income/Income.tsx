@@ -30,7 +30,7 @@ export default function Income() {
     value: number;
     color: string;
     menuName: string;
-    totalPrice: number;
+    price: number;
   };
   type DataState = {
     [key: string]: any;
@@ -128,7 +128,7 @@ export default function Income() {
               value: Number(menuItem.value),
               color: String(menuItem.color),
               menuName: String(menuItem.menuName),
-              totalPrice: Number(menuItem.totalPrice),
+              price: Number(menuItem.price),
             };
           })
         : [];
@@ -272,7 +272,7 @@ export default function Income() {
                 {menuData.map((el) => {
                   return (
                     <div>
-                      {el.menuName}: {el.totalPrice}원
+                      {el.menuName}: {el.price}원
                     </div>
                   );
                 })}
@@ -308,13 +308,22 @@ export default function Income() {
 
         <div className="flex flex-col justify-center w-full h-full gap-10 mt-10 lg:flex-row">
           <div className="bg-white p-4 rounded-lg shadow-lg w-full lg:w-[70%] h-full">
+            <select
+              onChange={(e) => {
+                setSelectedOption(e.target.value);
+              }}
+              className="p-2 mb-4 border rounded-lg"
+            >
+              <option value="income">매출</option>
+              <option value="visitors">고객 수</option>
+            </select>
             {isDataEmpty || data.income.length === 0 ? (
               <p className="text-center text-lg font-bold text-red-500">
                 검색 결과가 존재하지 않습니다. 날짜를 변경해주세요.
               </p>
             ) : (
               <ResponsiveContainer width="100%" height={500}>
-                <BarChart data={data.income}>
+                <BarChart data={data[selectedOption]}>
                   <XAxis dataKey="날짜" />
                   <YAxis />
                   <Tooltip />
