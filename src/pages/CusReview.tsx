@@ -7,6 +7,8 @@ import "../styles/cusReview.scss";
 import axios from "axios";
 import Header from "../components/Header/Header";
 import Footer from "./Footer";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/rootReducer";
 
 //주문목록 interface (수정함)
 interface data {
@@ -32,6 +34,10 @@ export default function CusReview() {
   const location = useLocation();
   const { orderId } = location.state || { orderId: null }; // 기본 값을 null로 설정
   console.log("주문아이디", orderId);
+
+  // 사용자 아이디
+  const userId = useSelector((state: RootState) => state.login.id);
+  console.log("---------id?", userId);
 
   //===== 이미지
   const [imgFile, setImgFile] = useState<string | ArrayBuffer | null>("");
@@ -116,6 +122,7 @@ export default function CusReview() {
 
     formData.append("star", starClick.toString());
     formData.append("orderId", orderId); // 주문아이디
+    // formData.append("cus_order_id", userId); // 회원 아이디  cus_order_id
     if (!review) {
       // review가 초기값 null이라서
       console.error("Review data is not loaded yet.");
@@ -123,6 +130,7 @@ export default function CusReview() {
     }
     if (Array.isArray(review) && review.length > 0) {
       formData.append("shopId", review[0].shop_order_id.toString());
+      formData.append("cus_order_id", review[0].cus_order_id.toString());
     } else {
       console.error("Review data is not in the expected format:", review);
     }
