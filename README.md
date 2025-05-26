@@ -2,6 +2,12 @@
 ### 소요기간: 2주(2025.02)
 ### 제작 목적: 
 ### 기술 스택: 
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
+![MySql](https://img.shields.io/badge/MySql-#4479A1?style=for-the-badge&logo=MySql&logoColor=#4479A1)
 ### 참여 인원: 4명
 임진우(조장)
 고민봉
