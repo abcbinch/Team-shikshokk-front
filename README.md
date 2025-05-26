@@ -8,8 +8,8 @@
 ![JavaScript](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
 ![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![NodeJS](https://img.shields.io/badge/nodedotjs-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![SocketIo](https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
+![NodeJS](https://img.shields.io/badge/nodedotjs-5FA04E?style=for-the-badge&logo=NodeJS&logoColor=white)
+![SocketIo](https://img.shields.io/badge/socketdotio-010101?style=for-the-badge&logo=SocketIO&logoColor=white)
 ![MySql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ### 참여 인원: 4명
 임진우(조장)
